@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @excercise.name %>
+</p>
+
+<p>
+  <b>Url:</b>
+  <%= @excercise.url %>
+</p>
+
+<p>
+  <b>From:</b>
+  <%= @excercise.from %>
+</p>
+
+<p>
+  <b>To:</b>
+  <%= @excercise.to %>
+</p>
+
+
+<%= link_to 'Edit', edit_excercise_path(@excercise) %> |
+<%= link_to 'Back', excercises_path %>
