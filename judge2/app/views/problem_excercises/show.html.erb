@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Excercise:</b>
+  <%= @problem_excercise.excercise_id %>
+</p>
+
+<p>
+  <b>Problem:</b>
+  <%= @problem_excercise.problem_id %>
+</p>
+
+<p>
+  <b>Timelimit:</b>
+  <%= @problem_excercise.timelimit %>
+</p>
+
+<p>
+  <b>Score:</b>
+  <%= @problem_excercise.score %>
+</p>
+
+
+<%= link_to 'Edit', edit_problem_excercise_path(@problem_excercise) %> |
+<%= link_to 'Back', problem_excercises_path %>

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  excercise_id: 1
+  problem_id: 1
+  timelimit: 1
+  score: 1
+
+two:
+  excercise_id: 1
+  problem_id: 1
+  timelimit: 1
+  score: 1
