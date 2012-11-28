@@ -1,6 +1,4 @@
 Judge2::Application.routes.draw do
-  resources :problem_excercises
-
   resources :problems
 
   match 'excercises/getvalid' => 'excercises#getvalid'
