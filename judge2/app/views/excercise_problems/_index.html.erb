@@ -1,7 +1,8 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Problem number</th>
+      <th>Number</th>
+      <th>Problem name </th>
       <th>Time limit</th>
       <th>Score</th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
@@ -10,7 +11,8 @@
   <tbody>
     <% @excercise.excercise_problems.each do |p| %>
       <tr>
-        <td><%= p.problem_number %></td>
+          <td><%= p.problem_number %></td>
+          <td><%= p.problem.name %> </td>
         <td><%= p.time_limit %></td>
         <td><%= p.score %></td>
         <td><%= link_to 'Delete',[p.excercise, p], :confirm => 'Are you sure?', 
