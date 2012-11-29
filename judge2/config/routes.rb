@@ -2,7 +2,9 @@ Judge2::Application.routes.draw do
   resources :problems
 
   match 'excercises/getvalid' => 'excercises#getvalid'
-  resources :excercises
+  resources :excercises do
+      resources :excercise_problems
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
