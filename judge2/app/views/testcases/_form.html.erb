@@ -1,14 +1,14 @@
-<%= form_for [@problem, @problem.testcases.build], :html => { :class => 'form-horizontal' } do |f| %>
+<%= form_for [@problem, @problem.testcases.build], :html => { :class => 'form-horizontal', :multipart=>true } do |f| %>
   <div class="control-group">
     <%= f.label :infile, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :infile, :class => 'text_field' %>
+      <%= f.file_field :infile %>
     </div>
   </div>
   <div class="control-group">
     <%= f.label :outfile, :class => 'control-label' %>
     <div class="controls">
-      <%= f.text_field :outfile, :class => 'text_field' %>
+      <%= f.file_field :outfile %>
     </div>
   </div>
   <div class="control-group">

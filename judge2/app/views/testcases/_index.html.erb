@@ -10,8 +10,8 @@
   <tbody>
     <% @problem.testcases.each do |p| %>
       <tr>
-        <td><%= p.infile %></td>
-        <td><%= p.outfile %> </td>
+        <td><%= p.infile.path %></td>
+        <td><%= p.outfile.path %> </td>
         <td><%= p.jtype %></td>
         <td><%= link_to 'Delete',[p.problem, p], :confirm => 'Are you sure?', 
             :method => :delete,
