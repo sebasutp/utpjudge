@@ -1,5 +1,7 @@
 Judge2::Application.routes.draw do
-  resources :problems
+  resources :problems do
+      resources :testcases
+  end
 
   match 'excercises/getvalid' => 'excercises#getvalid'
   resources :excercises do

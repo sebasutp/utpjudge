@@ -3,5 +3,6 @@ class Problem < ActiveRecord::Base
   validates_presence_of :name, :url
   has_many :excercise_problems
   has_many :excercises, :through=>:excercise_problems
+  has_many :testcases
 
 end
