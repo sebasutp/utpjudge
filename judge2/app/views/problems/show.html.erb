@@ -12,6 +12,12 @@
   <dd><%= @problem.notes %></dd>
 </dl>
 
+<h3>Test cases: </h3>
+<%= render "testcases/index" %>
+
+<h3>Add new test case: </h3>
+<%= render "testcases/form" %>
+
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               problems_path, :class => 'btn'  %>

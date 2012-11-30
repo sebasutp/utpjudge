@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121129021849) do
+ActiveRecord::Schema.define(:version => 20121130130931) do
 
   create_table "excercise_problems", :force => true do |t|
     t.integer  "problem_number"
@@ -50,5 +50,16 @@ ActiveRecord::Schema.define(:version => 20121129021849) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "testcases", :force => true do |t|
+    t.integer  "problem_id"
+    t.string   "infile"
+    t.string   "outfile"
+    t.integer  "jtype"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "testcases", ["problem_id"], :name => "index_testcases_on_problem_id"
 
 end
