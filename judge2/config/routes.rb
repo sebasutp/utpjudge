@@ -1,4 +1,6 @@
 Judge2::Application.routes.draw do
+  devise_for :users
+  
   resources :problems do
       resources :testcases
   end
