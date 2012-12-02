@@ -18,7 +18,7 @@
       <tr>
         <td><%= link_to problem.id, problem_path(problem) %></td>
         <td><%= problem.name %></td>
-        <td><%= problem.url %></td>
+        <td><%= problem.pdescription.url %></td>
         <td><%= problem.notes %></td>
         <td><%=l problem.created_at %></td>
         <td>

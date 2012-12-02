@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121130193037) do
+ActiveRecord::Schema.define(:version => 20121202001333) do
 
   create_table "excercise_problems", :force => true do |t|
     t.integer  "problem_number"
@@ -33,12 +34,24 @@ ActiveRecord::Schema.define(:version => 20121130193037) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "problem_excercises", :force => true do |t|
+    t.integer  "excercise_id"
+    t.integer  "problem_id"
+    t.integer  "timelimit"
+    t.integer  "score"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "problems", :force => true do |t|
     t.string   "name"
-    t.string   "url"
     t.text     "notes"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.string   "pdescription_file_name"
+    t.string   "pdescription_content_type"
+    t.integer  "pdescription_file_size"
+    t.datetime "pdescription_updated_at"
   end
 
   create_table "testcases", :force => true do |t|

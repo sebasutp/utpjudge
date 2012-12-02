@@ -7,7 +7,7 @@
   <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
   <dd><%= @problem.name %></dd>
   <dt><strong><%= model_class.human_attribute_name(:url) %>:</strong></dt>
-  <dd><%= @problem.url %></dd>
+  <dd><%= @problem.pdescription.url %></dd>
   <dt><strong><%= model_class.human_attribute_name(:notes) %>:</strong></dt>
   <dd><%= @problem.notes %></dd>
 </dl>
