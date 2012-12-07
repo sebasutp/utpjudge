@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121202001333) do
+ActiveRecord::Schema.define(:version => 20121207194031) do
 
   create_table "excercise_problems", :force => true do |t|
     t.integer  "problem_number"
@@ -21,6 +21,9 @@ ActiveRecord::Schema.define(:version => 20121202001333) do
     t.integer  "problem_id"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.integer  "mem_lim"
+    t.integer  "stype"
+    t.integer  "prog_limit"
   end
 
   add_index "excercise_problems", ["excercise_id"], :name => "index_excercise_problems_on_excercise_id"
@@ -34,15 +37,6 @@ ActiveRecord::Schema.define(:version => 20121202001333) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "problem_excercises", :force => true do |t|
-    t.integer  "excercise_id"
-    t.integer  "problem_id"
-    t.integer  "timelimit"
-    t.integer  "score"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
   create_table "problems", :force => true do |t|
     t.string   "name"
     t.text     "notes"
@@ -53,6 +47,26 @@ ActiveRecord::Schema.define(:version => 20121202001333) do
     t.integer  "pdescription_file_size"
     t.datetime "pdescription_updated_at"
   end
+
+  create_table "submissions", :force => true do |t|
+    t.datetime "init_date"
+    t.datetime "end_date"
+    t.string   "veredict"
+    t.integer  "time"
+    t.integer  "excercise_problem_id"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.string   "srcfile_file_name"
+    t.string   "srcfile_content_type"
+    t.integer  "srcfile_file_size"
+    t.datetime "srcfile_updated_at"
+    t.string   "outfile_file_name"
+    t.string   "outfile_content_type"
+    t.integer  "outfile_file_size"
+    t.datetime "outfile_updated_at"
+  end
+
+  add_index "submissions", ["excercise_problem_id"], :name => "index_submissions_on_excercise_problem_id"
 
   create_table "testcases", :force => true do |t|
     t.integer  "problem_id"

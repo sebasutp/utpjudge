@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Init date:</b>
+  <%= @submission.init_date %>
+</p>
+
+<p>
+  <b>End date:</b>
+  <%= @submission.end_date %>
+</p>
+
+<p>
+  <b>Veredict:</b>
+  <%= @submission.veredict %>
+</p>
+
+<p>
+  <b>Time:</b>
+  <%= @submission.time %>
+</p>
+
+<p>
+  <b>Excercise problem:</b>
+  <%= @submission.excercise_problem %>
+</p>
+
+
+<%= link_to 'Edit', edit_submission_path(@submission) %> |
+<%= link_to 'Back', submissions_path %>

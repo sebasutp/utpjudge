@@ -12,6 +12,19 @@
     </div>
   </div>
   <div class="control-group">
+    <%= f.label :prog_limit, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :prog_limit, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :mem_lim, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :mem_lim, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
     <%= f.label :score, :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field :score, :class => 'text_field' %>
@@ -23,7 +36,12 @@
       <%= f.collection_select :problem_id,Problem.all,:id,:name %>
     </div>
   </div>
-
+    <div class="control-group">
+    <%= f.label :stype, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :stype, :class => 'text_field' %>
+    </div>
+  </div>
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>

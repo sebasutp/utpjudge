@@ -3,22 +3,30 @@
     <tr>
       <th>Number</th>
       <th>Problem name </th>
-      <th>Time limit</th>
+      <th>Problem time limit</th>
+      <th>Program time limit</th>
+      <th>Memory limit (MB)</th>
       <th>Score</th>
+      <th>Submission Type</th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @excercise.excercise_problems.each do |p| %>
       <tr>
-          <td><%= p.problem_number %></td>
-          <td><%= p.problem.name %> </td>
+        <td><%= p.problem_number %></td>
+        <td><%= p.problem.name %> </td>
         <td><%= p.time_limit %></td>
+        <td><%= p.prog_limit %></td>
+        <td><%= p.mem_lim %></td>
         <td><%= p.score %></td>
+        <td><%= p.stype %></td>
         <td><%= link_to 'Delete',[p.excercise, p], :confirm => 'Are you sure?', 
             :method => :delete,
             :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-            :class => 'btn btn-mini btn-danger' %> </td>
+            :class => 'btn btn-mini btn-danger' %>
+            <%= link_to 'Submit', {:controller => "submissions", :action=>"new", :epid => p.id}, :class => 'btn btn-mini'%>
+        </td>
       </tr>
     <% end %>
   </tbody>
