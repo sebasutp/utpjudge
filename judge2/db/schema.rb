@@ -11,13 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121207194031) do
+ActiveRecord::Schema.define(:version => 20121214200313) do
 
-  create_table "excercise_problems", :force => true do |t|
+  create_table "exercise_problems", :force => true do |t|
     t.integer  "problem_number"
     t.integer  "time_limit"
     t.integer  "score"
-    t.integer  "excercise_id"
+    t.integer  "exercise_id"
     t.integer  "problem_id"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
@@ -26,10 +26,10 @@ ActiveRecord::Schema.define(:version => 20121207194031) do
     t.integer  "prog_limit"
   end
 
-  add_index "excercise_problems", ["excercise_id"], :name => "index_excercise_problems_on_excercise_id"
-  add_index "excercise_problems", ["problem_id"], :name => "index_excercise_problems_on_problem_id"
+  add_index "exercise_problems", ["exercise_id"], :name => "index_excercise_problems_on_excercise_id"
+  add_index "exercise_problems", ["problem_id"], :name => "index_excercise_problems_on_problem_id"
 
-  create_table "excercises", :force => true do |t|
+  create_table "exercises", :force => true do |t|
     t.string   "name"
     t.datetime "from_date"
     t.datetime "to_date"
