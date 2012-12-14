@@ -1,4 +1,7 @@
-<% @exercises.each do |e| %>
-<%= e.name %>
-<br />
-<% end %>
+<table class="table table-hover">
+    <% @exercises.each do |e| %>
+        
+     <tr><th><a href="#"><i class="icon-book"></i> <%= e.name %></a></th></tr>
+    <% end %>
+</table>
+
