@@ -7,7 +7,7 @@ class ExerciseProblemsController < ApplicationController
     end
 
     def destroy
-        @exercise = exercise.find(params[:exercise_id])
+        @exercise = Exercise.find(params[:exercise_id])
         @exercise_problem = @exercise.exercise_problems.find(params[:id])
         @exercise_problem.destroy
         redirect_to exercise_path(@exercise)
