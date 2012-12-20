@@ -1,8 +1,8 @@
 <h1> <%= @exercise.name %> </h1>
-<p class="text-success"> time to end : <%= (@exercise.to_date - DateTime.now).to_s() %> </p>
+<p class="text-success"> time to end : <%= (@exercise.elapsed_time).to_s()  %> minutes </p>
 
 <ul class="nav nav-list">
   <% @problems.each do |e| %>
-      <li><a href="#"><i class="icon-star"></i>   <%= e.name %> </a></li>
+      <li><a href="../problems/<%= e.id %>"><i class="icon-star"></i>   <%= e.name %> </a></li>
   <% end %>
 </ul>
