@@ -8,5 +8,13 @@ class Testcase < ActiveRecord::Base
   validates_attachment_size :infile, :less_than => 20.megabytes
   validates_attachment_presence :outfile
   validates_attachment_size :outfile, :less_than => 20.megabytes
+
+  def self.judgeTypes
+    [['Download Input',1],['Upload source',2]]
+  end
+
+  def self.judgeTypeHash
+      {1=>:downloadSource, 2 => :uploadSource}
+  end
   
 end

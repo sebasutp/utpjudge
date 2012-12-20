@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121214200313) do
+ActiveRecord::Schema.define(:version => 20121220153054) do
 
   create_table "exercise_problems", :force => true do |t|
     t.integer  "problem_number"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(:version => 20121214200313) do
     t.string   "outfile_content_type"
     t.integer  "outfile_file_size"
     t.datetime "outfile_updated_at"
+    t.integer  "tcaseId"
   end
 
   add_index "submissions", ["excercise_problem_id"], :name => "index_submissions_on_excercise_problem_id"
