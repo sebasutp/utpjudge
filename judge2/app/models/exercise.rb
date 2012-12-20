@@ -10,4 +10,13 @@ class Exercise < ActiveRecord::Base
 	  errors.add(:to_date, "Final date cannot be less that start date")
     end
   end
+  
+  def elapsed_time
+    elapsed = ((Time.parse(to_date.to_s(:db)) - Time.now)/60.0).to_i
+    if elapsed < 0
+        return 0
+    else
+        return elapsed
+    end
+  end
 end

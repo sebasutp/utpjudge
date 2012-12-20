@@ -12,6 +12,8 @@ class ExercisesController < ApplicationController
 
   def getvalid
       @exercises = Exercise.where("from_date <= :cdate and to_date >= :cdate",{:cdate => DateTime.now.to_s(:db)})
+      @past_exercises = Exercise.where("to_date <= :cdate",{:cdate => DateTime.now.to_s(:db)})
+      @future_exercises = Exercise.where("from_date >= :cdate",{:cdate => DateTime.now.to_s(:db)})
   end
 
   def exercise
