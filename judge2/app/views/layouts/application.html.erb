@@ -13,7 +13,7 @@
 <body>
 
 
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-fixed-top navbar-inverse">
   <div class="navbar-inner">
     <div class="container">
       <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -24,7 +24,12 @@
       <a class="brand" href="/">Insilico - UTP Judge</a>
       <div class="nav-collapse">
         <ul class="nav"> 
+          <li class="divider-vertical"></li>
           <li><a class="active" href="/listexercises"> Contest </a></li>
+          <li class="divider-vertical"></li>
+          <li><a class="active" href="#"> training </a></li>
+          <li class="divider-vertical"></li>
+          <li><a class="active" href="#"> About us </a></li>
         </ul>
         <ul class="nav pull-right" >
             <% if user_signed_in? %>
@@ -37,7 +42,7 @@
                 <li class="divider-vertical"></li>
               <!--  <li><a href="/users/sign_in">Sign In</a></li>-->
                 <li class="dropdown">
-                   <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+                   <a class="dropdown-toggle-inverse" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
                    <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                      <!-- Login form here -->
                      <form accept-charset="UTF-8" action="/users/sign_in" class="new_user" id="new_user" method="post">
@@ -79,8 +84,8 @@
     <div class="row">
     <div class="span10"><%= yield %></div>
     <div class="span3">
-      <h2>About Us</h2>
-      <p>Information about UTP online judge ... bla bla bla</p>        
+      <h2>Events</h2>
+      <p>Information about Currents/upcoming events</p>        
     </div>
   </div>
 </div>
