@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ExcerciseProblemsControllerTest < ActionController::TestCase
+class ExerciseProblemsControllerTest < ActionController::TestCase
   # test "the truth" do
   #   assert true
   # end

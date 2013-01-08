@@ -1,0 +1,7 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+exercise_one:
+  name: Exercise 1
+  from_date: 2012-11-15 14:36:15
+  to_date: 2012-11-16 14:36:15
+

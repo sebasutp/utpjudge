@@ -1,4 +1,6 @@
 class ExercisesController < ApplicationController
+  before_filter :req_psetter, :except=>[:index,:show]
+
   # GET /exercises
   # GET /exercises.json
   def index

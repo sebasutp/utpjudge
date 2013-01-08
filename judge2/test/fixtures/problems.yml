@@ -1,11 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
-  name: MyString
-  url: MyString
-  notes: MyText
+problem_one:
+  name: Arbol
+  #pdescription: a.pdf #Not used because is a file
+  notes: Pitagoras
 
-two:
-  name: MyString
-  url: MyString
-  notes: MyText

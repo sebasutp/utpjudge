@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  problem: 
-  infile: MyString
-  outfile: MyString
+#  problem: 
+#  infile: MyString
+#  outfile: MyString
   jtype: 1
 
 two:
-  problem: 
-  infile: MyString
-  outfile: MyString
+#  problem: 
+#  infile: MyString
+#  outfile: MyString
   jtype: 1
