@@ -19,8 +19,7 @@ class ExercisesController < ApplicationController
   end
 
   def exercise
-      @exercise  = Exercise.find(params[:id])
-      @problems = @exercise.problems
+      @exercise  = Exercise.find(params[:id])      
   end
 
   # GET /exercises/1
