@@ -9,7 +9,12 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
 </head>
 <body>
 
@@ -86,7 +91,7 @@
     <div class="span10"><%= yield %></div>
     <div class="span3">
       <h2>Events</h2>
-      <p>Information about Currents/upcoming events</p>        
+      <p>Information about Currents/upcoming events</p>
     </div>
   </div>
 </div>
