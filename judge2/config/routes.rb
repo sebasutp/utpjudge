@@ -13,7 +13,7 @@ Judge2::Application.routes.draw do
   match 'exercise/:id' => 'exercises#exercise'
   resources :exercises do
       resources :exercise_problems do
-        members do
+        member do
           get :download
         end
       end

@@ -18,6 +18,9 @@ class ExerciseProblemsController < ApplicationController
     ep = ExerciseProblem.find(params[:id])
     problem = ep.problems
     exercise = ep.exercise
+    if exercise.current?
+      send_file problem.pdescription.path, :type=>"application/pdf"
+    end
   end
 
 end

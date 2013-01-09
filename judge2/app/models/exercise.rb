@@ -21,4 +21,12 @@ class Exercise < ActiveRecord::Base
         return elapsed
     end
   end
+
+  def current?
+    #returns weather the exercise can be done or not given the current date
+    #and the from->to dates
+    #now = DateTime.now
+    #return from_date < now and to_date > now
+    return true
+  end
 end
