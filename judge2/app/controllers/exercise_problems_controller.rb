@@ -14,4 +14,10 @@ class ExerciseProblemsController < ApplicationController
         redirect_to exercise_path(@exercise)
     end
 
+  def download
+    ep = ExerciseProblem.find(params[:id])
+    problem = ep.problems
+    exercise = ep.exercise
+  end
+
 end

@@ -12,7 +12,11 @@ Judge2::Application.routes.draw do
   match 'listexercises' => 'exercises#getvalid'
   match 'exercise/:id' => 'exercises#exercise'
   resources :exercises do
-      resources :exercise_problems
+      resources :exercise_problems do
+        members do
+          get :download
+        end
+      end
   end
 
   # The priority is based upon order of creation:

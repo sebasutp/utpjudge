@@ -1,6 +1,7 @@
 class SubmissionsController < ApplicationController
-
   before_filter :req_gen_user, :except=>[:index,:show]
+  before_filter :req_psetter, :except=>[:new,:create]
+
   # GET /submissions
   # GET /submissions.json
   def index
