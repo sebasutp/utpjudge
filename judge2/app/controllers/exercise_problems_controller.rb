@@ -1,6 +1,11 @@
 class ExerciseProblemsController < ApplicationController
     before_filter :req_psetter
-
+    
+    def show
+      @exercise_problem = ExerciseProblem.find(params[:id])
+      @problem = @exercise_problem.problem
+    end
+    
     def create
         @exercise = Exercise.find(params[:exercise_id])
         @exercise_problem = @exercise.exercise_problems.create(params[:exercise_problem])
@@ -16,7 +21,7 @@ class ExerciseProblemsController < ApplicationController
 
   def download
     ep = ExerciseProblem.find(params[:id])
-    problem = ep.problems
+    problem = ep.problem
     exercise = ep.exercise
     if exercise.current?
       send_file problem.pdescription.path, :type=>"application/pdf"

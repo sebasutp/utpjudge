@@ -3,7 +3,7 @@
   <h1><%=t '.title', :default => model_class.model_name.human %></h1>
 </div>
 
-<%= render :partial => 'problem' %>
+<%= render @problem %>
 
 <%  if @user and @user.has_roles(User.roles[:psetter]) then %> 
   <hr class="bs-docs-separator"> 

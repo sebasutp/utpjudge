@@ -1,0 +1,6 @@
+<dl class="dl-horizontal">
+  <dd><h2><%= @problem.name %></h2></dd>
+  <dd>Time limit: <%= "#{@exercise_problem.time_limit} s" %></dd>
+  <dd><%= @problem.pdescription.url %></dd>
+  <dd><%= raw(@problem.notes) %></dd>
+</dl>
