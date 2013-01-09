@@ -1,4 +1,5 @@
 class TestcasesController < ApplicationController
+    before_filter :req_psetter, :except=>[:index,:show]
     
     def create
         @problem = Problem.find(params[:problem_id])

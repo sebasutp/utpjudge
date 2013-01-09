@@ -1,28 +1,27 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  def unauthorized_user
-      redirect_to root_path
+  def unauthorized_user(should_redirect=true)
+      redirect_to root_path if should_redirect
       return false
   end
 
   def req_root
-      req_role(1)
+      req_role(User.roles[:root])
   end
 
   def req_psetter
-      req_role(2)
+      req_role(User.roles[:psetter])
   end
 
   def req_gen_user
-      req_role(3)
+      req_role([1,2,3])
   end
 
   def req_role(rid)
       u = current_user
       return unauthorized_user unless u
-      rids = u.role_ids
-      return unauthorized_user unless rids.include? rid
+      return unauthorized_user unless u.has_roles(rid)
   end
 
 end

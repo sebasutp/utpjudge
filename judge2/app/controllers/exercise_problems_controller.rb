@@ -1,4 +1,5 @@
 class ExerciseProblemsController < ApplicationController
+    before_filter :req_psetter
 
     def create
         @exercise = Exercise.find(params[:exercise_id])

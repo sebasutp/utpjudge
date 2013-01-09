@@ -1,4 +1,11 @@
 class ProblemsController < ApplicationController
+  before_filter :req_psetter, :except=>[:index,:show]
+  before_filter :init_vars
+  
+  def init_vars
+    @user = current_user    
+  end
+  
   # GET /problems
   # GET /problems.json
   def index
@@ -14,7 +21,6 @@ class ProblemsController < ApplicationController
   # GET /problems/1.json
   def show
     @problem = Problem.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @problem }

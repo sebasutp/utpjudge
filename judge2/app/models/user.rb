@@ -9,4 +9,13 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me
   has_and_belongs_to_many :roles
   # attr_accessible :title, :body
+  
+  def has_roles(roles)
+    rids = role_ids & roles
+    return rids.count>0
+  end
+  
+  def self.roles
+    return {:root => [1], :psetter=>[1,2], :g_user => [1,2,3]}
+  end
 end
