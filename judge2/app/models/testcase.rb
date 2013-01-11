@@ -14,7 +14,7 @@ class Testcase < ActiveRecord::Base
   end
 
   def self.judgeTypeHash
-      {1=>:downloadSource, 2 => :uploadSource}
+      {1=>:downloadInput, 2 => :uploadSource}
   end
   
 end

@@ -25,14 +25,37 @@ class SubmissionsController < ApplicationController
   end
 
   # GET /submissions/new
-  # GET /submissions/new.json
   def new
-    @submission = Submission.new
+      @exercise_problem = ExerciseProblem.find(params[:exercise_problem])
+      @jtype = Testcase.judgeTypeHash[@exercise_problem.stype]
+      if @jtype==:downloadInput
+          @submission = Submission.new
+          @submission.init_date = DateTime.now
+          @submission.exercise_problem = @exercise_problem
+          @submission.veredict = 'TL'
+          @submission.save
+          render "jdownload"
+      end
+  end
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @submission }
-    end
+  def jdownload
+      @submission = Submission.find(params[:id])
+      @submission.end_date = DateTime.now
+      respond_to do |format|
+        if @submission.update_attributes(params[:submission])
+            #if success redirect to show action
+            format.html { redirect_to @submission, notice: 'Your submission was successfully sent.' }
+            format.json { head :no_content }
+        else
+            format.html { render action: "new" }
+            format.json { render json: @submission.errors, status: :unprocessable_entity }
+        end
+      end
+  end
+
+  #GET /submissions/downloadInput?exercise_problem=id
+  def downloadInput
+      @exercise_problem = ExerciseProblem.find(params[:exercise_problem])      
   end
 
   # GET /submissions/1/edit

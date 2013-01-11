@@ -2,7 +2,7 @@
 <p class="text-success"> time to end : <%= (@exercise.elapsed_time).to_s()  %> minutes </p>
 
 <ul class="nav nav-list">
-  <% @exercise.exercise_problems.each do |e| %>
+  <% @problems.each do |e| %>
       <li><%= link_to "<i class='icon-star'></i> #{e.problem.name}".html_safe, [@exercise,e] %></li>
   <% end %>
 </ul>

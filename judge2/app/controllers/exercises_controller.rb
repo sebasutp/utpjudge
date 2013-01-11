@@ -1,5 +1,5 @@
 class ExercisesController < ApplicationController
-  before_filter :req_psetter, :except=>[:index,:show,:getvalid,:exercise]
+  before_filter :req_psetter, :except=>[:getvalid,:exercise]
 
   # GET /exercises
   # GET /exercises.json
@@ -19,7 +19,8 @@ class ExercisesController < ApplicationController
   end
 
   def exercise
-      @exercise  = Exercise.find(params[:id])      
+    @exercise = Exercise.find(params[:id])
+    @problems = @exercise.exercise_problems.order(:problem_number)
   end
 
   # GET /exercises/1

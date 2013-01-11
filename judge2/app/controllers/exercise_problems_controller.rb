@@ -1,5 +1,5 @@
 class ExerciseProblemsController < ApplicationController
-    before_filter :req_psetter
+    before_filter :req_psetter, :except => [:show]
     
     def show
       @exercise_problem = ExerciseProblem.find(params[:id])
