@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130108203916) do
+ActiveRecord::Schema.define(:version => 20130110235421) do
 
   create_table "exercise_problems", :force => true do |t|
     t.integer  "problem_number"
@@ -35,6 +35,15 @@ ActiveRecord::Schema.define(:version => 20130108203916) do
     t.datetime "to_date"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "problem_excercises", :force => true do |t|
+    t.integer  "excercise_id"
+    t.integer  "problem_id"
+    t.integer  "timelimit"
+    t.integer  "score"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "problems", :force => true do |t|
@@ -64,7 +73,7 @@ ActiveRecord::Schema.define(:version => 20130108203916) do
     t.datetime "end_date"
     t.string   "veredict"
     t.integer  "time"
-    t.integer  "excercise_problem_id"
+    t.integer  "exercise_problem_id"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false
     t.string   "srcfile_file_name"
@@ -78,7 +87,7 @@ ActiveRecord::Schema.define(:version => 20130108203916) do
     t.integer  "tcaseId"
   end
 
-  add_index "submissions", ["excercise_problem_id"], :name => "index_submissions_on_excercise_problem_id"
+  add_index "submissions", ["exercise_problem_id"], :name => "index_submissions_on_excercise_problem_id"
 
   create_table "testcases", :force => true do |t|
     t.integer  "problem_id"

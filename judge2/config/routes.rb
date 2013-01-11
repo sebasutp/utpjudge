@@ -1,7 +1,14 @@
 Judge2::Application.routes.draw do
   root :to => "static_pages#home"
   
-  resources :submissions
+  resources :submissions do
+      collection do
+          get :downloadInput
+      end
+      member do
+          put :jdownload
+      end
+  end
 
   devise_for :users
   
