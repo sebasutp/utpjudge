@@ -8,21 +8,37 @@ class Submission < ActiveRecord::Base
   validates_attachment_size :srcfile, :less_than => 1.megabytes
   validates_attachment_size :outfile, :less_than => 20.megabytes
 
+  def self.newJudgeDownload(exercise_problem)
+    s = Submission.new
+    s.init_date = DateTime.now
+    s.exercise_problem = exercise_problem
+    s.veredict = 'TL'
+    testcases = exercise_problem.problem.testcases.where(:jtype => exercise_problem.stype)
+    s.tcaseId = testcases.first.id
+    return s
+  end
+
   def judge()
       #If you change this constants, also change Testcase
       h = Testcase.judgeTypeHash
       tc = Testcase.find(tcaseId)
       jt = h[tc.jtype]
       if jt == :downloadInput
-          judgeDownload(tc)
+        judgeDownload(tc)
       end
   end
 
   def judgeDownload(tc)
       ofile1 = tc.outfile.path
       ofile2 = outfile.path
-      diff_file = "protected/jdownload.diff"
-      veredict = %x{bash protected/djudge.sh #{ofile1} #{ofile2} #{diff_file}}
+      self.time = self.end_date - self.init_date
+      if self.time > self.exercise_problem.time_limit
+        self.veredict = 'TL'
+      else
+        diff_file = "protected/jdownload.diff"
+        self.veredict = %x{bash djudge.sh #{ofile1} #{ofile2} #{diff_file}}
+      end
+      save
   end
 
 end

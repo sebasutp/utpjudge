@@ -1,6 +1,5 @@
 class SubmissionsController < ApplicationController
-  before_filter :req_gen_user, :except=>[:index,:show]
-  before_filter :req_psetter, :except=>[:new,:create]
+  before_filter :req_gen_user, :except=>[:index,:show,:new]
 
   # GET /submissions
   # GET /submissions.json
@@ -29,12 +28,9 @@ class SubmissionsController < ApplicationController
       @exercise_problem = ExerciseProblem.find(params[:exercise_problem])
       @jtype = Testcase.judgeTypeHash[@exercise_problem.stype]
       if @jtype==:downloadInput
-          @submission = Submission.new
-          @submission.init_date = DateTime.now
-          @submission.exercise_problem = @exercise_problem
-          @submission.veredict = 'TL'
-          @submission.save
-          render "jdownload"
+        @submission = Submission.newJudgeDownload(@exercise_problem)
+        @submission.save
+        render "jdownload"
       end
   end
 
@@ -43,19 +39,23 @@ class SubmissionsController < ApplicationController
       @submission.end_date = DateTime.now
       respond_to do |format|
         if @submission.update_attributes(params[:submission])
-            #if success redirect to show action
-            format.html { redirect_to @submission, notice: 'Your submission was successfully sent.' }
-            format.json { head :no_content }
+          #if success redirect to show action
+          @submission.judge
+          format.html { redirect_to @submission, notice: 'Your submission was successfully sent.' }
+          format.json { head :no_content }
         else
-            format.html { render action: "new" }
-            format.json { render json: @submission.errors, status: :unprocessable_entity }
+          format.html { render action: "new" }
+          format.json { render json: @submission.errors, status: :unprocessable_entity }
         end
       end
   end
 
   #GET /submissions/downloadInput?exercise_problem=id
   def downloadInput
-      @exercise_problem = ExerciseProblem.find(params[:exercise_problem])      
+      @exercise_problem = ExerciseProblem.find(params[:exercise_problem])
+      problem = @exercise_problem.problem
+      testcase = problem.testcases.where(:jtype => @exercise_problem.stype).first
+      send_file testcase.infile.path, :type=>"application/text"
   end
 
   # GET /submissions/1/edit
