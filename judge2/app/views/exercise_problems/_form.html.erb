@@ -1,5 +1,17 @@
 <%= form_for [@exercise, @exercise.exercise_problems.build], :html => { :class => 'form-horizontal' } do |f| %>
   <div class="control-group">
+    <%= f.label :stype, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :stype, Testcase.judgeTypes %>
+    </div>
+  </div> 
+  <div class="control-group">
+    <%= f.label :problem_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.collection_select :problem_id,Problem.all,:id,:name %>
+    </div>
+  </div>
+  <div class="control-group">
     <%= f.label :problem_number, :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field :problem_number, :class => 'text_field' %>
@@ -17,7 +29,6 @@
       <%= f.text_field :prog_limit, :class => 'text_field' %>
     </div>
   </div>
-
   <div class="control-group">
     <%= f.label :mem_lim, :class => 'control-label' %>
     <div class="controls">
@@ -30,19 +41,6 @@
       <%= f.text_field :score, :class => 'text_field' %>
     </div>
   </div>
-  <div class="control-group">
-    <%= f.label :problem_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.collection_select :problem_id,Problem.all,:id,:name %>
-    </div>
-  </div>
-    <div class="control-group">
-    <%= f.label :stype, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :stype, :class => 'text_field' %>
-    </div>
-  </div>
-
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
   </div>

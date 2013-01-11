@@ -1,0 +1,92 @@
+<%= form_for @submission, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :init_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datetime_select :init_date, :class => 'datetime_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :end_date, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datetime_select :end_date, :class => 'datetime_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :veredict, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :veredict, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :time, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :time, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :exercise_problem_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :exercise_problem_id, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :srcfile_file_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :srcfile_file_name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :srcfile_content_type, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :srcfile_content_type, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :srcfile_file_size, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :srcfile_file_size, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :srcfile_updated_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datetime_select :srcfile_updated_at, :class => 'datetime_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :outfile_file_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :outfile_file_name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :outfile_content_type, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :outfile_content_type, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :outfile_file_size, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :outfile_file_size, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :outfile_updated_at, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.datetime_select :outfile_updated_at, :class => 'datetime_select' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :tcaseId, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :tcaseId, :class => 'number_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                submission_path, :class => 'btn' %>
+  </div>
+<% end %>

@@ -28,7 +28,7 @@
 
   <div class="actions">
       <%= link_to "Download Input", {:controller=>"submissions",:action=>"downloadInput", 
-          :exercise_problem=>@exercise_problem.id},{:class => 'btn btn-primary'} %>
+          :exercise_problem=>@exercise_problem.id},{:class => 'btn btn-primary',:target => "blank"} %>
       <%= f.submit :class => 'btn btn-success', :value => 'Submit solution' %>
   </div>
 <% end %>
