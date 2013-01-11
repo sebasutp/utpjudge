@@ -16,6 +16,7 @@ class SubmissionsController < ApplicationController
   # GET /submissions/1.json
   def show
     @submission = Submission.find(params[:id])
+    @exercise_problem = @submission.exercise_problem
 
     respond_to do |format|
       format.html # show.html.erb
@@ -29,6 +30,7 @@ class SubmissionsController < ApplicationController
       @jtype = Testcase.judgeTypeHash[@exercise_problem.stype]
       if @jtype==:downloadInput
         @submission = Submission.newJudgeDownload(@exercise_problem)
+        @submission.user = current_user
         @submission.save
         render "jdownload"
       end

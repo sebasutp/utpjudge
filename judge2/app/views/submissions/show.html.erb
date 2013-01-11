@@ -20,11 +20,6 @@
   <%= @submission.time %>
 </p>
 
-<p>
-  <b>Exercise problem:</b>
-  <%= @submission.exercise_problem %>
-</p>
-
-<%= link_to 'Go to problem', @exercise %> |
+<%= link_to 'Go to problem', [@exercise_problem.exercise, @exercise_problem] %> |
 <%= link_to 'Edit', edit_submission_path(@submission) %> |
 <%= link_to 'Back', submissions_path %>
