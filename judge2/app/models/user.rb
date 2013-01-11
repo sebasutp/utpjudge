@@ -9,7 +9,11 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me
   has_and_belongs_to_many :roles
   # attr_accessible :title, :body
-  
+  def after_create
+    r = Role.find(3)
+    self.roles << r
+  end
+
   def has_roles(roles)
     rids = role_ids & roles
     return rids.count>0

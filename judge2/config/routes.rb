@@ -9,14 +9,16 @@ Judge2::Application.routes.draw do
           put :jdownload
       end
   end
-
-  devise_for :users
   
+  devise_for :users , :controllers => { :sessions => "sessions" , :registrations =>"registrations" }
+  resources :users
+    
   resources :problems do
       resources :testcases
   end
 
   match 'listexercises' => 'exercises#getvalid'
+  match 'admin' => 'static_pages#admin'
   match 'exercise/:id' => 'exercises#exercise'
   resources :exercises do
       resources :exercise_problems do

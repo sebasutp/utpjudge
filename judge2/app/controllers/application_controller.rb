@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   def req_gen_user
-      req_role([1,2,3])
+      req_role(User.roles[:g_user])
   end
 
   def req_role(rid)

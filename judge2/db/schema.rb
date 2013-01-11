@@ -37,15 +37,6 @@ ActiveRecord::Schema.define(:version => 20130110235421) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "problem_excercises", :force => true do |t|
-    t.integer  "excercise_id"
-    t.integer  "problem_id"
-    t.integer  "timelimit"
-    t.integer  "score"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
   create_table "problems", :force => true do |t|
     t.string   "name"
     t.text     "notes"
