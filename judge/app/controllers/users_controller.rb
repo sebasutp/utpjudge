@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :req_root
+  before_filter :req_root, :except=>[:new]
   
   # GET /users
   # GET /users.json

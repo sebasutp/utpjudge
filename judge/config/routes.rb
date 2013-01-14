@@ -15,7 +15,7 @@ Judge::Application.routes.draw do
   resources :problems do
       resources :testcases
   end
-
+  
   match 'listexercises' => 'exercises#getvalid'
   match 'admin' => 'static_pages#admin'
   match 'exercise/:id' => 'exercises#exercise'
