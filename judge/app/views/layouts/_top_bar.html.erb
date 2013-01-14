@@ -15,14 +15,14 @@
           <li><a class="active" href="#"> training </a></li>
           <li class="divider-vertical"></li>
           <li><a class="active" href="#"> About us </a></li>
-          <% u  = current_user %>
+          <% u  = session[:user_id] %>
           <% if u and u.has_roles(User.roles[:psetter]) %>
             <li class="divider-vertical"></li>
             <li><a class="active" href="/admin"> Admin </a></li>
           <% end %>
         </ul>
         <ul class="nav pull-right" >
-            <% if user_signed_in? %>
+            <% if u %>
                 <li>
                     Signed in as <%= current_user.email %>. Not you?
                     <a href="/users/sign_out">Sign Out</a>

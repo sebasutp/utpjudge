@@ -1,6 +1,12 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-
+  
+  def current_user
+    uid = session[:user_id]
+    return nil if not uid
+    return User.find(uid)
+  end
+  
   def unauthorized_user(should_redirect=true)
       redirect_to root_path if should_redirect
       return false
