@@ -1,0 +1,9 @@
+<dl class="dl-horizontal">
+  <dd><%= link_to "Submit",{:controller => "submissions", :action => "new", :exercise_problem => @exercise_problem.id},{:class=>'btn btn-primary'} %></dd>
+  <dd><h2><%= @problem.name %></h2></dd>
+  <dd>Time limit: <%= "#{@exercise_problem.time_limit} s" %></dd>
+  <dd>Memory limit: <%= "#{@exercise_problem.mem_lim} MBytes" %></dd>
+  <dd><%= @problem.pdescription.url %></dd>
+  <br />
+  <dd><%= raw(@problem.notes) %></dd>
+</dl>
