@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  exercise_problem: 
+  user: 
+  testcase: 
+  init_date: 2013-01-14 12:54:59
+  end_date: 2013-01-14 12:54:59
+  veredict: MyString
+  time: 9.99
+
+two:
+  exercise_problem: 
+  user: 
+  testcase: 
+  init_date: 2013-01-14 12:54:59
+  end_date: 2013-01-14 12:54:59
+  veredict: MyString
+  time: 9.99

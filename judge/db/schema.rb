@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130114174725) do
+ActiveRecord::Schema.define(:version => 20130114180229) do
 
   create_table "exercise_problems", :force => true do |t|
     t.integer  "problem_number"
@@ -48,6 +48,41 @@ ActiveRecord::Schema.define(:version => 20130114174725) do
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
   end
+
+  create_table "roles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "roles_users", :id => false, :force => true do |t|
+    t.integer "role_id"
+    t.integer "user_id"
+  end
+
+  create_table "submissions", :force => true do |t|
+    t.integer  "exercise_problem_id"
+    t.integer  "user_id"
+    t.integer  "testcase_id"
+    t.datetime "init_date"
+    t.datetime "end_date"
+    t.string   "veredict"
+    t.decimal  "time"
+    t.string   "srcfile_file_name"
+    t.string   "srcfile_content_type"
+    t.integer  "srcfile_file_size"
+    t.datetime "srcfile_updated_at"
+    t.string   "outfile_file_name"
+    t.string   "outfile_content_type"
+    t.integer  "outfile_file_size"
+    t.datetime "outfile_updated_at"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  add_index "submissions", ["exercise_problem_id"], :name => "index_submissions_on_exercise_problem_id"
+  add_index "submissions", ["testcase_id"], :name => "index_submissions_on_testcase_id"
+  add_index "submissions", ["user_id"], :name => "index_submissions_on_user_id"
 
   create_table "testcases", :force => true do |t|
     t.integer  "problem_id"
