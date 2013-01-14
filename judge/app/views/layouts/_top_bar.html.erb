@@ -15,16 +15,15 @@
           <li><a class="active" href="#"> training </a></li>
           <li class="divider-vertical"></li>
           <li><a class="active" href="#"> About us </a></li>
-          <% u  = session[:user_id] %>
-          <% if u and u.has_roles(User.roles[:psetter]) %>
+          <% if @user and @user.has_roles(User.roles[:psetter]) %>
             <li class="divider-vertical"></li>
             <li><a class="active" href="/admin"> Admin </a></li>
           <% end %>
         </ul>
         <ul class="nav pull-right" >
-            <% if u %>
+            <% if @user %>
                 <li>
-                    Signed in as <%= current_user.email %>. Not you?
+                    Signed in as <%= @user.name %>. Not you?
                     <a href="/users/sign_out">Sign Out</a>
                 </li>
             <% else %>
@@ -35,7 +34,7 @@
                    <a class="dropdown-toggle-inverse" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
                    <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
                      <!-- Login form here -->
-                     <form accept-charset="UTF-8" action="/listexercises" class="new_user" id="new_user" method="post">
+                     <form accept-charset="UTF-8" action="/users/sign_in" class="new_user" id="new_user" method="post">
                          <div style="margin:0;padding:0;display:inline">
                             <input name="utf8" type="hidden" value="✓">
                             <input name="authenticity_token" type="hidden" value="L2K8B6ZF1evpnx99foqy30dHu8c5XAVJgdOx11GegBc=">

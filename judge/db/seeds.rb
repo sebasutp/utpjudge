@@ -3,5 +3,12 @@
 #
 # Examples:
 #
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+#   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
+#   Mayor.create(:name => 'Emanuel', :city => cities.first)
+
+roles = Role.create([{:name => "Root"},{:name => "Problem setter"},{:name => "General User"}])
+root = User.new
+root.email="root@utp.edu.co"
+root.password="root@utp.edu.co"
+root.save
+root.roles << roles

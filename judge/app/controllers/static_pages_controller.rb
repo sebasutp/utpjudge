@@ -1,12 +1,17 @@
 class StaticPagesController < ApplicationController
   before_filter :req_psetter, :except=>[:home]
   
+  
   def home
-    @user = current_user
+    if session[:user_id]
+      @user = User.find(session[:user_id])
+    end
   end
   
   def admin
-    @user = current_user
+    if session[:user_id]
+      @user = User.find(session[:user_id])
+    end
   end
 
 end

@@ -10,7 +10,12 @@ Judge::Application.routes.draw do
       end
   end
   
-  resources :users
+  resources :users do
+    collection do
+      post :sign_in
+      get :sign_out
+    end
+  end
     
   resources :problems do
       resources :testcases
