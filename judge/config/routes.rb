@@ -1,4 +1,33 @@
 Judge::Application.routes.draw do
+  root :to => "static_pages#home"
+  
+  resources :submissions do
+      collection do
+          get :downloadInput
+      end
+      member do
+          put :jdownload
+      end
+  end
+  
+  resources :users
+    
+  resources :problems do
+      resources :testcases
+  end
+
+  match 'listexercises' => 'exercises#getvalid'
+  match 'admin' => 'static_pages#admin'
+  match 'exercise/:id' => 'exercises#exercise'
+  resources :exercises do
+      resources :exercise_problems do
+        member do
+          get :download
+        end
+      end
+  end
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
