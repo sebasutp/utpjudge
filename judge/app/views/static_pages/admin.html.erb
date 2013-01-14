@@ -9,3 +9,7 @@
 <% if @user.has_roles( User.roles[:root]) %>
   <a class="active" href="/users"> <h4> Admin Users </h4> </a>
 <% end %>
+
+<% if @user.has_roles( User.roles[:psetter]) %>
+  <a class="active" href="/problems"> <h4> Admin Problems </h4> </a>
+<% end %>

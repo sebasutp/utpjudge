@@ -1,6 +1,12 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
+  before_filter :set_user
+  
+  def set_user
+    @current_user = current_user
+  end
+  
   def current_user
     uid = session[:user_id]
     return nil if not uid
