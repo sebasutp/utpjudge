@@ -1,11 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
-  name: MyString
+test_exercise:
+  name: My Exercise
   from_date: 2013-01-14 11:51:15
-  to_date: 2013-01-14 11:51:15
+  to_date: 2015-01-15 11:51:15
 
-two:
-  name: MyString
-  from_date: 2013-01-14 11:51:15
-  to_date: 2013-01-14 11:51:15
+

@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  problem_number: 1
+  time_limit: 1
+  score: 1
+  exercise: 
+  problem: 
+  mem_lim: 1
+  stype: 1
+  prog_limit: 1
+
+two:
+  problem_number: 1
+  time_limit: 1
+  score: 1
+  exercise: 
+  problem: 
+  mem_lim: 1
+  stype: 1
+  prog_limit: 1

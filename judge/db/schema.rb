@@ -11,7 +11,23 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130114165508) do
+ActiveRecord::Schema.define(:version => 20130114171332) do
+
+  create_table "exercise_problems", :force => true do |t|
+    t.integer  "problem_number"
+    t.integer  "time_limit"
+    t.integer  "score"
+    t.integer  "exercise_id"
+    t.integer  "problem_id"
+    t.integer  "mem_lim"
+    t.integer  "stype"
+    t.integer  "prog_limit"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "exercise_problems", ["exercise_id"], :name => "index_exercise_problems_on_exercise_id"
+  add_index "exercise_problems", ["problem_id"], :name => "index_exercise_problems_on_problem_id"
 
   create_table "exercises", :force => true do |t|
     t.string   "name"
