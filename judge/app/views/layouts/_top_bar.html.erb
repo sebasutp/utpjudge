@@ -15,7 +15,7 @@
           <li><a class="active" href="#"> training </a></li>
           <li class="divider-vertical"></li>
           <li><a class="active" href="#"> About us </a></li>
-          <% if @current_user and @user.has_roles(User.roles[:psetter]) %>
+          <% if @current_user and @current_user.has_roles(User.roles[:psetter]) %>
             <li class="divider-vertical"></li>
             <li><a class="active" href="/admin"> Admin </a></li>
           <% end %>

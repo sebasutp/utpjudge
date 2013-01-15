@@ -9,11 +9,6 @@ class User < ActiveRecord::Base
     :presence => true, :if => :password_required?}
   validates :email, {:presence=>true, :format => {:with => /^[^@][\w.-]+@[\w.-]+[.][a-z]{2,4}$/i}}
 
-  def after_create
-    r = Role.find(3)
-    self.roles << r
-  end
-
   def has_roles(roles)
     rids = role_ids & roles
     return rids.count>0
@@ -43,6 +38,7 @@ class User < ActiveRecord::Base
     u.password = params[:password]
     u.password_confirmation = params[:password_confirmation]
     u.code = params[:code]
+    u.roles << Role.find(3)
     return u
   end
 
