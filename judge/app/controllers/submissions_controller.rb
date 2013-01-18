@@ -1,5 +1,6 @@
 class SubmissionsController < ApplicationController
-  before_filter :req_gen_user, :except=>[:index,:show,:new]
+  before_filter :req_psetter, :only=>[:index,:destroy,:update,:edit,:show]
+  before_filter :req_gen_user, :except=>[:index,:destroy,:update,:edit,:show]
 
   # GET /submissions
   # GET /submissions.json
@@ -17,6 +18,8 @@ class SubmissionsController < ApplicationController
   def show
     @submission = Submission.find(params[:id])
     @exercise_problem = @submission.exercise_problem
+    src_file = @submission.srcfile.path
+    @srccode = File.open(src_file).read
 
     respond_to do |format|
       format.html # show.html.erb

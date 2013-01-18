@@ -1,28 +1,37 @@
-<h1>Listing submissions</h1>
+<%- model_class = Submission -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
 
-<table>
-  <tr>
-    <th>Init date</th>
-    <th>End date</th>
-    <th>Veredict</th>
-    <th>Time</th>
-    <th>Exercise problem</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>User</th>
+            <th>Exercise</th>
+            <th>Problem</th>
+            <th>Time</th>
+            <th>Veredict</th>
+            <th><%=t '.actions', :default => t("helper.actions") %></th>
+        </tr>
+    </thead>
+    <tbody>
 <% @submissions.each do |submission| %>
-  <tr>
-    <td><%= submission.init_date %></td>
-    <td><%= submission.end_date %></td>
-    <td><%= submission.veredict %></td>
-    <td><%= submission.time %></td>
-    <td><%= submission.exercise_problem %></td>
-    <td><%= link_to 'Show', submission %></td>
-    <td><%= link_to 'Edit', edit_submission_path(submission) %></td>
-    <td><%= link_to 'Destroy', submission, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+    <tr>
+        <td><%= link_to submission.id, submission_path(submission) %></td>
+        <td><%= link_to submission.user.name, user_path(submission.user) %></td>
+        <td><%= submission.exercise_problem.exercise.name %></td>
+        <td><%= submission.exercise_problem.problem.name %></td>
+        <td><%= submission.time %></td>
+        <td><%= submission.veredict %></td>
+        <td>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      submission_path(submission),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>    
+    </tr>
 <% end %>
 </table>
 
