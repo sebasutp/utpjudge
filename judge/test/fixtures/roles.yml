@@ -1,7 +1,10 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  name: MyString
+  name: root
 
 two:
-  name: MyString
+  name: psetter
+  
+three:
+  name: g_user
