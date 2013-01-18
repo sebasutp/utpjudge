@@ -31,6 +31,11 @@ class User < ActiveRecord::Base
     return {:root => [1], :psetter=>[1,2], :g_user => [1,2,3]}
   end
   
+  def self.roles2
+    [['root',1],['problem setter',2],['general user',3]]
+  end
+
+  
   def self.newMA(params)
     u = User.new
     u.name = params[:name]

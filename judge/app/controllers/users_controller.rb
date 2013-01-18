@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :req_root, :except=>[:new,:create,:sign_in, :sign_out]
-  before_filter :req_guser, :only=>[:update]
+  before_filter :req_gen_user, :only=>[:update]
   # GET /users
   # GET /users.json
   
