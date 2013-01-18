@@ -42,10 +42,12 @@
   </div>
   
   <div class="control-group">
-    <%= f.label :category, :class => 'control-label' %>
+    <%= f.label :roles, :class => 'control-label' %>
     <div class="controls">
-       <p>cambiar por adecuado</p>
-      <%= f.select :code, User.roles2 %>
+        <% for r in Role.all  %>
+            <%= check_box_tag 'user[roles][]', r.id, @user.role_ids.include?(r.id), :id => dom_id(r) %>
+            <%= label_tag dom_id(r), r.name %>
+        <% end %>
     </div>
   </div>
 

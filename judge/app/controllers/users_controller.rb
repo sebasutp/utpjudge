@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :req_root, :except=>[:new,:create,:sign_in, :sign_out]
-  before_filter :req_gen_user, :only=>[:update]
+  before_filter :req_gen_user, :only=>[:update, :edit]
   # GET /users
   # GET /users.json
   
@@ -78,7 +78,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
 
     respond_to do |format|
-      if @user.update_attributes(params[:user])
+      if @user.updateMA(params[:user])
         format.html { redirect_to @user, :notice => 'user was successfully updated.' }
         format.json { head :no_content }
       else
