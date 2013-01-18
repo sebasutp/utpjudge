@@ -1,12 +1,12 @@
 class SubmissionsController < ApplicationController
-  before_filter :req_psetter, :only=>[:index,:destroy,:update,:edit,:show]
-  before_filter :req_gen_user, :except=>[:index,:destroy,:update,:edit,:show]
+  before_filter :req_psetter, :only=>[:index,:destroy,:update,:edit]
+  before_filter :req_gen_user, :except=>[:index,:destroy,:update,:edit]
 
   # GET /submissions
   # GET /submissions.json
   def index
     @submissions = Submission.all
-
+   
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @submissions }
@@ -17,6 +17,9 @@ class SubmissionsController < ApplicationController
   # GET /submissions/1.json
   def show
     @submission = Submission.find(params[:id])
+    is_authorized = @current_user.id == @submission.user.id || @current_user.has_roles(User.roles[:psetter])
+    redirect_to :root and return if not is_authorized
+
     @exercise_problem = @submission.exercise_problem
     src_file = @submission.srcfile.path
     @srccode = File.open(src_file).read
