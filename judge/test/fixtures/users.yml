@@ -1,13 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  email: MyString
-  name: MyString
-  code: MyString
-  encrypted_password: MyString
+  email: root@gmail.com
+  name: Super-root
+  code: 007
+  encrypted_password: JamesBond
 
 two:
-  email: MyString
-  name: MyString
-  code: MyString
-  encrypted_password: MyString
+  email: other@gmail.com
+  name: Mortal
+  code: 1
+  encrypted_password: password
