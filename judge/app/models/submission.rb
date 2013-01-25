@@ -21,7 +21,9 @@ class Submission < ActiveRecord::Base
   end
 
   def veredict=(v)
-    write_attribute(:veredict, v.delete("\n"))
+    if v
+      write_attribute(:veredict, v.delete("\n"))
+    end
   end
 
   def veredict
@@ -30,12 +32,14 @@ class Submission < ActiveRecord::Base
 
   def judge()
       #If you change this constants, also change Testcase
+      self.veredict = "Judging"
       h = Testcase.judgeTypeHash
       tc = self.testcase
       jt = h[tc.jtype]
       if jt == :downloadInput
         judgeDownload(tc)
       end
+      save
   end
 
   def judgeDownload(tc)
@@ -46,12 +50,11 @@ class Submission < ActiveRecord::Base
         self.veredict = 'TL'
       else
         if ofile2 && FileTest.exists?(ofile2)
-          diff_file = "protected/jdownload.diff"
-          self.veredict = %x{bash djudge.sh #{ofile1} #{ofile2} #{diff_file}}
+          s = %x{bash djudge.sh #{ofile1} #{ofile2}}
+          self.veredict = s.split.last
         else
           self.veredict = "Judging"
         end
       end
-      save
   end
 end

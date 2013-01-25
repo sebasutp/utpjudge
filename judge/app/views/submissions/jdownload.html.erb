@@ -31,4 +31,30 @@
           :exercise_problem=>@exercise_problem.id},{:class => 'btn btn-primary',:target => "blank"} %>
       <%= f.submit :class => 'btn btn-success', :value => 'Submit solution' %>
   </div>
+
+  <div class="control-group">
+      Time limit: 
+      <div class="controls" id="countdown"></div>
+  </div>
 <% end %>
+
+<script language="jscript">
+    var timer,time;
+
+    window.onload=function(){init_timer()};
+
+    function init_timer() {
+        time = <%= @exercise_problem.time_limit %>;
+        idSubm = <%= @submission.id %>;
+        time_trigger();
+    }
+
+    function time_trigger() {
+        document.getElementById("countdown").innerHTML=time + " s";
+        time--;
+        if (time==0) {
+            window.location.href="/submissions/"+idSubm;
+        }
+        timer = setTimeout('time_trigger()',1000);
+    }
+</script>

@@ -29,12 +29,12 @@ class SubmissionsController < ApplicationController
     is_authorized = @current_user.id == @submission.user.id || @current_user.has_roles(User.roles[:psetter])
     redirect_to :root and return if not is_authorized
 
-    if @submission.veredict == "Judging"
+    if (@submission.veredict == "Judging" || @submission.veredict.length == 0)
       @submission.judge
     end
     @exercise_problem = @submission.exercise_problem
     src_file = @submission.srcfile.path
-    if src_file && FileTest.exists?(src_file)
+        if src_file && FileTest.exists?(src_file)
       @srccode = File.open(src_file).read
     else
       @srccode = "No source code"
