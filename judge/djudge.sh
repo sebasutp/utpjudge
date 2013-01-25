@@ -1,7 +1,17 @@
 #! /bin/bash
 
-if (diff -wB $1 $2 > $3); then
-    echo "YES"
+if [ ! -f $1 ]; then
+	echo "$1 does not exist";
+	exit;
+fi;
+if [ ! -f $2 ]; then
+	echo "$2 does not exist";
+	exit;
+fi;
+
+if (diff -wB $1 $2); then
+	echo "YES";
 else
-    echo "WA"
+	echo "NO";
 fi
+

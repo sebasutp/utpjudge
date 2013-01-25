@@ -45,8 +45,12 @@ class Submission < ActiveRecord::Base
       if self.time > self.exercise_problem.time_limit
         self.veredict = 'TL'
       else
-        diff_file = "protected/jdownload.diff"
-        self.veredict = %x{bash djudge.sh #{ofile1} #{ofile2} #{diff_file}}
+        if ofile2 && FileTest.exists?(ofile2)
+          diff_file = "protected/jdownload.diff"
+          self.veredict = %x{bash djudge.sh #{ofile1} #{ofile2} #{diff_file}}
+        else
+          self.veredict = "Judging"
+        end
       end
       save
   end
