@@ -11,4 +11,5 @@ class ExerciseProblemTest < ActiveSupport::TestCase
     assert a.count==1
   end
   
+
 end

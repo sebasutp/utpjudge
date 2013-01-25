@@ -1,15 +1,7 @@
 
 class Fraccion
-    attr_accessor :num
+    attr_accessor :num, :den
     
-    def den()
-        return @den
-    end
-
-    def den=(x)
-        @den = x
-    end
-
     def euclid(x,y)
         if y==0
             return x
@@ -62,3 +54,39 @@ a = [x,y,z]
 puts z.num,z.den
 puts a
 puts a.sort
+
+class String
+
+  def palindrome?
+    return self.reverse == self
+  end
+end
+
+puts "hola".palindrome?
+puts "dabalearrozalazorraelabad".palindrome?
+puts "anitalavalatina".palindrome?
+
+class Integer
+
+  def each_prime_factor
+    i = self
+    p=2
+    while p*p<i
+      if i%p == 0
+        yield p
+        while (i%p == 0)
+          i = i / p
+        end
+      end
+      p += 1
+    end
+    if (i!=1)
+      yield i
+    end
+  end
+end
+
+30.each_prime_factor do |x|
+  puts x
+end
+
