@@ -1,11 +1,20 @@
 class SubmissionsController < ApplicationController
-  before_filter :req_psetter, :only=>[:index,:destroy,:update,:edit]
-  before_filter :req_gen_user, :except=>[:index,:destroy,:update,:edit]
+  before_filter :req_psetter, :only=>[:destroy,:update,:edit]
+  before_filter :req_gen_user, :except=>[:destroy,:update,:edit]
 
   # GET /submissions
   # GET /submissions.json
   def index
-    @submissions = Submission.all
+    u_id = params[:uid]
+    if (!u_id || Integer(u_id)!=@current_user.id)
+      authorized = @current_user.has_roles(User.roles[:psetter])
+      redirect_to :root and return if not authorized
+    end
+    if u_id
+      @submissions = User.find(u_id).submissions
+    else
+      @submissions = Submission.all
+    end
    
     respond_to do |format|
       format.html # index.html.erb
@@ -20,9 +29,16 @@ class SubmissionsController < ApplicationController
     is_authorized = @current_user.id == @submission.user.id || @current_user.has_roles(User.roles[:psetter])
     redirect_to :root and return if not is_authorized
 
+    if @submission.veredict == "Judging"
+      @submission.judge
+    end
     @exercise_problem = @submission.exercise_problem
     src_file = @submission.srcfile.path
-    @srccode = File.open(src_file).read
+    if src_file && FileTest.exists?(src_file)
+      @srccode = File.open(src_file).read
+    else
+      @srccode = "No source code"
+    end
 
     respond_to do |format|
       format.html # show.html.erb

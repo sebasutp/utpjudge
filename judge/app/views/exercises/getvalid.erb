@@ -3,7 +3,7 @@
 <table class="table table-hover">
     <% @exercises.each do |e| %>
         
-     <tr><th><a href="exercise/<%= e.id %>"><i class="icon-book"></i> <%= e.name %></a></th></tr>
+     <tr><th><a href="/exercise/<%= e.id %>"><i class="icon-book"></i> <%= e.name %></a></th></tr>
     <% end %>
 </table>
 
@@ -12,7 +12,7 @@
 <table class="table table-hover">
     <% @future_exercises.each do |e| %>
         
-     <tr><th><a href="exercise/<%= e.id %>"><i class="icon-book"></i> <%= e.name %></a></th></tr>
+     <tr><th><a href="/exercise/<%= e.id %>"><i class="icon-book"></i> <%= e.name %></a></th></tr>
     <% end %>
 </table>
 
@@ -21,6 +21,6 @@
 <table class="table table-hover">
     <% @past_exercises.each do |e| %>
         
-     <tr><th><a href="exercise/<%= e.id %>"><i class="icon-book"></i> <%= e.name %></a></th></tr>
+     <tr><th><a href="/exercise/<%= e.id %>"><i class="icon-book"></i> <%= e.name %></a></th></tr>
     <% end %>
 </table>

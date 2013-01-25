@@ -25,11 +25,13 @@
         <td><%= submission.time %></td>
         <td><%= submission.veredict %></td>
         <td>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+          <% if @current_user.has_roles(User.roles[:psetter]) %>
+            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                       submission_path(submission),
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                       :class => 'btn btn-mini btn-danger' %>
+          <% end %>
         </td>    
     </tr>
 <% end %>
@@ -37,4 +39,3 @@
 
 <br />
 
-<%= link_to 'New Submission', new_submission_path %>
