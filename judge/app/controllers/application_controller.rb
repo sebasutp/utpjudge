@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
   
   def unauthorized_user(should_redirect=true)
-      redirect_to root_path if should_redirect
+      redirect_to(root_path, :notice => "You need to log in to perform that action") if should_redirect
       return false
   end
 

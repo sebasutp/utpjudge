@@ -13,15 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20130114180229) do
 
-  create_table "excercises", :force => true do |t|
-    t.string   "name"
-    t.string   "url"
-    t.datetime "from"
-    t.datetime "to"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "exercise_problems", :force => true do |t|
     t.integer  "problem_number"
     t.integer  "time_limit"
