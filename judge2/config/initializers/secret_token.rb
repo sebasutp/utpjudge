@@ -4,4 +4,6 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Judge2::Application.config.secret_token = '21e4b39f835e1c3436d17ca91b9dfee0e1a39a1b2c7857949b44af81d3cb7fbbeaa44e2e9828f24e8e0ed32dd4306e9d6b0fad343cfbc326ffe0ba51aedadd82'
+Judge2::Application.config.secret_token = ENV.fetch('SECRET_TOKEN') do
+  "668c3c6e280b6d6f79d997e1b5cd4201b6dec9811adddf9e9f9f20dfbc5071fbd35be048a785780c958771889ebc83efa4f6c072d73b775c60d1b43301e5a184"
+end
