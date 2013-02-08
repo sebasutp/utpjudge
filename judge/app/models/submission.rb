@@ -42,6 +42,10 @@ class Submission < ActiveRecord::Base
       save
   end
 
+  def file_exist? (fpath)
+      return fpath && FileTest.exists?(fpath)
+  end
+
   def judgeDownload(tc)
       ofile1 = tc.outfile.path
       ofile2 = outfile.path
@@ -49,12 +53,21 @@ class Submission < ActiveRecord::Base
       if self.time > self.exercise_problem.time_limit
         self.veredict = 'TL'
       else
-        if ofile2 && FileTest.exists?(ofile2)
-          s = %x{bash djudge.sh #{ofile1} #{ofile2}}
-          self.veredict = s.split.last
-        else
-          self.veredict = "Judging"
+        if file_exist? ofile2
+            s = %x{bash djudge.sh #{ofile1} #{ofile2}}
+            self.veredict = s.split.last 
         end
       end
   end
+
+  def source
+      srcf = srcfile.path
+      if file_exist? srcf
+          s = File.open(srcf).read
+          return "The source code has non UTF8 characters" if not s.is_utf8?
+          return s
+      end
+      return "No source code"
+  end
+
 end

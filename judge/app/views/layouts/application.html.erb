@@ -17,9 +17,11 @@
     </script>
   </head>
   <body>
-      <%= render "/layouts/top_bar" %>
+      <%= render "/layouts/top_bar" %>      
       <% if flash[:notice] %>
-          <span class="label label-important"><%= flash[:notice] %></span>
+        <div class="alert alert-error">
+          <%= flash[:notice] %>
+        </div>        
       <% end %>
       <%= render "/layouts/info" %>
   </body>
