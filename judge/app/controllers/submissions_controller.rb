@@ -50,6 +50,11 @@ class SubmissionsController < ApplicationController
         @submission.user = current_user
         @submission.save
         render "jdownload"
+			else
+				@submission = Submission.newJudgeDownload(@exercise_problem)
+        @submission.user = current_user
+        @submission.save
+        render "jupload"
       end
   end
 
@@ -67,6 +72,21 @@ class SubmissionsController < ApplicationController
         end
       end
   end
+
+	def jupload
+		@submission = Submission.find(params[:id])
+    @submission.end_date = DateTime.now
+    respond_to do |format|
+      if @submission.update_attributes(params[:submission]) && @submission.judge
+        #if success redirect to show action
+        format.html { redirect_to @submission, notice: 'Your submission was successfully sent.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @submission.errors, status: :unprocessable_entity }
+      end
+    end
+	end
 
   #GET /submissions/downloadInput?exercise_problem=id
   def downloadInput

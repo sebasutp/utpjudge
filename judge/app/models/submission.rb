@@ -5,6 +5,8 @@ class Submission < ActiveRecord::Base
   attr_accessible :end_date, :init_date, :time, :srcfile, :outfile
   has_attached_file :srcfile, :path => ":rails_root/protected/submissions/s:basename:id.:extension", :url => "s:basename:id.:extension"
   has_attached_file :outfile, :path => ":rails_root/protected/submissions/o:basename:id.:extension", :url => "o:basename:id.:extension"
+	## Code to judge uploadSource
+	has_attached_file :inputfile, :path => ":rails_root/protected/submissions/o:basename:id.:extension", :url => "o:basename:id.:extension"
 
   #validates_attachment_presence :src_file
   validates_attachment_size :srcfile, :less_than => 1.megabytes
@@ -15,6 +17,17 @@ class Submission < ActiveRecord::Base
     s.init_date = DateTime.now
     s.exercise_problem = exercise_problem
     s.veredict = 'TL'
+    testcases = exercise_problem.problem.testcases.where(:jtype => exercise_problem.stype)
+    s.testcase = testcases.first
+    return s
+  end
+
+	## Code to judge uploadSource
+	def self.newJudgeSource(exercise_problem)
+    s = Submission.new
+    s.init_date = DateTime.now
+    s.exercise_problem = exercise_problem
+    s.veredict = 'Judging'
     testcases = exercise_problem.problem.testcases.where(:jtype => exercise_problem.stype)
     s.testcase = testcases.first
     return s
@@ -38,6 +51,8 @@ class Submission < ActiveRecord::Base
       jt = h[tc.jtype]
       if jt == :downloadInput
         judgeDownload(tc)
+			else
+				judgeUpload(tc);
       end
       save
   end
@@ -59,6 +74,16 @@ class Submission < ActiveRecord::Base
         end
       end
   end
+
+	def judgeUpload(tc)
+		ifile = tc.inputfile.path
+		ofile = tc.outputfile.path
+		sfile = srcfile.path
+		if file_exist? sfile
+			s = %x{bash sjudge.sh #{sfile} #{ifile} #{ofile}}
+			self.veredict = s.split.last
+		end
+	end
 
   def source
       srcf = srcfile.path
