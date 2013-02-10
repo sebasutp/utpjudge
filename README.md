@@ -6,7 +6,7 @@ of the students through contest like acm-icpc, codeforces, and others.
 
 - The current development is not in the master branch, is in "dev".
 
-### To Clone. (if you want collaborate).
+### To Clone.
 
 		git clone git@github.com:sebasutp/utpjudge.git
 		git checkout -b dev
