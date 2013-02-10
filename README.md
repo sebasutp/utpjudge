@@ -16,14 +16,14 @@ of the students through contest like acm-icpc, codeforces, and others.
 
 - go to judge directory and initialize the db.
 
-	cd judge/
-	rake db:migrate
-	rake db:seed
+		cd judge/
+		rake db:migrate
+		rake db:seed
 
 this will create a account with email "root@utp.edu.co" and password "root@utp.edu.co"
 - run the server
 
-	rails server
+		rails server
 
 - enjoy
 
