@@ -74,7 +74,7 @@ class Submission < ActiveRecord::Base
         end
       end
   end
-
+=begin
 	def judgeUpload(tc)
 		ifile = tc.inputfile.path
 		ofile = tc.outputfile.path
@@ -84,7 +84,7 @@ class Submission < ActiveRecord::Base
 			self.veredict = s.split.last
 		end
 	end
-
+=end
   def source
       srcf = srcfile.path
       if file_exist? srcf

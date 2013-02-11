@@ -7,6 +7,7 @@ Judge::Application.routes.draw do
       end
       member do
           put :jdownload
+					put :jupload
       end
   end
   

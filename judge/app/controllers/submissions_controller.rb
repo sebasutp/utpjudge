@@ -45,17 +45,20 @@ class SubmissionsController < ApplicationController
   def new
       @exercise_problem = ExerciseProblem.find(params[:exercise_problem])
       @jtype = Testcase.judgeTypeHash[@exercise_problem.stype]
+			flash.now[:notice] = @jtype
+
       if @jtype==:downloadInput
         @submission = Submission.newJudgeDownload(@exercise_problem)
         @submission.user = current_user
         @submission.save
         render "jdownload"
 			else
-				@submission = Submission.newJudgeDownload(@exercise_problem)
+				@submission = Submission.newJudgeSource(@exercise_problem)
         @submission.user = current_user
         @submission.save
         render "jupload"
       end
+
   end
 
   def jdownload
