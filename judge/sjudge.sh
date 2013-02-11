@@ -5,7 +5,7 @@ INPUTFILE=$2
 OUTFILE=$3
 
 COMPILATION="g++ -Wall -O2 -static -pipe -o ${SOURCE}.BIN $SOURCE"
-EXECUTION="./${SOURCE}.BIN < $INPUTFILE > ${SOURCE}.OUT 2> ${SOURCE}.ERR"
+EXECUTION="${SOURCE}.BIN <$INPUTFILE >${SOURCE}.OUT 2>${SOURCE}.ERR"
 
 if [ ! -f $SOURCE ]; then
   echo "$SOURCE does not exist";
@@ -25,8 +25,7 @@ fi;
 ## Code temporal
 `$COMPILATION` #Compilation
 if [ $? == 0 ]; then
-#	`$EXECUTION` #Execution (Dont works)
-	./${SOURCE}.BIN < $INPUTFILE > ${SOURCE}.OUT 2> ${SOURCE}.ERR
+	`${SOURCE}.BIN <$INPUTFILE >${SOURCE}.OUT 2>${SOURCE}.ERR`
 	if [ $? != 0 ]; then
 		echo "Runtime error";
 	fi
