@@ -2,11 +2,11 @@ class Submission < ActiveRecord::Base
   belongs_to :exercise_problem
   belongs_to :user
   belongs_to :testcase
-  attr_accessible :end_date, :init_date, :time, :srcfile, :outfile
+  attr_accessible :end_date, :init_date, :time, :srcfile, :outfile, :infile
   has_attached_file :srcfile, :path => ":rails_root/protected/submissions/s:basename:id.:extension", :url => "s:basename:id.:extension"
   has_attached_file :outfile, :path => ":rails_root/protected/submissions/o:basename:id.:extension", :url => "o:basename:id.:extension"
-	## Code to judge uploadSource
-	has_attached_file :inputfile, :path => ":rails_root/protected/submissions/o:basename:id.:extension", :url => "o:basename:id.:extension"
+
+	has_attached_file :infile, :path => ":rails_root/protected/correct/:basename:id.:extension", :url => "psin:id.:extension"
 
   #validates_attachment_presence :src_file
   validates_attachment_size :srcfile, :less_than => 1.megabytes
@@ -66,25 +66,25 @@ class Submission < ActiveRecord::Base
       ofile2 = outfile.path
       self.time = self.end_date - self.init_date
       if self.time > self.exercise_problem.time_limit
-        self.veredict = 'TL'
+      	self.veredict = 'TL'
       else
-        if file_exist? ofile2
-            s = %x{bash djudge.sh #{ofile1} #{ofile2}}
-            self.veredict = s.split.last 
-        end
+			if file_exist? ofile2
+				s = %x{bash djudge.sh #{ofile1} #{ofile2}}
+				self.veredict = s.split.last 
+			end
       end
   end
-=begin
+
 	def judgeUpload(tc)
-		ifile = tc.inputfile.path
-		ofile = tc.outputfile.path
+		ofile = tc.outfile.path
+		ifile = infile.path
 		sfile = srcfile.path
 		if file_exist? sfile
 			s = %x{bash sjudge.sh #{sfile} #{ifile} #{ofile}}
 			self.veredict = s.split.last
 		end
 	end
-=end
+
   def source
       srcf = srcfile.path
       if file_exist? srcf
