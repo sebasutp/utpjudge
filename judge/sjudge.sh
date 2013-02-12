@@ -66,7 +66,8 @@ elif [ $TYPE == 2 ]; then
 fi;
 
 
-if (diff -wB $OUTFILE ${SOURCE}.OUT); then
+DIFF=`diff -wB $OUTFILE ${SOURCE}.OUT`
+if [ $? == 0 ]; then
   echo "YES";
 else
   echo "NO";

@@ -87,7 +87,7 @@ class Submission < ActiveRecord::Base
 
 		if file_exist? sfile
 			s = %x{bash sjudge.sh #{sfile} #{ifile} #{ofile} #{type} #{comp} #{exec} #{tl} #{ml}}
-			self.veredict = s.split.last
+			self.veredict = s
 		end
 	end
 
