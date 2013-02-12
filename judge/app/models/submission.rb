@@ -77,8 +77,16 @@ class Submission < ActiveRecord::Base
 		ofile = tc.outfile.path
 		ifile = tc.infile.path
 		sfile = srcfile.path
+		
+		#to check if sjudge.h works
+		comp = "'g++ -Wall -O2 -static -pipe -o ${SOURCE}.BIN ${SOURCE}'"
+		exec = "'${SOURCE}.BIN < ${INFILE} > ${SOURCE}.OUT 2> ${SOURCE}.ERR'"
+		tl = 1
+		ml = 250
+		type = 1
+
 		if file_exist? sfile
-			s = %x{bash sjudge.sh #{sfile} #{ifile} #{ofile}}
+			s = %x{bash sjudge.sh #{sfile} #{ifile} #{ofile} #{type} #{comp} #{exec} #{tl} #{ml}}
 			self.veredict = s.split.last
 		end
 	end
