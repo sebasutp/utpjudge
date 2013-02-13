@@ -19,9 +19,9 @@
   <body>
       <%= render "/layouts/top_bar" %>      
       <% if flash[:notice] %>
-        <div class="alert alert-error">
+        <h4 class='<%= (flash[:class]) ? flash[:class] : "alert alert-error" %>'>
           <%= flash[:notice] %>
-        </div>        
+        </h4>        
       <% end %>
       <%= render "/layouts/info" %>
   </body>

@@ -26,9 +26,7 @@ class Exercise < ActiveRecord::Base
   def current?
     #returns weather the exercise can be done or not given the current date
     #and the from->to dates
-    #now = DateTime.now
-    #return from_date < now and to_date > now
-    return true
+    return (Time.parse(to_date.to_s(:db)) >= Time.now) && (Time.parse(from_date.to_s(:db)) < Time.now)
   end
 
 end

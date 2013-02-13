@@ -2,6 +2,7 @@ class Submission < ActiveRecord::Base
   belongs_to :exercise_problem
   belongs_to :user
   belongs_to :testcase
+  
   attr_accessible :end_date, :init_date, :time, :srcfile, :outfile
   has_attached_file :srcfile, :path => ":rails_root/protected/submissions/s:basename:id.:extension", :url => "s:basename:id.:extension"
   has_attached_file :outfile, :path => ":rails_root/protected/submissions/o:basename:id.:extension", :url => "o:basename:id.:extension"

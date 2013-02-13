@@ -6,7 +6,7 @@ class Problem < ActiveRecord::Base
   #validates_attachment_presence :pdescription
   validates_attachment_size :pdescription, :less_than => 2.megabytes
 
-  has_many :exercise_problems
+  has_many :exercise_problems ,  :dependent => :destroy
   has_many :exercises, :through=>:exercise_problems
-  has_many :testcases
+  has_many :testcases,  :dependent => :destroy
 end

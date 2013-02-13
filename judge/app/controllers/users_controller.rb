@@ -62,7 +62,13 @@ class UsersController < ApplicationController
     @user = User.authenticate(params[:user])
     if @user
       session[:user_id] = @user.id
+      flash[:class] = "alert alert-success"
+      flash[:notice] = "Login successful"
+    else
+      #flash[:class] = "alert alert-error"
+      flash[:notice] = "Login failed. Wrong user name or password"
     end
+    
     redirect_to :root
   end
   
