@@ -53,6 +53,7 @@ class SubmissionsController < ApplicationController
         @submission.save
         render "jdownload"
 			else
+				@language = Language.all
 				@submission = Submission.newJudgeSource(@exercise_problem)
         @submission.user = current_user
         @submission.save
