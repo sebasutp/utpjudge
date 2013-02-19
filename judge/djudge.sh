@@ -9,7 +9,7 @@ if [ ! -f $2 ]; then
 	exit;
 fi;
 
-if (diff -wB $1 $2); then
+if ( diff -wB $1 $2 --brief ); then
 	echo "YES";
 else
 	echo "NO";

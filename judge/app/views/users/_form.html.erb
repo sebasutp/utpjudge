@@ -1,7 +1,8 @@
 <%= form_for @user, :html => { :class => 'form-horizontal' } do |f| %>
   <% if @user.errors.any? %>
     <div id="error_explanation">
-      <h3 class="text-error"><%= pluralize(@user.errors.count, "error") %> prohibited this submission from being saved:</h3>
+      <h3 class="text-error">The user can't be create</h3>
+      <h4 class="text-error"> <%= pluralize(@exercise.errors.count, "error") %> </h4>
       <ul>
       <% @user.errors.full_messages.each do |msg| %>
         <li class="text-error"><%= msg %></li>

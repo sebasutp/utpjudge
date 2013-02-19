@@ -29,16 +29,11 @@ class SubmissionsController < ApplicationController
     is_authorized = @current_user.id == @submission.user.id || @current_user.has_roles(User.roles[:psetter])
     redirect_to :root and return if not is_authorized
 
-    if @submission.veredict == "Judging"
+    if (@submission.veredict == "Judging" || @submission.veredict.length == 0)
       @submission.judge
     end
     @exercise_problem = @submission.exercise_problem
-    src_file = @submission.srcfile.path
-    if src_file && FileTest.exists?(src_file)
-      @srccode = File.open(src_file).read
-    else
-      @srccode = "No source code"
-    end
+    @srccode = @submission.source
 
     respond_to do |format|
       format.html # show.html.erb
@@ -62,9 +57,8 @@ class SubmissionsController < ApplicationController
       @submission = Submission.find(params[:id])
       @submission.end_date = DateTime.now
       respond_to do |format|
-        if @submission.update_attributes(params[:submission])
+        if @submission.update_attributes(params[:submission]) && @submission.judge
           #if success redirect to show action
-          @submission.judge
           format.html { redirect_to @submission, notice: 'Your submission was successfully sent.' }
           format.json { head :no_content }
         else

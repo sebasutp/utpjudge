@@ -2,6 +2,7 @@ class Submission < ActiveRecord::Base
   belongs_to :exercise_problem
   belongs_to :user
   belongs_to :testcase
+  
   attr_accessible :end_date, :init_date, :time, :srcfile, :outfile
   has_attached_file :srcfile, :path => ":rails_root/protected/submissions/s:basename:id.:extension", :url => "s:basename:id.:extension"
   has_attached_file :outfile, :path => ":rails_root/protected/submissions/o:basename:id.:extension", :url => "o:basename:id.:extension"
@@ -21,7 +22,9 @@ class Submission < ActiveRecord::Base
   end
 
   def veredict=(v)
-    write_attribute(:veredict, v.delete("\n"))
+    if v
+      write_attribute(:veredict, v.delete("\n"))
+    end
   end
 
   def veredict
@@ -30,12 +33,18 @@ class Submission < ActiveRecord::Base
 
   def judge()
       #If you change this constants, also change Testcase
+      self.veredict = "Judging"
       h = Testcase.judgeTypeHash
       tc = self.testcase
       jt = h[tc.jtype]
       if jt == :downloadInput
         judgeDownload(tc)
       end
+      save
+  end
+
+  def file_exist? (fpath)
+      return fpath && FileTest.exists?(fpath)
   end
 
   def judgeDownload(tc)
@@ -45,13 +54,21 @@ class Submission < ActiveRecord::Base
       if self.time > self.exercise_problem.time_limit
         self.veredict = 'TL'
       else
-        if ofile2 && FileTest.exists?(ofile2)
-          diff_file = "protected/jdownload.diff"
-          self.veredict = %x{bash djudge.sh #{ofile1} #{ofile2} #{diff_file}}
-        else
-          self.veredict = "Judging"
+        if file_exist? ofile2
+            s = %x{bash djudge.sh #{ofile1} #{ofile2}}
+            self.veredict = s.split.last 
         end
       end
-      save
   end
+
+  def source
+      srcf = srcfile.path
+      if file_exist? srcf
+          s = File.open(srcf).read
+          return "The source code has non UTF8 characters" if not s.is_utf8?
+          return s
+      end
+      return "No source code"
+  end
+
 end

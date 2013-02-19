@@ -11,9 +11,9 @@
         <ul class="nav"> 
           <li class="divider-vertical"></li>
           <li><a class="active" href="/"> Home </a></li>
-          <li class="divider-vertical"></li>
           <% if @current_user %>
-              <li><a class="active" href="/submissions?uid=<%= @current_user.id %>">My submissions</a></li>
+            <li class="divider-vertical"></li>
+            <li><a class="active" href="/submissions?uid=<%= @current_user.id %>">My submissions</a></li>
           <%end%>
           <li class="divider-vertical"></li>
           <li><a class="active" href="#"> About us </a></li>

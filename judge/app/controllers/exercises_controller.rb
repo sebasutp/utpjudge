@@ -15,12 +15,19 @@ class ExercisesController < ApplicationController
   def getvalid
       @exercises = Exercise.where("from_date <= :cdate and to_date >= :cdate",{:cdate => DateTime.now.to_s(:db)})
       @past_exercises = Exercise.where("to_date <= :cdate",{:cdate => DateTime.now.to_s(:db)})
-      @future_exercises = Exercise.where("from_date >= :cdate",{:cdate => DateTime.now.to_s(:db)})
+      @future_exercises = Exercise.where("from_date > :cdate",{:cdate => DateTime.now.to_s(:db)})
   end
 
   def exercise
     @exercise = Exercise.find(params[:id])
     @problems = @exercise.exercise_problems.order(:problem_number)
+    respond_to do |format|
+        if(!@exercise.current?)
+           format.html { redirect_to :root, :notice => 'the exercise is not running' }
+        else
+           format.html 
+        end
+    end
   end
 
   # GET /exercises/1

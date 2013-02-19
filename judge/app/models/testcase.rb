@@ -1,6 +1,8 @@
 class Testcase < ActiveRecord::Base
   belongs_to :problem
-  has_many :submissions
+
+  has_many :submissions, :dependent => :destroy
+
   attr_accessible :jtype,:infile,:outfile
   has_attached_file :infile, :path => ":rails_root/protected/correct/:basename:id.:extension", :url => ":basename:id.:extension"
   has_attached_file :outfile, :path => ":rails_root/protected/correct/:basename:id.:extension", :url => ":basename:id.:extension"
