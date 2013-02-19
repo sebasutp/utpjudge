@@ -1,7 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-problem_one:
-  name: Arbol
-  #pdescription: a.pdf #Not used because is a file
-  notes: Pitagoras
-
