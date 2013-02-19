@@ -2,8 +2,8 @@ class Submission < ActiveRecord::Base
   belongs_to :exercise_problem
   belongs_to :user
   belongs_to :testcase
-  
-  attr_accessible :end_date, :init_date, :time, :srcfile, :outfile
+  belongs_to :language
+  attr_accessible :end_date, :init_date, :time, :srcfile, :outfile, :infile
   has_attached_file :srcfile, :path => ":rails_root/protected/submissions/s:basename:id.:extension", :url => "s:basename:id.:extension"
   has_attached_file :outfile, :path => ":rails_root/protected/submissions/o:basename:id.:extension", :url => "o:basename:id.:extension"
 
@@ -16,6 +16,17 @@ class Submission < ActiveRecord::Base
     s.init_date = DateTime.now
     s.exercise_problem = exercise_problem
     s.veredict = 'TL'
+    testcases = exercise_problem.problem.testcases.where(:jtype => exercise_problem.stype)
+    s.testcase = testcases.first
+    return s
+  end
+
+	## Code to judge uploadSource
+	def self.newJudgeSource(exercise_problem)
+    s = Submission.new
+    s.init_date = DateTime.now
+    s.exercise_problem = exercise_problem
+    s.veredict = 'Judging'
     testcases = exercise_problem.problem.testcases.where(:jtype => exercise_problem.stype)
     s.testcase = testcases.first
     return s
@@ -39,6 +50,9 @@ class Submission < ActiveRecord::Base
       jt = h[tc.jtype]
       if jt == :downloadInput
         judgeDownload(tc)
+			else
+				lan = self.language
+				judgeUpload(tc,lan);
       end
       save
   end
@@ -52,14 +66,32 @@ class Submission < ActiveRecord::Base
       ofile2 = outfile.path
       self.time = self.end_date - self.init_date
       if self.time > self.exercise_problem.time_limit
-        self.veredict = 'TL'
+      	self.veredict = 'TL'
       else
-        if file_exist? ofile2
-            s = %x{bash djudge.sh #{ofile1} #{ofile2}}
-            self.veredict = s.split.last 
-        end
+			if file_exist? ofile2
+				s = %x{bash djudge.sh #{ofile1} #{ofile2}}
+				self.veredict = s.split.last 
+			end
       end
   end
+
+	def judgeUpload(tc)
+		ofile = tc.outfile.path
+		ifile = tc.infile.path
+		sfile = srcfile.path
+		
+		#to check if sjudge.h works
+		comp = "'g++ -Wall -O2 -static -pipe -o ${SOURCE}.BIN ${SOURCE}'"
+		exec = "'${SOURCE}.BIN < ${INFILE} > ${SOURCE}.OUT 2> ${SOURCE}.ERR'"
+		tl = 1
+		ml = 250
+		type = 1
+
+		if file_exist? sfile
+			s = %x{bash sjudge.sh #{sfile} #{ifile} #{ofile} #{type} #{comp} #{exec} #{tl} #{ml}}
+			self.veredict = s
+		end
+	end
 
   def source
       srcf = srcfile.path

@@ -1,0 +1,47 @@
+<h2>Submit solution</h2>
+<%= form_for(@submission, :url=> {:action => "jupload", :id=>@submission.id}, :html => {:method=>"put", :onsubmit => "return validate_form()"}) do |f| %>
+  <% if @submission.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@submission.errors.count, "error") %> prohibited this submission from being saved:</h2>
+
+      <ul>
+      <% @submission.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+	<div class="control-group">
+		<%= f.label :language, :class=>'control-label' %>
+    <div class="controls">
+			<%= f.select(:language, @language.map { |value| [ value.name, value.id ] }) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+      <%= f.label :srcfile, :class=>'control-label' %>
+      <div class="controls">
+          <%= f.file_field :srcfile %>
+      </div>
+  </div>
+
+  <div class="actions">
+      <%= f.submit :class => 'btn btn-success', :value => 'Submit solution' %>
+  </div>
+
+<% end %>
+
+<script language="jscript">
+    function filled(str) {
+        return str!=null && str!="";
+    }
+
+    function validate_form() {
+        var srcfile = document.getElementById("submission_srcfile");
+        var outfile = document.getElementById("submission_outfile");
+        var v = filled(srcfile.value);
+        if (!v) alert("The source file must be filled");
+        return v;
+    }
+</script>

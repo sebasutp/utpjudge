@@ -1,4 +1,7 @@
 Judge::Application.routes.draw do
+  resources :languages
+
+
   root :to => "static_pages#home"
   
   resources :submissions do
@@ -7,6 +10,7 @@ Judge::Application.routes.draw do
       end
       member do
           put :jdownload
+					put :jupload
       end
   end
   
