@@ -53,7 +53,10 @@ class Submission < ActiveRecord::Base
         judgeDownload(tc)
       else
         lan = Language.find(language_id)
-        judgeUpload(tc,lan)
+        exp = self.exercise_problem
+        timl = exp.time_limit
+        meml = exp.mem_lim
+        judgeUpload(tc,lan,timl,meml)
       end
       save
   end
@@ -76,16 +79,15 @@ class Submission < ActiveRecord::Base
       end
   end
 
-	def judgeUpload(tc,lan)
+	def judgeUpload(tc,lan,timl,meml)
 		ofile = tc.outfile.path
 		ifile = tc.infile.path
 		sfile = srcfile.path
 		
-		#to check if sjudge.h works
-		comp = lan.compilation #"g++ -Wall -O2 -static -pipe -o ${SOURCE}.BIN ${SOURCE}"
-		exec = lan.execution #"${SOURCE}.BIN < ${INFILE} > ${SOURCE}.OUT 2> ${SOURCE}.ERR"
-		tl = 1
-		ml = 250
+		comp = lan.compilation
+		exec = lan.execution 
+		tl = timl
+		ml = meml
 		type = lan.ltype
 
 		if file_exist? sfile
