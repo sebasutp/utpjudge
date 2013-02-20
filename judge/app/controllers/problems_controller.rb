@@ -9,7 +9,7 @@ class ProblemsController < ApplicationController
   # GET /problems
   # GET /problems.json
   def index
-    @problems = Problem.all
+    @problems = Problem.paginate(:page => params[:page], :per_page => 10)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -49,7 +49,8 @@ class ProblemsController < ApplicationController
     @problem = Problem.new(params[:problem])
 
     respond_to do |format|
-      if @problem.save
+      if @problem.save        
+        flash[:class] = "alert alert-success"
         format.html { redirect_to @problem, :notice => 'Problem was successfully created.' }
         format.json { render :json => @problem, :status => :created, :location => @problem }
       else

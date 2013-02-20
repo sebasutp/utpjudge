@@ -60,6 +60,7 @@ class SubmissionsController < ApplicationController
       respond_to do |format|
         if @submission.update_attributes(params[:submission]) && @submission.judge
           #if success redirect to show action
+          flash[:class] = "alert alert-success"
           format.html { redirect_to @submission, notice: 'Your submission was successfully sent.' }
           format.json { head :no_content }
         else

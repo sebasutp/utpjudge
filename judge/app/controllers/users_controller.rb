@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users.json
   
   def index
-    @users = User.all
+    @users = User.paginate(:page => params[:page], :per_page => 10)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -48,6 +48,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         session[:user_id] = @user.id
+        flash[:class] = "alert alert-success"
         format.html { redirect_to @user, :notice => 'user was successfully created.' }
         format.json { render :json => @user, :status => :created, :location => @user }
       else

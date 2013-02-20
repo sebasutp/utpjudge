@@ -35,6 +35,8 @@
       </tr>
     <% end %>
   </tbody>
+  
+  <%= will_paginate @posts %>
 </table>
 
 <%= link_to t('.new', :default => t("helpers.links.new")),
