@@ -7,9 +7,12 @@ class User < ActiveRecord::Base
   has_many :submissions ,  :dependent => :destroy
 
   has_and_belongs_to_many :roles
+  has_and_belongs_to_many :groups
+  
   validates :password, {:confirmation => true, :length=>{:within => 6..50},
     :presence => true, :if => :password_required?}
   validates :email, {:presence=>true, :format => {:with => /^[^@][\w.-]+@[\w.-]+[.][a-z]{2,4}$/i}}
+   validates_uniqueness_of :email
 
   def has_roles(roles)
     rids = role_ids & roles

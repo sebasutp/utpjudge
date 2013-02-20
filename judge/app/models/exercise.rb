@@ -5,6 +5,8 @@ class Exercise < ActiveRecord::Base
   validate :date_range
   has_many :exercise_problems, :dependent => :destroy
   has_many :problems, :through=>:exercise_problems
+  
+  has_and_belongs_to_many :groups
 
   def date_range
     if (from_date and to_date)

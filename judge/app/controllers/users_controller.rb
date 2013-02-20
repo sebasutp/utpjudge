@@ -86,6 +86,7 @@ class UsersController < ApplicationController
     
     respond_to do |format|
       if @user.updateMA(params[:user])
+        flash[:class] = "alert alert-success"
         format.html { redirect_to @user, :notice => 'user was successfully updated.' }
         format.json { head :no_content }
       else
