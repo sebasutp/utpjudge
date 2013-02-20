@@ -2,8 +2,9 @@ class Submission < ActiveRecord::Base
   belongs_to :exercise_problem
   belongs_to :user
   belongs_to :testcase
-  belongs_to :language
+
   attr_accessible :end_date, :init_date, :time, :srcfile, :outfile, :infile
+  attr_accessor :language_id
   has_attached_file :srcfile, :path => ":rails_root/protected/submissions/s:basename:id.:extension", :url => "s:basename:id.:extension"
   has_attached_file :outfile, :path => ":rails_root/protected/submissions/o:basename:id.:extension", :url => "o:basename:id.:extension"
 
@@ -22,7 +23,7 @@ class Submission < ActiveRecord::Base
   end
 
 	## Code to judge uploadSource
-	def self.newJudgeSource(exercise_problem)
+  def self.newJudgeSource(exercise_problem)
     s = Submission.new
     s.init_date = DateTime.now
     s.exercise_problem = exercise_problem
@@ -50,9 +51,9 @@ class Submission < ActiveRecord::Base
       jt = h[tc.jtype]
       if jt == :downloadInput
         judgeDownload(tc)
-			else
-				lan = self.language
-				judgeUpload(tc,lan);
+      else
+        lan = Language.find(language_id)
+        judgeUpload(tc,lan)
       end
       save
   end
@@ -61,7 +62,7 @@ class Submission < ActiveRecord::Base
       return fpath && FileTest.exists?(fpath)
   end
 
-  def judgeDownload(tc)
+  def judgeDownload(tc,lan)
       ofile1 = tc.outfile.path
       ofile2 = outfile.path
       self.time = self.end_date - self.init_date
@@ -75,20 +76,20 @@ class Submission < ActiveRecord::Base
       end
   end
 
-	def judgeUpload(tc)
+	def judgeUpload(tc,lan)
 		ofile = tc.outfile.path
 		ifile = tc.infile.path
 		sfile = srcfile.path
 		
 		#to check if sjudge.h works
-		comp = "'g++ -Wall -O2 -static -pipe -o ${SOURCE}.BIN ${SOURCE}'"
-		exec = "'${SOURCE}.BIN < ${INFILE} > ${SOURCE}.OUT 2> ${SOURCE}.ERR'"
+		comp = lan.compilation #"g++ -Wall -O2 -static -pipe -o ${SOURCE}.BIN ${SOURCE}"
+		exec = lan.execution #"${SOURCE}.BIN < ${INFILE} > ${SOURCE}.OUT 2> ${SOURCE}.ERR"
 		tl = 1
 		ml = 250
-		type = 1
+		type = lan.ltype
 
 		if file_exist? sfile
-			s = %x{bash sjudge.sh #{sfile} #{ifile} #{ofile} #{type} #{comp} #{exec} #{tl} #{ml}}
+			s = %x{bash sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{tl} #{ml}}
 			self.veredict = s
 		end
 	end

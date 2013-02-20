@@ -78,9 +78,10 @@ class SubmissionsController < ApplicationController
   end
 
 	def jupload
-		@submission = Submission.find(params[:id])
-    @submission.end_date = DateTime.now
-    respond_to do |format|
+	  @submission = Submission.find(params[:id])
+      @submission.end_date = DateTime.now
+      respond_to do |format|
+      @submission.language_id = params[:language_id]
       if @submission.update_attributes(params[:submission]) && @submission.judge
         #if success redirect to show action
         format.html { redirect_to @submission, notice: 'Your submission was successfully sent.' }

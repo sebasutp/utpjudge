@@ -17,7 +17,7 @@
   </div>
   <div class="field">
     <%= f.label :ltype %><br />
-    <%= f.text_field :ltype %>
+    <%= f.select :ltype, [['Compiled',1],['Interpreted',2]] %>
   </div>
   <div class="field">
     <%= f.label :compilation %><br />
