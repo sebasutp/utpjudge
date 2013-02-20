@@ -54,7 +54,7 @@ class Submission < ActiveRecord::Base
       else
         lan = Language.find(language_id)
         exp = self.exercise_problem
-        timl = exp.time_limit
+        timl = exp.prog_limit
         meml = exp.mem_lim
         judgeUpload(tc,lan,timl,meml)
       end
