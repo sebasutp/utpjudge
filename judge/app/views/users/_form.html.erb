@@ -2,7 +2,7 @@
   <% if @user.errors.any? %>
     <div id="error_explanation">
       <h3 class="text-error">The user can't be create</h3>
-      <h4 class="text-error"> <%= pluralize(@exercise.errors.count, "error") %> </h4>
+      <h4 class="text-error"> <%= pluralize(@user.errors.count, "error") %> </h4>
       <ul>
       <% @user.errors.full_messages.each do |msg| %>
         <li class="text-error"><%= msg %></li>

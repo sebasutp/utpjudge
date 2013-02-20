@@ -1,19 +1,27 @@
 <h3> Administration Page </h3>
 
-<p> future information </p>
+<h4 class="text-info"> Future information </h4>
+
+<ul class="inline">
 
 <% if @user.has_roles( User.roles[:psetter]) %>
-  <a class="active" href="/exercises"> <h4> Admin Exercises </h4> </a>
+  <li><a class="active" href="/exercises"> <h4> Admin Exercises </h4> </a></li>
 <% end %>
 
 <% if @user.has_roles( User.roles[:root]) %>
-  <a class="active" href="/users"> <h4> Admin Users </h4> </a>
+  <li><a class="active" href="/users"> <h4> Admin Users </h4> </a></li>
 <% end %>
 
 <% if @user.has_roles( User.roles[:psetter]) %>
-  <a class="active" href="/problems"> <h4> Admin Problems </h4> </a>
+  <li><a class="active" href="/problems"> <h4> Admin Problems </h4> </a></li>
 <% end %>
 
 <% if @user.has_roles( User.roles[:psetter]) %>
-  <a class="active" href="/submissions"> <h4>Submissions</h4> </a>
+  <li><a class="active" href="/submissions"> <h4>Submissions</h4> </a></li>
 <% end %>
+
+<% if @user.has_roles( User.roles[:psetter]) %>
+  <li><a class="active" href="/groups"> <h4>groups</h4> </a></li>
+<% end %>
+
+</ul>
