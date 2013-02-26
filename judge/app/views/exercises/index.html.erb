@@ -2,7 +2,8 @@
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
 </div>
-<table class="table table-striped">
+<% if @exercises.length >0 %>
+<table class="table table-striped" border="1">
   <thead>
     <tr>
       <th><%= model_class.human_attribute_name(:id) %></th>
@@ -32,8 +33,13 @@
         </td>
       </tr>
     <% end %>
+    <%else%>
   </tbody>
 </table>
+    <div>
+      <p style="font-weight: bold; font-size: 22px; color:red"> No exercise </p>
+    </div>
+    <% end %>
 
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_exercise_path,
