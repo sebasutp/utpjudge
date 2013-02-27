@@ -13,11 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20130220213913) do
 
-  create_table "excercises_groups", :id => false, :force => true do |t|
-    t.integer "exercise_id"
-    t.integer "group_id"
-  end
-
   create_table "exercise_problems", :force => true do |t|
     t.integer  "problem_number"
     t.integer  "time_limit"
@@ -40,6 +35,11 @@ ActiveRecord::Schema.define(:version => 20130220213913) do
     t.datetime "to_date"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "exercises_groups", :id => false, :force => true do |t|
+    t.integer "exercise_id"
+    t.integer "group_id"
   end
 
   create_table "groups", :force => true do |t|

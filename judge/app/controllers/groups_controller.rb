@@ -87,7 +87,7 @@ class GroupsController < ApplicationController
   # DELETE /groups/1.json
   def destroy
     @group = Group.find(params[:id])
-    return unless match_user(@group)
+    #return unless match_user(@group)
     @group.destroy
 
     respond_to do |format|
@@ -95,4 +95,5 @@ class GroupsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
 end

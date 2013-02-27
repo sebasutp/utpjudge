@@ -9,4 +9,5 @@ class Group < ActiveRecord::Base
   def owner_name
     return User.find(owner).name
   end
+  
 end

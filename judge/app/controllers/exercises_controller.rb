@@ -34,6 +34,7 @@ class ExercisesController < ApplicationController
   # GET /exercises/1.json
   def show
     @exercise = Exercise.find(params[:id])
+    @groups = @current_user.groups
 
     respond_to do |format|
       format.html # show.html.erb
@@ -81,6 +82,7 @@ class ExercisesController < ApplicationController
 
     respond_to do |format|
       if @exercise.update_attributes(params[:exercise])
+        flash[:class] = "alert alert-success"
         format.html { redirect_to @exercise, :notice => 'exercise was successfully updated.' }
         format.json { head :no_content }
       else
@@ -100,5 +102,13 @@ class ExercisesController < ApplicationController
       format.html { redirect_to exercises_url }
       format.json { head :no_content }
     end
+  end
+  
+  def add_group
+    @exercise = Exercise.find(params[:id])
+    group = Group.find(params[:group])
+    @exercise.groups << group
+    flash[:class] = "alert alert-success"
+    redirect_to @exercise, :notice => 'Group was successfully added to this exercise'
   end
 end
