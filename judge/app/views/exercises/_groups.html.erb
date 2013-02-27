@@ -1,0 +1,30 @@
+<%= form_tag({:controller => "exercises", :action => "add_group"}, :method => "post") do %>
+    Groups:
+    <%= select_tag "group", options_from_collection_for_select(@groups, "id", "name") %>
+    <%= submit_tag("Add group") %>
+<% end %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>group id</th>
+      <th>Group name </th>
+      <th>Password</th>
+      <th>Owner</th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @exercise.groups.each do |group| %>
+      <tr>
+        <td><%= link_to group.id, group_path(group) %></td>
+        <td><%= group.name %></td>
+        <td><%= group.password %></td>
+        <td><%= group.owner %></td>
+        <td>
+        
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

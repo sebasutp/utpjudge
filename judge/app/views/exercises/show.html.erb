@@ -12,11 +12,19 @@
   <dd><%= @exercise.to_date %></dd>
 </dl>
 
+<hr class="bs-docs-separator">
 <h3>Problems of this exercise</h3>
 <%= render "exercise_problems/index" %>
 
+<hr class="bs-docs-separator">
 <h3>Add problems to the exercise:</h3>
 <%= render "exercise_problems/form" %>
+
+<hr class="bs-docs-separator">
+<h3>Groups of this exercise</h3>
+<%= render "groups" %>
+
+<hr class="bs-docs-separator">
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
