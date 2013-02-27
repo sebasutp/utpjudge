@@ -10,11 +10,11 @@
       </ul>
     </div>
   <% end %>
-  
+
   <div class="control-group">
-    <%= f.label :email, :class => 'control-label' %>
+    <%= f.label :email, :class => 'control-label'%>
     <div class="controls">
-      <%= f.email_field :email, :autofocus => true %>
+      <%= f.email_field :email, :autofocus => true, :class =>'required' %>
     </div>
   </div>
   <div class="control-group">
@@ -48,4 +48,6 @@
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 users_path, :class => 'btn' %>
   </div>
-<% end %>
+<% end %> 
+
+

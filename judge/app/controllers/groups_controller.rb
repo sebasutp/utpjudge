@@ -55,6 +55,7 @@ class GroupsController < ApplicationController
 
     respond_to do |format|
       if @group.save
+        flash[:class] = "alert alert-success"
         format.html { redirect_to @group, notice: 'Group was successfully created.' }
         format.json { render json: @group, status: :created, location: @group }
       else
@@ -72,6 +73,7 @@ class GroupsController < ApplicationController
 
     respond_to do |format|
       if @group.update_attributes(params[:group])
+        flash[:class] = "alert alert-success"
         format.html { redirect_to @group, notice: 'Group was successfully updated.' }
         format.json { head :no_content }
       else
