@@ -111,4 +111,11 @@ class ExercisesController < ApplicationController
     flash[:class] = "alert alert-success"
     redirect_to @exercise, :notice => 'Group was successfully added to this exercise'
   end
+  def rem_group
+  	@exercise = Exercise.find(params[:id])
+    group = Group.find(params[:group])
+    @exercise.groups.delete(group)
+    flash[:class] = "alert alert-success"
+    redirect_to @exercise, :notice => 'Group was successfully deleted from this exercise'
+  end
 end

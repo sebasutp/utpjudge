@@ -30,11 +30,12 @@ Judge::Application.routes.draw do
   resources :exercises do
       resources :exercise_problems do
         member do
-          get :download          
+          get :download
         end
       end
       member do
         post :add_group
+        get :rem_group
       end
   end
 

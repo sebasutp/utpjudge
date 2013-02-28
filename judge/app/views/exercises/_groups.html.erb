@@ -22,7 +22,7 @@
         <td><%= group.password %></td>
         <td><%= group.owner %></td>
         <td>
-        
+        <%= link_to "delete",:controller => "exercises", :action => "rem_group" , :group => group.id%>
         </td>
       </tr>
     <% end %>
