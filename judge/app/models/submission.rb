@@ -65,7 +65,7 @@ class Submission < ActiveRecord::Base
       return fpath && FileTest.exists?(fpath)
   end
 
-  def judgeDownload(tc,lan)
+  def judgeDownload(tc)
       ofile1 = tc.outfile.path
       ofile2 = outfile.path
       self.time = self.end_date - self.init_date
