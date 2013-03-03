@@ -10,7 +10,7 @@
 #
 # E.g:
 # COMPILATION		g++ -Wall -O2 -static -pipe -o a.BIN a.cpp
-# EXECUTION			/usr/bin/safeexec -F0 -t2 -iexample/a.in -oexample/a.OUT -eexample/a.ERR -n0 -C. -f20000 -d512000 -m512000 example/a
+# EXECUTION			/usr/bin/safeexec -F10 -t2 -iexample/a.in -oexample/a.OUT -eexample/a.ERR -n0 -C. -f20000 -d512000 -m512000 example/a
 ##
 
 
@@ -105,14 +105,15 @@ else
 fi
 
 #To replace string '$VAR' by the value of each variable
-COMPILATION="${COMPILATION//'$SOURCE'/$SOURCE}"
-EXECUTION="${EXECUTION//'$SOURCE'/$SOURCE}"
-EXECUTION="${EXECUTION//'$INFILE'/$INFILE}"
-EXECUTION="${EXECUTION//'$SRUN'/$SRUN}"
-EXECUTION="${EXECUTION//'$TL'/$TL}"
-EXECUTION="${EXECUTION//'$RTL'/$RTL}"
-EXECUTION="${EXECUTION//'$jailu'/$jailu}"
-EXECUTION="${EXECUTION//'$jailg'/$jailg}"
+COMPILATION="${COMPILATION//'SOURCE'/$SOURCE}"
+EXECUTION="${EXECUTION//'SOURCE'/$(basename $SOURCE)}"
+EXECUTION="${EXECUTION//'INFILE'/$(basename $INFILE)}"
+EXECUTION="${EXECUTION//'SRUN'/$SRUN}"
+EXECUTION="${EXECUTION//'TL'/$TL}"
+EXECUTION="${EXECUTION//'ML'/$ML}"
+EXECUTION="${EXECUTION//'jailu'/$jailu}"
+EXECUTION="${EXECUTION//'jailg'/$jailg}"
+EXECUTION="${EXECUTION//'SRUN'/$SRUN}"
 
 # Path absolute to execute programs
 PRUNNING=/$basename/RUNS
@@ -131,6 +132,7 @@ if [ "$TYPE" == "1" ]; then
     # Coping infile and .BIN into jail
     cp $INFILE $PRUNNING
     cp ${SOURCE}.BIN $PRUNNING
+    chmod +x $PRUNNING/$(basename $SOURCE).BIN
 
     cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
@@ -162,7 +164,8 @@ elif [ "$TYPE" == "2" ]; then
   cdir=$PRUNNING
   # Coping infile and .BIN into jail
   cp $INFILE $PRUNNING
-  cp ${SOURCE}.BIN $PRUNNING
+  cp ${SOURCE} $PRUNNING
+  chmod +x $PRUNNING/$(basename $SOURCE)
 
   cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
