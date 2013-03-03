@@ -23,9 +23,18 @@
   <dd><%= @submission.end_date %></dd>
 </dl>
 
-<pre>
-<%= @srccode %>
-</pre>
+
+<div id="editor"><%= @srccode %></div>
+    
+<script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/tomorrow_night");
+    editor.getSession().setMode("ace/mode/c_cpp");
+</script>
+
+
+
 
 <div class="form-actions">
 <% if @current_user.has_roles(User.roles[:psetter]) %>
