@@ -22,16 +22,16 @@ echo "" > $slog
 
 # To know utpjudgejail id
 basename=utpjudgejail
-umask 0022
+#umask 0022
 id -u $basename >/dev/null 2>/dev/null
 if [ $? == 0 ]; then
   jailu=`id -u $basename`
   jailg=`id -g $basename`
-  chown $basename.nogroup .
+  #chown $basename.nogroup .
 else
   jailu=`id -u nobody`
   jailg=`id -g nobody`
-  chown nobody.nogroup .
+  #chown nobody.nogroup .
 fi
 
 if [ "$jailu" == "" -o "$jailg" == "" ]; then

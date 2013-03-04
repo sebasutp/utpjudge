@@ -11,13 +11,13 @@ fi
 # 
 # To install all packages needed
 #
-##LIST_DEBS_JAIL="g++ gcc libstdc++6 sharutils default-jdk default-jre"
-LIST_DEBS_JAIL="g++"
-##LIST_DEBS="quota debootstrap schroot sysstat g++ gcc libstdc++6 makepasswd mii-diag \
-##					 sharutils openjdk-6-dbg default-jdk openjdk-6-doc sysvinit-utils"
-LIST_DEBS="g++"
+LIST_DEBS_JAIL="g++ gcc libstdc++6 sharutils default-jdk default-jre"
+##LIST_DEBS_JAIL="g++"
+LIST_DEBS="quota debootstrap schroot sysstat g++ gcc libstdc++6 makepasswd mii-diag \
+					 sharutils openjdk-6-dbg default-jdk openjdk-6-doc sysvinit-utils"
+##LIST_DEBS="g++"
 
-##apt-get update > /dev/null 2>/dev/null;
+apt-get update > /dev/null 2>/dev/null;
 apt-get -y install $LIST_DEBS > /dev/null 2>/dev/null;
 
 #
@@ -133,7 +133,7 @@ echo "*** Intalling packages into $homejail";
 cat <<EOF > /home/$basename/tmp/install.sh
 #!/bin/bash
 mount -t proc proc /proc
-##apt-get -y update
+apt-get -y update
 apt-get -y install $LIST_DEBS_JAIL
 umount /proc
 EOF
