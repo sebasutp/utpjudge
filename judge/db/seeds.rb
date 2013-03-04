@@ -12,3 +12,17 @@ root.email="root@utp.edu.co"
 root.password="root@utp.edu.co"
 root.save
 root.roles << roles
+
+lang = Language.new
+lang.name="C++"
+lang.ltype="1"
+lang.compilation="g++ -Wall -O2 -static -pipe -o SOURCE.BIN SOURCE"
+lang.execution="SRUN -F10 -tTL -Ujailu -Gjailg -iINFILE -oSOURCE.OUT -eSOURCE.ERR -n0 -C. -f20000 -d512000 -mML ./SOURCE.BIN"
+lang.save
+
+lang = Language.new
+lang.name="Python"
+lang.ltype="2"
+lang.compilation=""
+lang.execution="SRUN -F10 -tTL -Ujailu -Gjailg -iINFILE -oSOURCE.OUT -eSOURCE.ERR -n0 -C. -f20000 -d512000 -mML ./SOURCE.BIN"
+lang.save
