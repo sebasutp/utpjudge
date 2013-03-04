@@ -104,8 +104,15 @@ else
   exit;
 fi
 
+t=$(basename $SOURCE)
+arr=(${t//./ })
+EXECNAME=${arr[0]}
+path=protected/submissions
+
 #To replace string '$VAR' by the value of each variable
+COMPILATION="${COMPILATION//'SOURCE.BIN'/$path/$EXECNAME}"
 COMPILATION="${COMPILATION//'SOURCE'/$SOURCE}"
+[ "$TYPE" == "1" ]; EXECUTION="${EXECUTION//'SOURCE.BIN'/$EXECNAME}"
 EXECUTION="${EXECUTION//'SOURCE'/$(basename $SOURCE)}"
 EXECUTION="${EXECUTION//'INFILE'/$(basename $INFILE)}"
 EXECUTION="${EXECUTION//'SRUN'/$SRUN}"
@@ -131,8 +138,8 @@ if [ "$TYPE" == "1" ]; then
     cdir=$PRUNNING
     # Coping infile and .BIN into jail
     cp $INFILE $PRUNNING
-    cp ${SOURCE}.BIN $PRUNNING
-    chmod +x $PRUNNING/$(basename $SOURCE).BIN
+    cp $path/$EXECNAME $PRUNNING
+    chmod +x $PRUNNING/$EXECNAME
 
     cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
