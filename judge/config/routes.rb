@@ -38,6 +38,23 @@ Judge::Application.routes.draw do
         get :rem_group
       end
   end
+  
+  resources :groups do
+      member do
+        post :add_user
+        get :rem_user
+        post :add_exer
+        get :rem_exer
+      end
+  end
+  
+  resources :users do
+      member do
+        post :add_group
+        get :rem_group
+      end
+  end
+
 
 
   # The priority is based upon order of creation:

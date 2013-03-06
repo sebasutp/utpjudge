@@ -1,0 +1,28 @@
+<%= form_tag({:controller => "groups", :action => "add_user"}, :method => "post") do %>
+    Users:
+    <%= select_tag "user", options_from_collection_for_select(@users, "id", "name") %>
+    <%= submit_tag("Add user") %>
+<% end %>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>User id</th>
+      <th>User name </th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @group.users.each do |user| %>
+      <tr>
+        <td><%= link_to user.id, user_path(user) %></td>
+        <td><%= user.name %></td>
+        <td>
+        <%= link_to "delete",:controller => "groups", :action => "rem_user" , :user => user.id%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

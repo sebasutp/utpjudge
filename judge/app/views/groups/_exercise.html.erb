@@ -1,0 +1,28 @@
+<%= form_tag({:controller => "groups", :action => "add_exer"}, :method => "post") do %>
+    Exercises:
+    <%= select_tag "exercise", options_from_collection_for_select(@exercises, "id", "name") %>
+    <%= submit_tag("Add exercise") %>
+<% end %>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Exercise id</th>
+      <th>Exercise name </th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @group.exercises.each do |exercise| %>
+      <tr>
+        <td><%= link_to exercise.id, user_path(exercise) %></td>
+        <td><%= exercise.name %></td>
+        <td>
+        <%= link_to "delete",:controller => "groups", :action => "rem_exer" , :exercise => exercise.id%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

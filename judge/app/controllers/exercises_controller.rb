@@ -13,9 +13,21 @@ class ExercisesController < ApplicationController
   end
 
   def getvalid
+      @mios 
+      @current_user.groups.each do |group|
+          if !@mios
+            @mios = group.exercises
+          else
+            @mios = @mios |group.exercises
+          end
+      end
       @exercises = Exercise.where("from_date <= :cdate and to_date >= :cdate",{:cdate => DateTime.now.to_s(:db)})
       @past_exercises = Exercise.where("to_date <= :cdate",{:cdate => DateTime.now.to_s(:db)})
       @future_exercises = Exercise.where("from_date > :cdate",{:cdate => DateTime.now.to_s(:db)})
+      @exercises = @exercises & @mios
+      @past_exercises = @past_exercises & @mios
+      @future_exercises = @future_exercises & @mios
+      
   end
 
   def exercise

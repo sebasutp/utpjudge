@@ -12,6 +12,13 @@
   <dd><%= @group.owner_name %></dd>
 </dl>
 
+<hr class="bs-docs-separator">
+<h3>Users of this group</h3>
+<%= render "user" %>
+<hr class="bs-docs-separator">
+<h3>Exercises of this group</h3>
+<%= render "exercise" %>
+
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               groups_path, :class => 'btn'  %>

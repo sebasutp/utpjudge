@@ -14,6 +14,10 @@
   <dd><%= @user.encrypted_password %></dd> -->
 </dl>
 
+<hr class="bs-docs-separator">
+<h3>Groups of this user</h3>
+<%= render "group" %>
+
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
               users_path, :class => 'btn'  %>

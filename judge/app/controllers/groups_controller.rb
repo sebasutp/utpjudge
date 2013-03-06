@@ -22,6 +22,8 @@ class GroupsController < ApplicationController
   # GET /groups/1.json
   def show
     @group = Group.find(params[:id])
+    @users = User.all
+    @exercises = Exercise.all
     return unless match_user(@group)
 
     respond_to do |format|
@@ -82,7 +84,40 @@ class GroupsController < ApplicationController
       end
     end
   end
-
+  
+  def add_user
+    @group = Group.find(params[:id])
+    user = User.find(params[:user])
+    @group.users << user
+    flash[:class] = "alert alert-success"
+    redirect_to @group, :notice => 'User was successfully added to this group'
+  end
+  
+  def rem_user
+  	@group = Group.find(params[:id])
+    user = User.find(params[:user])
+    @group.users.delete(user)
+    flash[:class] = "alert alert-success"
+    redirect_to @group, :notice => 'User was successfully deleted from this group'
+  end
+  
+  def add_exer
+    @group = Group.find(params[:id])
+    exercise = Exercise.find(params[:exercise])
+    @group.exercises << exercise
+    flash[:class] = "alert alert-success"
+    redirect_to @group, :notice => 'Exercise was successfully added to this group'
+  end
+  
+  def rem_exer
+  	@group = Group.find(params[:id])
+    exercise = Exercise.find(params[:exercise])
+    @group.exercises.delete(exercise)
+    flash[:class] = "alert alert-success"
+    redirect_to @group, :notice => 'Exercise was successfully deleted from this group'
+  end
+  
+  
   # DELETE /groups/1
   # DELETE /groups/1.json
   def destroy

@@ -17,6 +17,7 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
+    @groups = Group.all
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @user }
@@ -78,6 +79,23 @@ class UsersController < ApplicationController
     session[:user_id] = nil
     redirect_to :root
   end
+
+  def add_group
+    @user = User.find(params[:id])
+    group = Group.find(params[:group])
+    @user.groups << group
+    flash[:class] = "alert alert-success"
+    redirect_to @user, :notice => 'Group was successfully added to this user'
+  end
+  
+  def rem_user
+    @user = User.find(params[:id])
+    group = Group.find(params[:group])
+    @user.groups.delete(group)
+    flash[:class] = "alert alert-success"
+    redirect_to @user, :notice => 'Group was successfully deleted from this user'
+  end
+
 
   # PUT /users/1
   # PUT /users/1.json
