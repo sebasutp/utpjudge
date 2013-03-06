@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
     end
     return mios
     %}
-    return Exercise.joins(:groups => :exercises)
+    return Exercise.joins(:groups => :exercises).group("exercises.id")
   end
   
   def valid_exercise? (exercise)
