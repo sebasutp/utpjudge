@@ -1,8 +1,10 @@
 class GroupsController < ApplicationController
   before_filter :req_psetter, :except=>:index
   before_filter :req_root, :only=>:index
+  before_filter :match_user, :except => [:index, :new, :create]
 
-  def match_user(group)
+  def match_user
+    group = Group.find(params[:id])
     auth = @current_user && @current_user.id==group.owner
     return unauthorized_user unless auth
   end
@@ -24,7 +26,6 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:id])
     @users = User.all
     @exercises = Exercise.all
-    return unless match_user(@group)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -58,6 +59,7 @@ class GroupsController < ApplicationController
     respond_to do |format|
       if @group.save
         flash[:class] = "alert alert-success"
+        @group.users << @current_user
         format.html { redirect_to @group, notice: 'Group was successfully created.' }
         format.json { render json: @group, status: :created, location: @group }
       else
