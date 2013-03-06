@@ -4,34 +4,39 @@
 #	Usage:
 #           SOURCE IN OUT TYPE	COMPILATION	EXECUTION	TL	ML
 # sjudge.sh a.cpp  in out 1   \
-#'g++ -Wall -O2 -static -pipe -o $SOURCE.BIN $SOURCE' \
-#'$SRUN -F10 -t$TL -T$RTL -i$INFILE -o$SOURCE.OUT -e$SOURCE.ERR -U$jailu -G$jailg -n0 -C. -f20000 -d512000 -m512000 ./$SOURCE' \
-# 1 250
-#
-# E.g:
-# COMPILATION		g++ -Wall -O2 -static -pipe -o a.BIN a.cpp
-# EXECUTION			/usr/bin/safeexec -F10 -t2 -iexample/a.in -oexample/a.OUT -eexample/a.ERR -n0 -C. -f20000 -d512000 -m512000 example/a
+#'g++ -Wall -O2 -static -pipe -o main.cpp main.cpp' \
+#'/usr/bin/safeexec -F10 -t1 -U1012 -G1015 -imain.IN -omain.OUT -emain.ERR -n0 -C. -f20000 -d512000 -m128000 ./main'  1 250
 ##
 
+# The return code show what happened (according to safeexec):
+# 0 ok
+# 1 compile error
+# 2 runtime error
+# 3 timelimit exceeded
+# 4 internal error
+# 5 parameter error
+# 6 internal error
+# 7 memory limit exceeded
+# 8 security threat
+# 9 runtime error
+
+basename=utpjudgejail
 
 #log of events
+ROOT=`pwd`
 t=$0
 arr=(${t//./ })
-slog=${arr[0]}.log
-echo "" > $slog
+slog=$ROOT/${arr[0]}.log
+echo "" >> $slog
 
-# To know utpjudgejail id
-basename=utpjudgejail
-#umask 0022
+# To know user id
 id -u $basename >/dev/null 2>/dev/null
 if [ $? == 0 ]; then
   jailu=`id -u $basename`
   jailg=`id -g $basename`
-  #chown $basename.nogroup .
 else
   jailu=`id -u nobody`
   jailg=`id -g nobody`
-  #chown nobody.nogroup .
 fi
 
 if [ "$jailu" == "" -o "$jailg" == "" ]; then
@@ -57,7 +62,6 @@ EXECUTION=$6
 TL=$7
 ML=$8
 RTL=30
-
 
 if [ ! -f $SOURCE ]; then
   echo "$SOURCE does not exist" >> $slog;
@@ -104,43 +108,44 @@ else
   exit;
 fi
 
-t=$(basename $SOURCE)
-arr=(${t//./ })
-EXECNAME=${arr[0]}
-path=protected/submissions
-
 #To replace string '$VAR' by the value of each variable
-COMPILATION="${COMPILATION//'SOURCE.BIN'/$path/$EXECNAME}"
-COMPILATION="${COMPILATION//'SOURCE'/$SOURCE}"
-[ "$TYPE" == "1" ]; EXECUTION="${EXECUTION//'SOURCE.BIN'/$EXECNAME}"
-EXECUTION="${EXECUTION//'SOURCE'/$(basename $SOURCE)}"
-EXECUTION="${EXECUTION//'INFILE'/$(basename $INFILE)}"
 EXECUTION="${EXECUTION//'SRUN'/$SRUN}"
-EXECUTION="${EXECUTION//'TL'/$TL}"
-EXECUTION="${EXECUTION//'ML'/$ML}"
+EXECUTION="${EXECUTION//'RTL'/$RTL}"
 EXECUTION="${EXECUTION//'jailu'/$jailu}"
 EXECUTION="${EXECUTION//'jailg'/$jailg}"
-EXECUTION="${EXECUTION//'SRUN'/$SRUN}"
 
 # Path absolute to execute programs
 PRUNNING=/$basename/RUNS
 # Path into jail
 PRUN=/RUNS
 
+# Extension
+tmp=(${SOURCE//./ })
+ext=${tmp[1]}
+
+# rm all files into $PRUNNING
+rm $PRUNNING/*
+
 #To compilation
 if [ "$TYPE" == "1" ]; then
+  echo "Copying and rename 'source.ext' to 'main.ext' in /$basename/RUNS" >> $slog;
+  cp $SOURCE $PRUNNING/main.$ext
+
+  echo "Copying $INFILE in $PRUNNING" >> $slog;
+  cp $INFILE $PRUNNING/main.IN
+
+  echo "Copying correct outputfile in $PRUNNING" >> $slog;
+  cp $OUTFILE $PRUNNING/correct.OUT
+
+  echo "Change directory to $PRUNNING" >> $slog;
+  cd $PRUNNING
+
   echo "Compiling .." >> $slog;
   eval $COMPILATION 2>> $slog;	#Compilation
-  if [ $? == 0 ]; then
-    #ulimit  -t $TL -m $ML
-    echo "Executing .." >> $slog;
-    #eval $EXECUTION #Execution
-    cdir=$PRUNNING
-    # Coping infile and .BIN into jail
-    cp $INFILE $PRUNNING
-    cp $path/$EXECNAME $PRUNNING
-    chmod +x $PRUNNING/$EXECNAME
+  chmod +x main*
 
+  if [ $? == 0 ]; then
+    echo "Executing .." >> $slog;
     cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
 [ -f /proc/cpuinfo ] || /bin/mount -t proc proc /proc
@@ -166,14 +171,20 @@ EOF
 
 #No compilation
 elif [ "$TYPE" == "2" ]; then
-  #ulimit  -t $TL -m $ML
-  #eval $EXECUTION
-  cdir=$PRUNNING
-  # Coping infile and .BIN into jail
-  cp $INFILE $PRUNNING
-  cp ${SOURCE} $PRUNNING
-  chmod +x $PRUNNING/$(basename $SOURCE)
+  echo "Copying and rename 'source.ext' to 'main.ext' in $PRUNNING" >> $slog;
+  cp $SOURCE $PRUNNING/main.$ext
 
+  echo "Copying $INFILE and rename in $PRUNNING" >> $slog;
+  cp $INFILE $PRUNNING/main.IN
+
+  echo "Copying correct outputfile in $PRUNNING" >> $slog;
+  cp $OUTFILE $PRUNNING/correct.OUT
+
+  echo "Change directory to $PRUNNING" >> $slog;
+  cd $PRUNNING
+  chmod +x main*
+
+  echo "Executing .." >> $slog;
   cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
 [ -f /proc/cpuinfo ] || /bin/mount -t proc proc /proc
@@ -191,15 +202,12 @@ fi;
 
 ret=`cat $PRUNNING/run.retcode`
 echo "** $ret" >> $slog
-if [ "$ret" == "0" ]; then
-  # The output file is in /utpjudgejail/RUNS/{NAME}.OUT
-  sname=`basename "$SOURCE" .OUT`
-  SOURCE="$PRUNNING/$sname"
 
+if [ "$ret" == "0" ]; then
   # This presentation error only checks white spaces and newlines
-  DIFF=`diff -wB $OUTFILE ${SOURCE}.OUT`
+  DIFF=`diff -wB correct.OUT main.OUT`
   if [ $? == 0 ]; then
-    DIFF2=`diff $OUTFILE ${SOURCE}.OUT`
+    DIFF2=`diff correct.OUT main.OUT`
     if [ $? == 0 ]; then
       echo "YES";
     else

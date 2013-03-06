@@ -84,8 +84,8 @@ class Submission < ActiveRecord::Base
 		ifile = tc.infile.path
 		sfile = srcfile.path
 		
-		comp = lan.compilation
-		exec = lan.execution 
+		comp = lan.compilation.gsub("SOURCE","main")
+		exec = lan.execution.gsub("SOURCE","main").gsub("TL",timl.to_s).gsub("ML",meml.to_s).gsub("INFILE","main.IN")
 		tl = timl
 		ml = meml
 		type = lan.ltype
