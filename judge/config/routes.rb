@@ -41,10 +41,8 @@ Judge::Application.routes.draw do
   
   resources :groups do
       member do
-        post :add_user
-        get :rem_user
-        post :add_exer
-        get :rem_exer
+        post :add_user , :add_exer
+        get :rem_user , :rem_exer
       end
   end
   

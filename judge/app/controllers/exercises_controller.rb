@@ -5,29 +5,20 @@ class ExercisesController < ApplicationController
   # GET /exercises.json
   def index
     @exercises = Exercise.paginate(:page => params[:page], :per_page => 10)
-
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @exercises }
     end
   end
 
-  def getvalid
-      @mios 
-      @current_user.groups.each do |group|
-          if !@mios
-            @mios = group.exercises
-          else
-            @mios = @mios |group.exercises
-          end
-      end
+  def getvalid      
+      @mios = @current_user.valid_exercises
       @exercises = Exercise.where("from_date <= :cdate and to_date >= :cdate",{:cdate => DateTime.now.to_s(:db)})
       @past_exercises = Exercise.where("to_date <= :cdate",{:cdate => DateTime.now.to_s(:db)})
       @future_exercises = Exercise.where("from_date > :cdate",{:cdate => DateTime.now.to_s(:db)})
       @exercises = @exercises & @mios
       @past_exercises = @past_exercises & @mios
-      @future_exercises = @future_exercises & @mios
-      
+      @future_exercises = @future_exercises & @mios      
   end
 
   def exercise
@@ -119,9 +110,13 @@ class ExercisesController < ApplicationController
   def add_group
     @exercise = Exercise.find(params[:id])
     group = Group.find(params[:group])
-    @exercise.groups << group
-    flash[:class] = "alert alert-success"
-    redirect_to @exercise, :notice => 'Group was successfully added to this exercise'
+    if !@exercise.groups.where(:id => group.id).first
+      @exercise.groups << group
+      flash[:class] = "alert alert-success"
+      redirect_to @exercise, :notice => 'Group was successfully added to this exercise'
+    else
+      redirect_to @exercise, :notice => 'Group is already in this exercise'
+    end
   end
   def rem_group
   	@exercise = Exercise.find(params[:id])

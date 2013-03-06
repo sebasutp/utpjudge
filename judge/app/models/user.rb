@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   
   before_save :encrypt_new_password
   has_many :submissions ,  :dependent => :destroy
+  #has_and_belongs_to_many :exercises, :join_table=>:exercises_groups
 
   has_and_belongs_to_many :roles
   has_and_belongs_to_many :groups
@@ -13,6 +14,23 @@ class User < ActiveRecord::Base
     :presence => true, :if => :password_required?}
   validates :email, {:presence=>true, :format => {:with => /^[^@][\w.-]+@[\w.-]+[.][a-z]{2,4}$/i}}
    validates_uniqueness_of :email
+   
+  def valid_exercises
+    mios = nil
+    self.groups.each do |group|
+      if !mios
+        mios = group.exercises
+      else
+        mios = mios |group.exercises
+      end
+    end
+    return mios
+  end
+  
+  def valid_exercise? (exercise)
+  
+    return true
+  end
 
   def has_roles(roles)
     rids = role_ids & roles

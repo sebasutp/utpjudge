@@ -88,9 +88,13 @@ class GroupsController < ApplicationController
   def add_user
     @group = Group.find(params[:id])
     user = User.find(params[:user])
-    @group.users << user
-    flash[:class] = "alert alert-success"
-    redirect_to @group, :notice => 'User was successfully added to this group'
+    if !@group.users.where(:id => user.id).first
+      @group.users << user
+      flash[:class] = "alert alert-success"
+      redirect_to @group, :notice => 'User was successfully added to this group'
+    else
+      redirect_to @user, :notice => 'That user is already in this group'
+    end 
   end
   
   def rem_user
