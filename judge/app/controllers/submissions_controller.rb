@@ -55,18 +55,22 @@ class SubmissionsController < ApplicationController
   end
 
   def jdownload
-      @submission = Submission.find(params[:id])
-      @submission.end_date = DateTime.now
-      respond_to do |format|
-        if @submission.update_attributes(params[:submission]) && @submission.judge
-          #if success redirect to show action
-          flash[:class] = "alert alert-success"
-          format.html { redirect_to @submission, notice: 'Your submission was successfully sent.' }
-          format.json { head :no_content }
-        else
-          format.html { render action: "new" }
-          format.json { render json: @submission.errors, status: :unprocessable_entity }
+     @submission = Submission.find(params[:id])
+     @submission.end_date = DateTime.now
+     if @submission.user.valid_exercise? @submission.exercise_problem.exercise
+        respond_to do |format|
+          if @submission.update_attributes(params[:submission]) && @submission.judge
+            #if success redirect to show action
+            flash[:class] = "alert alert-success"
+            format.html { redirect_to @submission, notice: 'Your submission was successfully sent.' }
+            format.json { head :no_content }
+          else
+            format.html { render action: "new" }
+            format.json { render json: @submission.errors, status: :unprocessable_entity }
+          end
         end
+      else
+        redirect_to :root, :notice => "You can't do this submission because this exercise is not avaible for you"
       end
   end
 

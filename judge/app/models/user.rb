@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   
   def valid_exercise? (exercise)
   
-    return true
+    return false
   end
 
   def has_roles(roles)

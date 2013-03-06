@@ -24,12 +24,16 @@ class ExercisesController < ApplicationController
   def exercise
     @exercise = Exercise.find(params[:id])
     @problems = @exercise.exercise_problems.order(:problem_number)
-    respond_to do |format|
-        if(!@exercise.current?)
-           format.html { redirect_to :root, :notice => 'the exercise is not running' }
-        else
-           format.html 
-        end
+    if @current_user.valid_exercise? @exercise
+      respond_to do |format|
+          if(!@exercise.current?)
+             format.html { redirect_to :root, :notice => 'the exercise is not running' }
+          else
+             format.html 
+          end
+      end
+    else
+      redirect_to :root, :notice => "You can't see this exercise"
     end
   end
 
@@ -38,10 +42,14 @@ class ExercisesController < ApplicationController
   def show
     @exercise = Exercise.find(params[:id])
     @groups = @current_user.groups
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @exercise }
+    
+    if @current_user.valid_exercise? @exercise
+      respond_to do |format|
+        format.html # show.html.erb
+        format.json { render :json => @exercise }
+      end
+    else
+       redirect_to :root, :notice => "You can't see this exercise"
     end
   end
 
