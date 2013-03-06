@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
    validates_uniqueness_of :email
    
   def valid_exercises
+    %{
     mios = nil
     self.groups.each do |group|
       if !mios
@@ -25,11 +26,13 @@ class User < ActiveRecord::Base
       end
     end
     return mios
+    %}
+    return Exercise.joins(:groups => :exercises)
   end
   
   def valid_exercise? (exercise)
-  
-    return false
+    a = valid_exercises.where("exercises.id = :id",{:id => exercise.id}).first
+    return a!=nil
   end
 
   def has_roles(roles)
