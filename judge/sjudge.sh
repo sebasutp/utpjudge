@@ -29,6 +29,7 @@ arr=(${t//./ })
 slog=$ROOT/${arr[0]}.log
 echo "" >> $slog
 
+umask 0022
 # To know user id
 id -u $basename >/dev/null 2>/dev/null
 if [ $? == 0 ]; then
@@ -110,7 +111,7 @@ fi
 
 #To replace string '$VAR' by the value of each variable
 EXECUTION="${EXECUTION//'SRUN'/$SRUN}"
-EXECUTION="${EXECUTION//'RTL'/$RTL}"
+EXECUTION="${EXECUTION//'-TRTL'/'-T'$RTL}"
 EXECUTION="${EXECUTION//'jailu'/$jailu}"
 EXECUTION="${EXECUTION//'jailg'/$jailg}"
 
@@ -124,7 +125,7 @@ tmp=(${SOURCE//./ })
 ext=${tmp[1]}
 
 # rm all files into $PRUNNING
-rm $PRUNNING/*
+rm -rf $PRUNNING/*
 
 #To compilation
 if [ "$TYPE" == "1" ]; then
@@ -142,28 +143,30 @@ if [ "$TYPE" == "1" ]; then
 
   echo "Compiling .." >> $slog;
   eval $COMPILATION 2>> $slog;	#Compilation
-  chmod +x main*
+  chmod +x $PRUNNING/main*
 
   if [ $? == 0 ]; then
     echo "Executing .." >> $slog;
     cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
-[ -f /proc/cpuinfo ] || /bin/mount -t proc proc /proc
-[ -d /sys/kernel ] || /bin/mount -t sysfs sysfs /sys
+[ -f /proc/cpuinfo ] || sudo /bin/mount -t proc proc /proc
+[ -d /sys/kernel ] || sudo /bin/mount -t sysfs sysfs /sys
 cd $PRUN
 eval $EXECUTION
 echo \$? > run.retcode
-/bin/umount /proc 2>/dev/null
-/bin/umount /sys 2>/dev/null
+sudo /bin/umount /proc 
+sudo /bin/umount /sys 
 EOF
 
     chmod 755 $PRUNNING/run.sh
-    chroot /$basename $PRUN/run.sh
+    #chroot /$basename $PRUN/run.sh
+    schroot -c $basename -p $PRUN/run.sh
 
-    if [ $? != 0 ]; then
-      cat run.retcode | echo;
-      exit;
-    fi;
+    ##if [ $? != 0 ]; then
+    ##  cat run.retcode | echo;
+    ##  echo "XXX";
+    ##  exit;
+    ##fi;
   else
     echo "Compilation error";
     exit;
@@ -187,17 +190,18 @@ elif [ "$TYPE" == "2" ]; then
   echo "Executing .." >> $slog;
   cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
-[ -f /proc/cpuinfo ] || /bin/mount -t proc proc /proc
-[ -d /sys/kernel ] || /bin/mount -t sysfs sysfs /sys
+[ -f /proc/cpuinfo ] || sudo /bin/mount -t proc proc /proc
+[ -d /sys/kernel ] || sudo /bin/mount -t sysfs sysfs /sys
 cd $PRUN
 eval $EXECUTION
 echo \$? > run.retcode
-/bin/umount /proc 2>/dev/null
-/bin/umount /sys 2>/dev/null
+sudo /bin/umount /proc 
+sudo /bin/umount /sys 
 EOF
 
   chmod 755 $PRUNNING/run.sh
-  chroot /$basename $PRUN/run.sh
+  #chroot /$basename $PRUN/run.sh
+  schroot -c $basename -p $PRUN/run.sh
 fi;
 
 ret=`cat $PRUNNING/run.retcode`
@@ -224,7 +228,21 @@ elif [ "$ret" == "3" ]; then
   echo "NO - Timelimit exceeded";
 elif [ "$ret" == "7" ]; then
   echo "NO - Memory limit exceeded";
-else 
-  echo "Unknown error";
+else
+  [ -f main.OUT ] &&  [ -s main.OUT ]
+  if [ $? == 0 ]; then
+    DIFF=`diff -wB correct.OUT main.OUT`
+    if [ $? == 0 ]; then
+      DIFF2=`diff correct.OUT main.OUT`
+      if [ $? == 0 ]; then
+        echo "YES";
+      else
+        echo "NO - Presentation error";
+      fi
+    else
+      echo "NO";
+    fi
+  else echo "Unknown error";
+  fi
 fi;
 
