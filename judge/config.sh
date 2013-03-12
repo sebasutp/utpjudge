@@ -24,9 +24,10 @@ deluser $basename
 delgroup g$basename
 
 # To install all packages needed
-LIST_DEBS_JAIL="g++ gcc libstdc++6 sharutils default-jdk default-jre"
+LIST_DEBS_JAIL="g++ gcc libstdc++6 sharutils openjdk-6-jdk openjdk-6-jre openjdk-7-jdk openjdk-7-jre \
+                python sudo"
 LIST_DEBS="quota debootstrap schroot sysstat g++ gcc libstdc++6 makepasswd mii-diag \
-					 sharutils openjdk-6-dbg default-jdk openjdk-6-doc sysvinit-utils"
+					 sharutils openjdk-7-dbg openjdk-7-jdk openjdk-7-jre openjdk-7-doc sysvinit-utils"
 
 apt-get update > /dev/null 2>/dev/null;
 apt-get -y install $LIST_DEBS > /dev/null 2>/dev/null;
@@ -102,33 +103,32 @@ users=$basename,nobody,root
 FIM
 
 # Installing base system
-debootstrap --no-check-gpg $DISTRIB_CODENAME $homejail;
+debootstrap $DISTRIB_CODENAME $homejail;
 if [ $? != 0 ]; then
   echo "'$basename' failed to debootstrap. Trying again";
-  debootstrap $DISTRIB_CODENAME $homejail;
+  debootstrap --no-check-gpg $DISTRIB_CODENAME $homejail;
   if [ $? != 0 ]; then
     echo "'$basename' failed to debootstrap";
     exit;
   fi
 else
-
-# Search $basename in schroot users
-schroot -l | grep -q $basename;
-if [ $? == 0 ]; then
-  echo "$basename successfully installed at $homejail";
-else
-  echo "*** some error has caused $basename not to install properly -- I will try it again with different parameters";
-  grep -v "^location" /etc/schroot/chroot.d/$basename.conf > /tmp/.$basename.tmp;
-  mv /tmp/.$basename.tmp /etc/schroot/chroot.d/$basename.conf;
-  debootstrap $DISTRIB_CODENAME $homejail;
+  # Search $basename in schroot users
   schroot -l | grep -q $basename;
   if [ $? == 0 ]; then
-    echo "*** '$basename' successfully installed at $homejail";
+    echo "$basename successfully installed at $homejail";
   else
-    echo "*** '$basename' failed to install";
-    exit;
+    echo "*** some error has caused $basename not to install properly -- I will try it again with different parameters";
+    grep -v "^location" /etc/schroot/chroot.d/$basename.conf > /tmp/.$basename.tmp;
+    mv /tmp/.$basename.tmp /etc/schroot/chroot.d/$basename.conf;
+    debootstrap $DISTRIB_CODENAME $homejail;
+    schroot -l | grep -q $basename;
+    if [ $? == 0 ]; then
+      echo "*** '$basename' successfully installed at $homejail";
+    else
+      echo "*** '$basename' failed to install";
+      exit;
+    fi
   fi
-fi
 fi
 
 echo "Intalling packages into $homejail";
@@ -141,9 +141,9 @@ umount /proc
 EOF
 
 mkdir $homejail/$PRUN
-chmod -R 700 $homejail
+#chmod -R 700 $homejail # With these permissions is not possible read shared libraries like libtinfo.so.5
 chown $basename:g$basename $homejail/$PRUN
-chmod 755 $homejail/$PRUN
+chmod -R 755 $homejail/$PRUN
 
 cat <<EOF > $homejail/etc/apt/sources.list
 deb http://ftp.debian.org/debian/ testing main contrib non-free
@@ -153,3 +153,10 @@ EOF
 
 chmod 755 /home/$basename/tmp/install.sh
 cd / ; chroot $homejail /tmp/install.sh
+
+#To allow userjail mount and umount without pass
+hostn=`hostname`
+echo "$basename $hostn = (root) NOPASSWD: /bin/mount"  >> /home/$basename/etc/sudoers;
+echo "$basename $hostn = (root) NOPASSWD: /bin/umount" >> /home/$basename/etc/sudoers;
+
+
