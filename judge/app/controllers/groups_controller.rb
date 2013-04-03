@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
   before_filter :req_psetter, :except=>:index
   before_filter :req_root, :only=>:index
-  before_filter :match_user, :except => [:index, :new, :create]
+  before_filter :match_user, :except => [:index, :new, :create,:list_groups]
 
   def match_user
     group = Group.find(params[:id])
@@ -16,6 +16,14 @@ class GroupsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
+      format.json { render json: @groups }
+    end
+  end
+  
+  def list_groups
+    @groups = Group.all
+    respond_to do |format|
+      format.html # list_groups.html.erb
       format.json { render json: @groups }
     end
   end

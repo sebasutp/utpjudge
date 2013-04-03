@@ -10,11 +10,13 @@
       <div class="nav-collapse">
         <ul class="nav"> 
           <li class="divider-vertical"></li>
-          <li><a class="active" href="/"> Home </a></li>
+          <li><a class="active" href="/listexercises"> Home </a></li>
           <% if @current_user %>
             <li class="divider-vertical"></li>
             <li><a class="active" href="/submissions?uid=<%= @current_user.id %>">My submissions</a></li>
           <%end%>
+          <li class="divider-vertical"></li>
+          <li><a class="active" href="/listgroups/"> Groups </a></li>
           <li class="divider-vertical"></li>
           <li><a class="active" href="#"> About us </a></li>
           <% if @current_user and @current_user.has_roles(User.roles[:psetter]) %>

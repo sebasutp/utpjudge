@@ -1,0 +1,24 @@
+<%- model_class = Group -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:name) %></th>
+      <th><%= model_class.human_attribute_name(:owner) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @groups.each do |group| %>
+      <tr>
+        <td><%= link_to group.id, group_path(group) %></td>
+        <td><%= group.name %></td>
+        <td><%= group.owner %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+

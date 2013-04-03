@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :roles
   has_and_belongs_to_many :groups
+  has_and_belongs_to_many :exercises
   
   validates :password, {:confirmation => true, :length=>{:within => 6..50},
     :presence => true, :if => :password_required?}

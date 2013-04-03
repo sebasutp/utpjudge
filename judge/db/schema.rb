@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130220213913) do
+ActiveRecord::Schema.define(:version => 20130403215644) do
 
   create_table "exercise_problems", :force => true do |t|
     t.integer  "problem_number"
@@ -40,6 +40,11 @@ ActiveRecord::Schema.define(:version => 20130220213913) do
   create_table "exercises_groups", :id => false, :force => true do |t|
     t.integer "exercise_id"
     t.integer "group_id"
+  end
+
+  create_table "exercises_users", :id => false, :force => true do |t|
+    t.integer "exercise_id"
+    t.integer "user_id"
   end
 
   create_table "groups", :force => true do |t|
