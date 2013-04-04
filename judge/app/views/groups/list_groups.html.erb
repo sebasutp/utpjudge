@@ -1,21 +1,38 @@
 <%- model_class = Group -%>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+                      $("#register").click(function(e){
+                        e.preventDefault();
+                        var pass = $("#pwd");
+                        alert("Bien");
+                      });
+                      
+
+              });
+</script>
+
+
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <h1>List of groups to register</h1>
 </div>
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:owner) %></th>
+      <th><%= model_class.human_attribute_name(:password) %></th>
+      <th><%= model_class.human_attribute_name(:do_it) %></th>
     </tr>
   </thead>
   <tbody>
     <% @groups.each do |group| %>
       <tr>
-        <td><%= link_to group.id, group_path(group) %></td>
         <td><%= group.name %></td>
         <td><%= group.owner %></td>
+        <td><input type="password" class="input-small" placeholder="Password" id="pwd"></td>
+        <td><button class="btn btn-small btn-success" type="button" id="register">Register</button></td>
       </tr>
     <% end %>
   </tbody>

@@ -60,6 +60,15 @@ ActiveRecord::Schema.define(:version => 20130403215644) do
     t.integer "user_id"
   end
 
+  create_table "languages", :force => true do |t|
+    t.string   "name"
+    t.string   "ltype"
+    t.string   "compilation"
+    t.string   "execution"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "problems", :force => true do |t|
     t.string   "name"
     t.text     "description"
