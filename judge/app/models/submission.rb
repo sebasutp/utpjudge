@@ -91,7 +91,7 @@ class Submission < ActiveRecord::Base
 		type = lan.ltype
 
 		if file_exist? sfile
-			s = %x{bash sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{tl} #{ml}}
+			s = %x{sudo -u utpjudgejail bash sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{tl} #{ml}}
 			self.veredict = s
 		end
 	end

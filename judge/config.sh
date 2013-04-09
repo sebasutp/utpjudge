@@ -28,10 +28,13 @@ LIST_DEBS_JAIL="g++ gcc libstdc++6 sharutils openjdk-6-jdk openjdk-6-jre openjdk
                 python sudo"
 LIST_DEBS="quota debootstrap schroot sysstat g++ gcc libstdc++6 makepasswd mii-diag \
 					 sharutils openjdk-7-dbg openjdk-7-jdk openjdk-7-jre openjdk-7-doc sysvinit-utils"
-
+echo "Executing: apt-get update ...";
 apt-get update > /dev/null 2>/dev/null;
+echo "done!";
+echo "Executing: apt-get install $LIST_DEBS ...";
 apt-get -y install $LIST_DEBS > /dev/null 2>/dev/null;
-
+echo "done!";
+echo "Creating commmand: '$COMMNAME' ...";
 # To compile and create command $COMMNAME if does not exists
 if [ ! -x /usr/bin/$COMMNAME ]; then
 	if [ -f $COMMNAME.c ]; then
@@ -71,7 +74,7 @@ if [ -f $homejail/proc/cpuinfo ]; then
   exit;
 fi
 
-
+echo "Creating user and group to jail: utpjudge, gutpjudge ...";
 # To create user and group to jail
 id -u $basename >/dev/null 2>/dev/null;	# If user does not exist then will be created
 if [ $? != 0 ]; then
@@ -82,26 +85,26 @@ if [ $? != 0 ]; then
 		exit;
 	fi
 fi
+echo "done!";
 
 setquota -u $basename 0 500000 0 10000 -a;
 
 mkdir -p $homejail/tmp
 chmod 1777 $homejail/tmp
 ln -s $homejail /$basename
-# Copying $COMMNAME into jail 
-[ -x /usr/bin/$COMMNAME ] && cp -a /usr/bin/$COMMNAME /$basename/usr/bin/
+
 
 # To configure schroot file
 cat <<FIM > /etc/schroot/chroot.d/$basename.conf
 [$basename]
 description=Jail
-location=$homejail
 directory=$homejail
 root-users=root
 type=directory
 users=$basename,nobody,root
 FIM
 
+echo "Installing base system with debootstrap ...";
 # Installing base system
 debootstrap $DISTRIB_CODENAME $homejail;
 if [ $? != 0 ]; then
@@ -130,8 +133,11 @@ else
     fi
   fi
 fi
+echo "done!";
 
-echo "Intalling packages into $homejail";
+# Copying $COMMNAME into jail 
+[ -x /usr/bin/$COMMNAME ] && cp -a /usr/bin/$COMMNAME /$basename/usr/bin/
+
 cat <<EOF > /home/$basename/tmp/install.sh
 #!/bin/bash
 mount -t proc proc /proc
@@ -140,10 +146,13 @@ apt-get -y install $LIST_DEBS_JAIL
 umount /proc
 EOF
 
+echo "Creating $homejail/$PRUN and configuring permissions ...";
 mkdir $homejail/$PRUN
 #chmod -R 700 $homejail # With these permissions is not possible read shared libraries like libtinfo.so.5
 chown $basename:g$basename $homejail/$PRUN
 chmod -R 755 $homejail/$PRUN
+
+echo "done!";
 
 cat <<EOF > $homejail/etc/apt/sources.list
 deb http://ftp.debian.org/debian/ testing main contrib non-free
@@ -151,12 +160,13 @@ deb http://ftp.de.debian.org/debian testing main
 deb http://security.debian.org/ testing/updates main contrib
 EOF
 
+echo "Intalling packages into $homejail";
 chmod 755 /home/$basename/tmp/install.sh
 cd / ; chroot $homejail /tmp/install.sh
+echo "done!";
 
 #To allow userjail mount and umount without pass
 hostn=`hostname`
 echo "$basename $hostn = (root) NOPASSWD: /bin/mount"  >> /home/$basename/etc/sudoers;
 echo "$basename $hostn = (root) NOPASSWD: /bin/umount" >> /home/$basename/etc/sudoers;
-
 
