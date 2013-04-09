@@ -22,11 +22,10 @@
 
 basename=utpjudgejail
 
-#log of events
-ROOT=`pwd`
+#log of event
 t=$0
 arr=(${t//./ })
-slog=$ROOT/${arr[0]}.log
+slog=${arr[0]}.log
 echo "" >> $slog
 
 umask 0022
