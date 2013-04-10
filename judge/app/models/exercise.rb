@@ -80,6 +80,7 @@ class Exercise < ActiveRecord::Base
   end
   
   def wrong_tries_before_solution(user, ex_problem)
+    return -1 if number_of_tries(user,ex_problem) < 1 
     solution = first_accepted_submission(user, ex_problem)
     date = solution.blank? ? to_date + 1 : solution.end_date
     submissions.where(:user_id => user, :exercise_problem_id => ex_problem).where("end_date < ?", date).count
