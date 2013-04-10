@@ -75,6 +75,10 @@ class Exercise < ActiveRecord::Base
     first_accepted_submission(user, ex_problem).present?
   end
   
+  def number_of_tries(user,ex_problem)
+    submissions.where(:user_id => user, :exercise_problem_id => ex_problem).count
+  end
+  
   def wrong_tries_before_solution(user, ex_problem)
     solution = first_accepted_submission(user, ex_problem)
     date = solution.blank? ? to_date + 1 : solution.end_date

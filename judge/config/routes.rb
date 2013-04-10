@@ -47,6 +47,12 @@ Judge::Application.routes.draw do
       end
   end
   
+  resources :exercises do
+    member do
+      post :add_user
+    end
+  end
+  
   resources :users do
       member do
         post :add_group

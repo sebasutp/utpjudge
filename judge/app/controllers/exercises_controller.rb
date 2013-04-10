@@ -1,5 +1,5 @@
 class ExercisesController < ApplicationController
-  before_filter :req_psetter, :except=>[:getvalid,:exercise]
+  before_filter :req_psetter, :except=>[:getvalid,:exercise, :add_user]
 
   # GET /exercises
   # GET /exercises.json
@@ -23,19 +23,36 @@ class ExercisesController < ApplicationController
       end
   end
 
+  def add_user
+    exer = Exercise.find(params[:id])
+    user = User.find(params[:user])
+    
+    if(exer.groups & user.groups)
+      if !exer.users.where(:id => user.id).first
+        exer.users << user
+        render :text => "The user was registered correctly"
+      else
+        render :text => 'That user is already in this exercise'
+      end
+    else
+        render :text => "You don't have permissions to perform this operation"
+    end 
+
+  end
+
   def exercise
     @exercise = Exercise.find(params[:id])
     @problems = @exercise.exercise_problems.order(:problem_number)
     if @current_user.valid_exercise? @exercise
       respond_to do |format|
           if(!@exercise.current?)
-             format.html { redirect_to :root, :notice => 'the exercise is not running' }
+             format.html { redirect_to :root, :notice => 'the contest is not running' }
           else
              format.html 
           end
       end
     else
-      redirect_to :root, :notice => "You can't see this exercise"
+      redirect_to :root, :notice => "You can't see this contest"
     end
   end
 
@@ -51,7 +68,7 @@ class ExercisesController < ApplicationController
         format.json { render :json => @exercise }
       end
     else
-       redirect_to :root, :notice => "You can't see this exercise"
+       redirect_to :root, :notice => "You can't see this contest"
     end
   end
 
@@ -64,6 +81,7 @@ class ExercisesController < ApplicationController
       format.html # new.html.erb
       format.json { render :json => @exercise }
     end
+    
   end
 
   # GET /exercises/1/edit

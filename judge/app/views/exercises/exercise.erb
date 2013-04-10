@@ -29,7 +29,7 @@ time to end : <%= (@exercise.time_to_end).to_s()  %> minutes
       <td><%= user.name %></td>
       <% @exercise.exercise_problems.each_with_index do |ex_problem,j| %>
           
-            <td <%= 'BGCOLOR="#00ff05"'  if @exercise.problem_solved?(user,ex_problem) %> >
+            <td <%= @exercise.number_of_tries(user, ex_problem) >= 1 ? @exercise.problem_solved?(user,ex_problem)?  'BGCOLOR="#4CC417"' :  'BGCOLOR="#817339"' : '' %> >
             <%= @exercise.wrong_tries_before_solution(user, ex_problem) %> / <%= @exercise.time_of_first_solution(user, ex_problem) %>
           </td>
       <% end %>
