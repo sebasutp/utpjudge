@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
-  before_filter :req_psetter, :except=>:index
+  before_filter :req_psetter, :except=> [ :index,:list_groups , :add_user_confirm]
   before_filter :req_root, :only=>:index
-  before_filter :match_user, :except => [:index, :new, :create,:list_groups]
+  before_filter :match_user, :except => [:index, :new, :create,:list_groups , :add_user_confirm]
 
   def match_user
     group = Group.find(params[:id])
@@ -93,6 +93,24 @@ class GroupsController < ApplicationController
         format.json { render json: @group.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  def add_user_confirm
+    @group = Group.find(params[:id])
+    user = User.find(params[:user])
+    pssw = params[:pwd];
+    
+    if(@group.password == pssw)
+      if !@group.users.where(:id => user.id).first
+        @group.users << user
+        render :text => "The user wass successfully added to this group"
+      else
+        render :text => 'That user is already in this group'
+      end
+    else
+        render :text => "The password doesn't match"
+    end 
+
   end
   
   def add_user

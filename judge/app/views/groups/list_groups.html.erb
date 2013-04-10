@@ -3,15 +3,43 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-                      $("#register").click(function(e){
-                        e.preventDefault();
-                        var pass = $("#pwd");
-                        alert("Bien");
-                      });
-                      
-
-              });
+      $("#register").click(function(e){
+          e.preventDefault();
+          var password = prompt("Please enter your password, Harry Potter ?");
+          
+          if (password != null){
+               var group = $("input[name=command]:checked").val();
+               //alert(group + " : " + password);
+               var uurl = "/groups/"+group+"/add_user_confirm/";
+             
+               var id;
+               <% if @current_user %>
+                  id = <%= @current_user.id %>;
+               <%else%>
+                  id= -1;
+               <%end%>
+               /*$.post(uurl , { id: group , user: id  , pwd: password })
+               .done(function(data) {
+                alert("todo bien: " + data);
+               })
+               .beforeSend(function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))});*/
+               $.ajax({ url: uurl,
+                  type: 'POST',
+                  beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+                  data: { id: group , user: id  , pwd: password },
+                  success: function(response) {
+                    alert("ans : "+response);
+                  }
+                });
+            
+          }
+      });
+  });
 </script>
+
+
+
+
 
 
 <div class="page-header">
@@ -22,20 +50,24 @@
     <tr>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:owner) %></th>
-      <th><%= model_class.human_attribute_name(:password) %></th>
-      <th><%= model_class.human_attribute_name(:do_it) %></th>
     </tr>
   </thead>
+  
   <tbody>
-    <% @groups.each do |group| %>
-      <tr>
-        <td><%= group.name %></td>
-        <td><%= group.owner %></td>
-        <td><input type="password" class="input-small" placeholder="Password" id="pwd"></td>
-        <td><button class="btn btn-small btn-success" type="button" id="register">Register</button></td>
-      </tr>
-    <% end %>
+  <fieldset data-role="controlgroup" data-type="vertical" id="comandos" >
+      <% @groups.each do |group| %>
+          <tr>
+            <td> <label for="command"><input data-inline="true" type="radio" class="controller" name="command" 
+            value= "<%= group.id %>" >  <%= group.name %> </label> </td>
+            <td><%= group.owner %></td>
+          </tr>
+      <% end %>
+        
+  </fieldset>
   </tbody>
+
+    
 </table>
 
+<button class="btn btn-small btn-success" type="button" id="register">Register</button>
 
