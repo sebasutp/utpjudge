@@ -10,11 +10,18 @@
         <%= csrf_meta_tags %>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="text/x-mathjax-config">
-          MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+			MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
         </script>
-        <script type="text/javascript"
-          src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    	  </script>
+    	  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    	<style>
+    		.ace_editor {
+				position: relative !important;
+				height: 300px;
+				width: 100%;
+			}
+		</style>
   </head>
   <body>
       <%= render "/layouts/top_bar" %>      
@@ -24,5 +31,6 @@
         </h4>        
       <% end %>
       <%= render "/layouts/info" %>
+      <%= csrf_meta_tag %>
   </body>
 </html>

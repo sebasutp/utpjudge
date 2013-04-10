@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users.json
   
   def index
-    @users = User.all
+    @users = User.paginate(:page => params[:page], :per_page => 10)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,6 +17,7 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
+    @groups = Group.all
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @user }
@@ -48,6 +49,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         session[:user_id] = @user.id
+        flash[:class] = "alert alert-success"
         format.html { redirect_to @user, :notice => 'user was successfully created.' }
         format.json { render :json => @user, :status => :created, :location => @user }
       else
@@ -78,6 +80,27 @@ class UsersController < ApplicationController
     redirect_to :root
   end
 
+  def add_group
+    @user = User.find(params[:id])
+    group = Group.find(params[:group])
+    if !@user.groups.where(:id => group.id).first
+      @user.groups << group
+      flash[:class] = "alert alert-success"
+      redirect_to @user, :notice => 'Group was successfully added to this user'
+    else
+      redirect_to @user, :notice => 'This user is already in that group'
+    end
+  end
+  
+  def rem_group
+    @user = User.find(params[:id])
+    group = Group.find(params[:group])
+    @user.groups.delete(group)
+    flash[:class] = "alert alert-success"
+    redirect_to @user, :notice => 'Group was successfully deleted from this user'
+  end
+
+
   # PUT /users/1
   # PUT /users/1.json
   def update
@@ -85,6 +108,7 @@ class UsersController < ApplicationController
     
     respond_to do |format|
       if @user.updateMA(params[:user])
+        flash[:class] = "alert alert-success"
         format.html { redirect_to @user, :notice => 'user was successfully updated.' }
         format.json { head :no_content }
       else

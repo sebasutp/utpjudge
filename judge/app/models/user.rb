@@ -5,11 +5,37 @@ class User < ActiveRecord::Base
   
   before_save :encrypt_new_password
   has_many :submissions ,  :dependent => :destroy
+  #has_and_belongs_to_many :exercises, :join_table=>:exercises_groups
 
   has_and_belongs_to_many :roles
+  has_and_belongs_to_many :groups
+  has_and_belongs_to_many :exercises
+  
   validates :password, {:confirmation => true, :length=>{:within => 6..50},
     :presence => true, :if => :password_required?}
   validates :email, {:presence=>true, :format => {:with => /^[^@][\w.-]+@[\w.-]+[.][a-z]{2,4}$/i}}
+   validates_uniqueness_of :email
+   
+  def valid_exercises
+    %{
+    mios = nil
+    self.groups.each do |group|
+      if !mios
+        mios = group.exercises
+      else
+        mios = mios |group.exercises
+      end
+    end
+    return mios
+    %}    
+    return Exercise.joins(:groups => :users).group("exercises.id").where("users.id = ?", self)
+    #return Exercise.all(:include=>{:groups => :users}, :conditions => ["users.id=?", self])
+  end
+  
+  def valid_exercise? (exercise)
+    a = valid_exercises.where("exercises.id = :id",{:id => exercise.id}).first
+    return a!=nil
+  end
 
   def has_roles(roles)
     rids = role_ids & roles

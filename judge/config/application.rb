@@ -59,5 +59,8 @@ module Judge
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     config.time_zone = 'UTC'
+    # Errors
+    config.action_view.field_error_proc = Proc.new { |html_tag, instance| html_tag.html_safe }
+    #config.action_view.field_error_proc = Proc.new { |html_tag, instance| %Q(<div class="control-group error">#{html_tag}</div>).html_safe }
   end
 end

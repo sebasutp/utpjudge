@@ -1,8 +1,48 @@
 <h1> <%= @exercise.name %> </h1>
-<p class="text-success"> time to end : <%= (@exercise.elapsed_time).to_s()  %> minutes </p>
 
-<ul class="nav nav-list">
-  <% @problems.each do |e| %>
-      <li><%= link_to "<i class='icon-star'></i> #{e.problem.name}".html_safe, [@exercise,e] %></li>
+
+<p class = <%= @exercise.time_to_end >= 60 ? "text-success" : "text-error"%> >
+time to start : <%= (@exercise.time_to_start).to_s()  %> minutes  -/-
+time to end : <%= (@exercise.time_to_end).to_s()  %> minutes 
+</p>
+
+<table class = "table table-bordered">
+  <tr>
+    <th>Rank</th>
+    <th>user</th>
+    <% @problems.each_with_index do |problem, i| %>
+      <th>
+        <% if @exercise.current? or @exercise.finished? %>
+          <%= link_to "#{problem.problem.name}".html_safe, [@exercise,problem] %>
+        <% else %>
+          <%= @exercise.letter_for_problem(problem) %>
+        <% end %>
+      </th>
+    <% end %>
+    <th>Solved</th>
+    <th>Penalty</th>
+  </tr>
+
+  <% @exercise.users_sorted_by_score.each_with_index do |user, i| %>
+    <tr>
+      <td><%= i + 1 %></td>
+      <td><%= user.name %></td>
+      <% @exercise.exercise_problems.each_with_index do |ex_problem,j| %>
+            
+            <td <%if @exercise.number_of_tries(user,ex_problem) >= 1 %>
+                  <% if @exercise.problem_solved?(user,ex_problem) %>
+                      style = "background : #4CC417" 
+                  <% else %>
+                      style = "background : #f62817" 
+                  <% end %>              
+                <% end %> >
+                                
+                <%= @exercise.wrong_tries_before_solution(user, ex_problem) +1 %> / <%= @exercise.time_of_first_solution(user, ex_problem) %>
+                
+          </td>
+      <% end %>
+      <td><%= @exercise.number_of_solved_problems(user) %></td>
+      <td><%= @exercise.total_penalty(user) %></td>
+    </tr>
   <% end %>
-</ul>
+</table>

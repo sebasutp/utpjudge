@@ -16,6 +16,9 @@
         </tr>
     </thead>
     <tbody>
+    
+    
+
 <% @submissions.each do |submission| %>
     <tr>
         <td><%= link_to submission.id, submission_path(submission) %></td>
@@ -33,8 +36,12 @@
                       :class => 'btn btn-mini btn-danger' %>
           <% end %>
         </td>    
-    </tr>
+    </tr>   
+
 <% end %>
+
+<%= will_paginate @posts %>
+
 </table>
 
 <br />

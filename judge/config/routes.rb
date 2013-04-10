@@ -1,6 +1,7 @@
 Judge::Application.routes.draw do
-  resources :languages
 
+  resources :languages
+  resources :groups
 
   root :to => "static_pages#home"
   
@@ -26,6 +27,7 @@ Judge::Application.routes.draw do
   end
   
   match 'listexercises' => 'exercises#getvalid'
+  match 'listgroups' => 'groups#list_groups'
   match 'admin' => 'static_pages#admin'
   match 'exercise/:id' => 'exercises#exercise'
   resources :exercises do
@@ -34,7 +36,32 @@ Judge::Application.routes.draw do
           get :download
         end
       end
+      member do
+        post :add_group
+        get :rem_group
+      end
   end
+  
+  resources :groups do
+      member do
+        post :add_user , :add_exer , :add_user_confirm
+        get :rem_user , :rem_exer
+      end
+  end
+  
+  resources :exercises do
+    member do
+      post :add_user
+    end
+  end
+  
+  resources :users do
+      member do
+        post :add_group
+        get :rem_group
+      end
+  end
+
 
 
   # The priority is based upon order of creation:
