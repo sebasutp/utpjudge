@@ -14,9 +14,10 @@ class ExercisesController < ApplicationController
   def getvalid
       if(@current_user)      
         mios = @current_user.valid_exercises
-        @exercises = mios.where("exercises.from_date <= :cdate and exercises.to_date >= :cdate",{:cdate => DateTime.now.to_s(:db)})
+        @exercises = mios.where("exercises.from_date <= :cdate and \
+        exercises.to_date >= :cdate",{:cdate =>  DateTime.now.to_s(:db)})
         @past_exercises = mios.where("exercises.to_date <= :cdate",{:cdate => DateTime.now.to_s(:db)})
-        @future_exercises = mios.where("exercises.from_date > :cdate",{:cdate => DateTime.now.to_s(:db)})    
+        @future_exercises = mios.where("exercises.from_date > :cdate",{:cdate => DateTime.now.to_s(:db)})
       else
         redirect_to :root, :notice => "You aren't signed"
       end

@@ -17,8 +17,7 @@ class User < ActiveRecord::Base
    validates_uniqueness_of :email
    
   def valid_exercises
-    %{
-    mios = nil
+    %{mios = nil
     self.groups.each do |group|
       if !mios
         mios = group.exercises
