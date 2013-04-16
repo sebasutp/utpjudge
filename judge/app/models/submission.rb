@@ -89,10 +89,14 @@ class Submission < ActiveRecord::Base
 		tl = timl
 		ml = meml
 		type = lan.ltype
+        self.veredict = "Judging"
 
 		if file_exist? sfile
-			s = %x{sudo -u utpjudgejail /home/jhonber/utpjudge/judge/sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{tl} #{ml}}
-			self.veredict = s
+            Thread.new {
+			    s = %x{sudo -u utpjudgejail /home/jhonber/utpjudge/judge/sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{tl} #{ml}}
+			    self.veredict = s
+                save
+            }
 		end
 	end
 
