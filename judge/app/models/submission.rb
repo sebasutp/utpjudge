@@ -7,7 +7,7 @@ class Submission < ActiveRecord::Base
   attr_accessor :language_id
   has_attached_file :srcfile, :path => ":rails_root/protected/submissions/s:basename:id.:extension", :url => "s:basename:id.:extension"
   has_attached_file :outfile, :path => ":rails_root/protected/submissions/o:basename:id.:extension", :url => "o:basename:id.:extension"
-  
+
   #validates_attachment_presence :src_file
   validates_attachment_size :srcfile, :less_than => 1.megabytes
   validates_attachment_size :outfile, :less_than => 20.megabytes
@@ -84,14 +84,14 @@ class Submission < ActiveRecord::Base
 		ifile = tc.infile.path
 		sfile = srcfile.path
 		
-		comp = lan.compilation.gsub("SOURCE","main")
-		exec = lan.execution.gsub("SOURCE","main").gsub("-tTL","-t"+timl.to_s).gsub("ML",meml.to_s).gsub("INFILE","main.IN")
+		comp = lan.compilation.gsub("SOURCE","Main")
+		exec = lan.execution.gsub("SOURCE","Main").gsub("-tTL","-t"+timl.to_s).gsub("ML",meml.to_s).gsub("INFILE","Main.IN")
 		tl = timl
 		ml = meml
 		type = lan.ltype
 
 		if file_exist? sfile
-			s = %x{sudo -u utpjudgejail bash /home/jhonber/utpjudge/judge/sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{tl} #{ml}}
+			s = %x{sudo -u utpjudgejail /home/jhonber/utpjudge/judge/sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{tl} #{ml}}
 			self.veredict = s
 		end
 	end
