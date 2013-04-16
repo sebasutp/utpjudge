@@ -109,7 +109,7 @@ else
 fi
 
 #To replace string '$VAR' by the value of each variable
-EXECUTION="${EXECUTION//'SRUN'/$SRUN}"
+EXECUTION="${EXECUTION//'SRUN'/safeexec}"
 EXECUTION="${EXECUTION//'-TRTL'/'-T'$RTL}"
 EXECUTION="${EXECUTION//'jailu'/$jailu}"
 EXECUTION="${EXECUTION//'jailg'/$jailg}"
@@ -129,10 +129,10 @@ rm -rf $PRUNNING/*
 #To compilation
 if [ "$TYPE" == "1" ]; then
   echo "Copying and rename 'source.ext' to 'main.ext' in /$basename/RUNS" >> $slog;
-  cp $SOURCE $PRUNNING/main.$ext
+  cp $SOURCE $PRUNNING/Main.$ext
 
   echo "Copying $INFILE in $PRUNNING" >> $slog;
-  cp $INFILE $PRUNNING/main.IN
+  cp $INFILE $PRUNNING/Main.IN
 
   echo "Copying correct outputfile in $PRUNNING" >> $slog;
   cp $OUTFILE $PRUNNING/correct.OUT
@@ -142,16 +142,16 @@ if [ "$TYPE" == "1" ]; then
 
   echo "Compiling .." >> $slog;
   eval $COMPILATION 2>> $slog;	#Compilation
-  chmod +x $PRUNNING/main*
 
   if [ $? == 0 ]; then
+    chmod +x $PRUNNING/Main*
     echo "Executing .." >> $slog;
     cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
 [ -f /proc/cpuinfo ] || sudo /bin/mount -t proc proc /proc
 [ -d /sys/kernel ] || sudo /bin/mount -t sysfs sysfs /sys
 cd $PRUN
-eval $EXECUTION
+$EXECUTION
 echo \$? > run.retcode
 sudo /bin/umount /proc 
 sudo /bin/umount /sys 
@@ -174,17 +174,17 @@ EOF
 #No compilation
 elif [ "$TYPE" == "2" ]; then
   echo "Copying and rename 'source.ext' to 'main.ext' in $PRUNNING" >> $slog;
-  cp $SOURCE $PRUNNING/main.$ext
+  cp $SOURCE $PRUNNING/Main.$ext
 
   echo "Copying $INFILE and rename in $PRUNNING" >> $slog;
-  cp $INFILE $PRUNNING/main.IN
+  cp $INFILE $PRUNNING/Main.IN
 
   echo "Copying correct outputfile in $PRUNNING" >> $slog;
   cp $OUTFILE $PRUNNING/correct.OUT
 
   echo "Change directory to $PRUNNING" >> $slog;
   cd $PRUNNING
-  chmod +x main*
+  chmod +x Main*
 
   echo "Executing .." >> $slog;
   cat <<EOF > $PRUNNING/run.sh
@@ -208,16 +208,16 @@ echo "** $ret" >> $slog
 
 if [ "$ret" == "0" ]; then
   # This presentation error only checks white spaces and newlines
-  DIFF=`diff -wB correct.OUT main.OUT`
+  DIFF=`diff -wB correct.OUT Main.OUT`
   if [ $? == 0 ]; then
-    DIFF2=`diff correct.OUT main.OUT`
+    DIFF2=`diff correct.OUT Main.OUT`
     if [ $? == 0 ]; then
       echo "YES";
     else
       echo "NO - Presentation error";
     fi
   else
-    echo "NO";
+    echo "NO - Wrong answer";
   fi
 elif [ "$ret" == "1" ]; then
   echo "NO - Compile error";
@@ -228,20 +228,20 @@ elif [ "$ret" == "3" ]; then
 elif [ "$ret" == "7" ]; then
   echo "NO - Memory limit exceeded";
 else
-  [ -f main.OUT ] &&  [ -s main.OUT ]
+  [ -s Main.OUT ]
   if [ $? == 0 ]; then
-    DIFF=`diff -wB correct.OUT main.OUT`
+    DIFF=`diff -wB correct.OUT Main.OUT`
     if [ $? == 0 ]; then
-      DIFF2=`diff correct.OUT main.OUT`
+      DIFF2=`diff correct.OUT Main.OUT`
       if [ $? == 0 ]; then
         echo "YES";
       else
         echo "NO - Presentation error";
       fi
     else
-      echo "NO";
+      echo "NO - Wrong answer";
     fi
-  else echo "Unknown error";
+  else echo "NO - NO-OUTPUT";
   fi
 fi;
 
