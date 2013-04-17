@@ -91,7 +91,7 @@ class Submission < ActiveRecord::Base
 		type = lan.ltype
 
 		if file_exist? sfile
-			s = %x{sudo -u utpjudgejail /home/jhonber/utpjudge/judge/sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{tl} #{ml}}
+			s = %x{sudo -u root /home/insilico/utpjudge/judge/sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{tl} #{ml}}
 			self.veredict = s
 		end
 	end
