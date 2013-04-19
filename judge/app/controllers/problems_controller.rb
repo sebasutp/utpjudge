@@ -67,6 +67,7 @@ class ProblemsController < ApplicationController
 
     respond_to do |format|
       if @problem.update_attributes(params[:problem])
+        flash[:class] = "alert alert-success"
         format.html { redirect_to @problem, :notice => 'Problem was successfully updated.' }
         format.json { head :no_content }
       else
