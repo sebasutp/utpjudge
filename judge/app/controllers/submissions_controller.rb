@@ -1,6 +1,7 @@
 class SubmissionsController < ApplicationController
   before_filter :req_psetter, :only=>[:destroy,:update,:edit]
-  before_filter :req_gen_user, :except=>[:destroy,:update,:edit]
+  before_filter :req_gen_user, :except=>[:destroy,:update,:edit,:judgebot]
+  http_basic_authenticate_with :name => "user", :password => "password", :only => :judgebot
 
   # GET /submissions
   # GET /submissions.json
@@ -39,7 +40,18 @@ class SubmissionsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @submission }
+      format.xml { render xml: @submission }
     end
+  end
+
+  #GET /submissions/judgebot/1.json (Called by judge)
+  def judgebot
+      @submission = Submission.find(params[:id])
+      @srccode = @submission.source
+      #@lang = Language.find(@submission.language_id)
+      respond_to do |format|
+          format.json { render json: [@submission,@srccode] }
+      end
   end
 
   # GET /submissions/new

@@ -10,8 +10,9 @@ Judge::Application.routes.draw do
           get :downloadInput
       end
       member do
+          get :judgebot
           put :jdownload
-					put :jupload
+		  put :jupload
       end
   end
   
