@@ -52,11 +52,13 @@ class Submission < ActiveRecord::Base
       if jt == :downloadInput
         judgeDownload(tc)
       else
+        #begin JHONBER
         lan = Language.find(language_id)
         exp = self.exercise_problem
         timl = exp.prog_limit
         meml = exp.mem_lim
         judgeUpload(tc,lan,timl,meml)
+        #end JHONBER
       end
       save
   end
@@ -80,6 +82,7 @@ class Submission < ActiveRecord::Base
   end
 
 	def judgeUpload(tc,lan,timl,meml)
+        #begin JHONBER
 		ofile = tc.outfile.path
 		ifile = tc.infile.path
 		sfile = srcfile.path
@@ -98,6 +101,7 @@ class Submission < ActiveRecord::Base
         save
       #}
 		end
+        #end JHONBER
 	end
 
   def source

@@ -44,7 +44,7 @@ class SubmissionsController < ApplicationController
     end
   end
 
-  #GET /submissions/judgebot/1.json (Called by judge)
+  #GET /submissions/1/judgebot.json (Called by judge)
   def judgebot
       @submission = Submission.find(params[:id])
       @srccode = @submission.source
