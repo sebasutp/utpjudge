@@ -1,7 +1,7 @@
 class SubmissionsController < ApplicationController
   before_filter :req_psetter, :only=>[:destroy,:update,:edit]
-  before_filter :req_gen_user, :except=>[:destroy,:update,:edit,:judgebot]
-  http_basic_authenticate_with :name => "user", :password => "password", :only => :judgebot
+  before_filter :req_gen_user, :except=>[:destroy,:update,:edit,:judgebot,:bot_testcase]
+  http_basic_authenticate_with :name => "user", :password => "password", :only => [:judgebot,:bot_testcase]
 
   # GET /submissions
   # GET /submissions.json
@@ -31,9 +31,9 @@ class SubmissionsController < ApplicationController
     is_authorized = @current_user.id == @submission.user.id || @current_user.has_roles(User.roles[:psetter])
     redirect_to :root and return if not is_authorized
 
-    if (@submission.veredict == "Judging" || @submission.veredict.length == 0)
-      @submission.judge
-    end
+    #if (@submission.veredict == "Judging" || @submission.veredict.length == 0)
+      #@submission.judge
+    #end
     @exercise_problem = @submission.exercise_problem
     @srccode = @submission.source
 
@@ -48,9 +48,18 @@ class SubmissionsController < ApplicationController
   def judgebot
       @submission = Submission.find(params[:id])
       @srccode = @submission.source
-      #@lang = Language.find(@submission.language_id)
+      @lang = @submission.language
       respond_to do |format|
-          format.json { render json: [@submission,@srccode] }
+          format.json { render json: [@submission,@srccode,@lang,@submission.exercise_problem] }
+      end
+  end
+  
+  #GET /submissions/1/bot_testcase.json (Called by judge)
+  def bot_testcase
+      @submission = Submission.find(params[:id])
+            
+      respond_to do |format|
+          format.json { render json: @submission.get_test_cases }
       end
   end
 
@@ -97,9 +106,10 @@ class SubmissionsController < ApplicationController
 
 	def jupload
 	  @submission = Submission.find(params[:id])
-      @submission.end_date = DateTime.now
-      respond_to do |format|
-      @submission.language_id = params[:language_id]
+	  @submission.language = Language.find(params[:language_id])
+    @submission.end_date = DateTime.now
+    #@submission.language_id = params[:language_id]
+    respond_to do |format|      
       if @submission.update_attributes(params[:submission]) && @submission.judge
         #if success redirect to show action
         flash[:class] = "alert alert-success"

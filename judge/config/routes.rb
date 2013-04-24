@@ -10,9 +10,10 @@ Judge::Application.routes.draw do
           get :downloadInput
       end
       member do
-          get :judgebot
-          put :jdownload
-		  put :jupload
+        get :judgebot
+        get :bot_testcase
+        put :jdownload
+		    put :jupload
       end
   end
   
@@ -24,7 +25,8 @@ Judge::Application.routes.draw do
   end
     
   resources :problems do
-      resources :testcases
+      resources :testcases do
+      end
   end
   
   match 'listexercises' => 'exercises#getvalid'
