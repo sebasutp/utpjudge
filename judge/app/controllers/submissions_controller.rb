@@ -12,9 +12,9 @@ class SubmissionsController < ApplicationController
       redirect_to :root and return if not authorized
     end
     if u_id
-      @submissions = User.find(u_id).submissions.paginate(:page => params[:page], :per_page => 5)
+      @submissions = User.find(u_id).submissions.paginate(:page => params[:page], :per_page => 5).order('created_at DESC')
     else
-      @submissions = Submission.paginate(:page => params[:page], :per_page => 5)
+      @submissions = Submission.paginate(:page => params[:page], :per_page => 5).order('created_at DESC')
     end
       
     respond_to do |format|
