@@ -13,10 +13,11 @@ class SJudge
 
   def initialize()
     @base_uri = 'http://localhost:3000'
+    @folder = 'files'
   end
   
   def write_to_file(fname,str)
-    file = File.open(fname,"w")
+    file = File.open("#{@folder}/#{fname}","w")
     file.write(str)
     file.close
   end
@@ -24,7 +25,7 @@ class SJudge
   def judge
     srcname = @submission["srcfile_file_name"]
     folder = "tmp/"
-    write_to_file(src_name,@src_code)
+    write_to_file(srcname,@src_code)
     tc_id = @submission["testcase_id"]
     if !(@testcases.has_key? tc_id)
       @testcases[tc_id] = tc = SConsumer.get("#{@base_uri}/submissions/#{tc_id}/bot_testcase.json")
@@ -40,7 +41,9 @@ class SJudge
     timl = @ex_pr["time_limit"]
     progl = @ex_pr["prog_limit"]
     meml = @ex_pr["mem_lim"]
-    s = %x{./sjudge.sh "#{src_name}" "#{tc_id}.in" "#{tc_id}.out" #{type} '#{comp}' '#{exec}' #{timl} #{meml} #{progl}}
+    command = "./sjudge.sh '#{srcname}' '#{tc_id}.in' '#{tc_id}.out' #{type} '#{comp}' '#{exec}' #{timl} #{meml} #{progl}"
+    puts command
+    s = %x{#{command}}
   end
 
   def process_subm(subm_id)
