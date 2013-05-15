@@ -26,10 +26,12 @@ slog=slog.log
 echo "" >> $folder/$slog
 
 # This script makes use of $COMMNAME to execute the code with less privilegies
-commname=safeexec
+commname=`which safeexec`
+# User to judging
+basename=utpjudgejail
 #SRUN=/usr/bin/$COMMNAME
 
-if [ ! -x $folder/$commname ]; then
+if [ ! -x $commname ]; then
   echo "$SRUN not found or it's not executable" >> $folder/$slog;
   exit;
 fi
@@ -73,6 +75,25 @@ if [ "$ML" == "" ]; then
   ML=131072;
 fi
 
+# To know user id
+id -u $basename >/dev/null 2>/dev/null
+if [ $? == 0 ]; then
+  jailu=`id -u $basename`
+  jailg=`id -g $basename`
+else
+  jailu=`id -u nobody`
+  jailg=`id -g nobody`
+fi
+
+if [ "$jailu" == "" -o "$jailg" == "" ]; then
+	echo "Error finding user to run script" >> $slog;
+	exit;
+fi
+
+#To replace string '$VAR' by the value of each variable
+EXECUTION="${EXECUTION//'jailu'/$jailu}"
+EXECUTION="${EXECUTION//'jailg'/$jailg}"
+
 if [ "$TYPE" == "" ]; then
   echo "The value for TYPE is required" >> $slog;
   exit;
@@ -93,33 +114,34 @@ else
   exit;
 fi
 
+#Directory to running submissions
 frun=runs
 
 # Extension
 tmp=(${SOURCE//./ })
 ext=${tmp[1]}
 
-# rm all files into $PRUNNING
-echo "rm -rf $fruns/*" >> $slog
-#rm -rf $fruns/*
-echo "mkdir $fruns" >> $slog
+if [ ! -d "$frun" ]; then
+  echo "mkdir $frun" >> $slog
+  mkdir $frun
+else
+  echo "rm -rf $frun/*" >> $slog
+  rm -rf $frun/*
+fi
 
 #To compilation
 if [ "$TYPE" == "1" ]; then
   echo "Copying and rename 'source.ext' to 'main.ext' in /$basename/RUNS" >> $slog;
-  cp $SOURCE $frun/Main.$ext
+  cp $SOURCE $frun/Main.$ext 2>> $slog;
 
   echo "Copying $INFILE in $frun" >> $slog;
-  cp $INFILE $frun/Main.IN
+  cp $INFILE $frun/Main.in 2>> $slog;
 
   echo "Copying correct outputfile in $frun" >> $slog;
-  cp $OUTFILE $frun/correct.OUT
-
-  echo "Copying safeexec in $frun" >> $slog;
-  cp safeexec $frun
+  cp $OUTFILE $frun/correct.OUT 2>> $slog;
 
   echo "Change directory to $frun" >> $slog;
-  cd $frun
+  cd $frun 2>> $slog;
 
   echo "Compiling .. $COMPILATION" >> $slog;
   eval $COMPILATION 2>> $slog;	#Compilation
@@ -162,7 +184,7 @@ elif [ "$TYPE" == "2" ]; then
   cp $SOURCE $frun/Main.$ext
 
   echo "Copying $INFILE and rename in $frun" >> $slog;
-  cp $INFILE $frun/Main.IN
+  cp $INFILE $frun/Main.in
 
   echo "Copying correct outputfile in $frun" >> $slog;
   cp $OUTFILE $frun/correct.OUT

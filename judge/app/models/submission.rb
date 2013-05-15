@@ -86,7 +86,7 @@ class Submission < ActiveRecord::Base
 		sfile = srcfile.path
 		
 		comp = lan.compilation.gsub("SOURCE","Main")
-		exec = lan.execution.gsub("SOURCE","Main").gsub("-tTL","-t"+timl.to_s).gsub("ML",meml.to_s).gsub("INFILE","Main.IN")
+		exec = lan.execution.gsub("SOURCE","Main").gsub("-tTL","-t"+timl.to_s).gsub("ML",meml.to_s).gsub("INFILE","Main.in")
 		#tl = timl
 		#ml = meml
 		type = lan.ltype
@@ -94,6 +94,13 @@ class Submission < ActiveRecord::Base
 
 		if file_exist? sfile
 		  #Tell server that a new submission arrived
+		  
+		  require 'socket'
+      s = TCPSocket.new 'localhost', 3010
+      subm = self.id.to_s
+      s.puts subm
+      s.close
+		  
       #s = %x{sudo -u utpjudjail /home/insilico/utpjudge/judge/sjudge.sh #{sfile} #{ifile} #{ofile} #{type} '#{comp}' '#{exec}' #{timl} #{meml}}
 			#self.veredict = s
       #save      

@@ -35,7 +35,7 @@ class SJudge
     else
       tc = @testcases[tc_id]
     end    
-    puts [@src_code,tc[0],tc[1]]
+    #puts [@src_code,tc[0],tc[1]]
     type = @language["ltype"]
     comp = @language["compilation"]
     exec = @language["execution"]
@@ -43,7 +43,7 @@ class SJudge
     progl = @ex_pr["prog_limit"]
     meml = @ex_pr["mem_lim"]
     comp = comp.gsub("SOURCE","Main")
-    exec = exec.gsub("SOURCE","Main").gsub("-tTL","-t"+timl.to_s).gsub("ML",meml.to_s).gsub("INFILE","Main.IN").gsub("SRUN","./safeexec")
+    exec = exec.gsub("SOURCE","Main").gsub("-tTL","-t"+timl.to_s).gsub("ML",meml.to_s).gsub("INFILE","Main.in").gsub("SRUN","safeexec")
     command = "./sjudge.sh '#{srcname}' '#{tc_id}.in' '#{tc_id}.out' #{type} '#{comp}' '#{exec}' #{timl} #{meml} #{progl}"
     puts command
     s = %x{#{command}}
@@ -52,14 +52,14 @@ class SJudge
 
   def process_subm(subm_id)
     s = "#{@base_uri}/submissions/#{subm_id}/judgebot.json"
-    puts s
+    #puts s
     response = SConsumer.get(s)
     #puts response
     @submission = response[0]
     @src_code = response[1]
     @language = response[2]
     @ex_pr = response[3]
-    puts response
+    #puts response
     judge    
   end
 
