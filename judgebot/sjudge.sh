@@ -20,16 +20,61 @@
 # 8 security threat
 # 9 runtime error
 
-basename=sebas
+folder=files
+slog=slog.log
 
-#log of event
-t=$0
-arr=(${t//./ })
-#slog=${arr[0]}.log
-slog=bot.log
-echo "" >> $slog
+echo "" >> $folder/$slog
 
-umask 0022
+# This script makes use of $COMMNAME to execute the code with less privilegies
+commname=`which safeexec`
+# User to judging
+basename=utpjudgejail
+#SRUN=/usr/bin/$COMMNAME
+
+if [ ! -x $commname ]; then
+  echo "$SRUN not found or it's not executable" >> $folder/$slog;
+  exit;
+fi
+
+SOURCE=$1
+INFILE=$2
+OUTFILE=$3
+TYPE=$4
+COMPILATION=$5
+EXECUTION=$6
+TL=$7
+ML=$8
+PL=$9
+RTL=30
+
+if [ ! -f $folder/$SOURCE ]; then
+  echo "$SOURCE does not exist" >> $folder/$slog;
+  exit;
+fi;
+
+if [ ! -f $folder/$INFILE ]; then
+  echo "$INFILE does not exist" >> $folder/$slog;
+  exit;
+fi;
+
+if [ ! -f $folder/$OUTFILE ]; then
+  echo "$OUTFILE does not exist" >> $folder/$slog;
+  exit;
+fi;
+
+cd $folder
+
+
+# Set values by default
+if [ "$TL" == "" ]; then
+  TL=5;
+fi
+let RTL=$TL+30	# Set the real time limit
+
+if [ "$ML" == "" ]; then
+  ML=131072;
+fi
+
 # To know user id
 id -u $basename >/dev/null 2>/dev/null
 if [ $? == 0 ]; then
@@ -45,51 +90,9 @@ if [ "$jailu" == "" -o "$jailg" == "" ]; then
 	exit;
 fi
 
-# This script makes use of $COMMNAME to execute the code with less privilegies
-COMMNAME=safeexec
-#SRUN=/usr/bin/$COMMNAME
-SRUN=./safeexec
-
-if [ ! -x RUN/$SRUN ]; then
-  echo "$SRUN not found or it's not executable" >> $slog;
-  exit;
-fi
-
-SOURCE=$1
-INFILE=$2
-OUTFILE=$3
-TYPE=$4
-COMPILATION=$5
-EXECUTION=$6
-TL=$7
-ML=$8
-PL=$9
-RTL=30
-
-if [ ! -f $SOURCE ]; then
-  echo "$SOURCE does not exist" >> $slog;
-  exit;
-fi;
-
-if [ ! -f $INFILE ]; then
-  echo "$INFILE does not exist" >> $slog;
-  exit;
-fi;
-
-if [ ! -f $OUTPUT ]; then
-  echo "$OUTFILE does not exist" >> $slog;
-  exit;
-fi;
-
-# Set values by default
-if [ "$TL" == "" ]; then
-  TL=5;
-fi
-let RTL=$TL+30	# Set the real time limit
-
-if [ "$ML" == "" ]; then
-  ML=131072;
-fi
+#To replace string '$VAR' by the value of each variable
+EXECUTION="${EXECUTION//'jailu'/$jailu}"
+EXECUTION="${EXECUTION//'jailg'/$jailg}"
 
 if [ "$TYPE" == "" ]; then
   echo "The value for TYPE is required" >> $slog;
@@ -111,46 +114,42 @@ else
   exit;
 fi
 
-#To replace string '$VAR' by the value of each variable
-EXECUTION="${EXECUTION//'SRUN'/./safeexec}"
-EXECUTION="${EXECUTION//'-TRTL'/'-T'$RTL}"
-EXECUTION="${EXECUTION//'jailu'/$jailu}"
-EXECUTION="${EXECUTION//'jailg'/$jailg}"
-
-# Path absolute to execute programs
-#PRUNNING=/$basename/RUNS
-PRUNNING=./RUN
-# Path into jail
-PRUN=./RUNS
+#Directory to running submissions
+frun=runs
 
 # Extension
 tmp=(${SOURCE//./ })
 ext=${tmp[1]}
 
-# rm all files into $PRUNNING
-rm -rf $PRUNNING/*
+if [ ! -d "$frun" ]; then
+  echo "mkdir $frun" >> $slog
+  mkdir $frun
+else
+  echo "rm -rf $frun/*" >> $slog
+  rm -rf $frun/*
+fi
 
 #To compilation
 if [ "$TYPE" == "1" ]; then
   echo "Copying and rename 'source.ext' to 'main.ext' in /$basename/RUNS" >> $slog;
-  cp $SOURCE $PRUNNING/Main.$ext
+  cp $SOURCE $frun/Main.$ext 2>> $slog;
 
-  echo "Copying $INFILE in $PRUNNING" >> $slog;
-  cp $INFILE $PRUNNING/Main.IN
+  echo "Copying $INFILE in $frun" >> $slog;
+  cp $INFILE $frun/Main.in 2>> $slog;
 
-  echo "Copying correct outputfile in $PRUNNING" >> $slog;
-  cp $OUTFILE $PRUNNING/correct.OUT
+  echo "Copying correct outputfile in $frun" >> $slog;
+  cp $OUTFILE $frun/correct.OUT 2>> $slog;
 
-  echo "Change directory to $PRUNNING" >> $slog;
-  cd $PRUNNING
+  echo "Change directory to $frun" >> $slog;
+  cd $frun 2>> $slog;
 
-  echo "Compiling .." >> $slog;
+  echo "Compiling .. $COMPILATION" >> $slog;
   eval $COMPILATION 2>> $slog;	#Compilation
 
   if [ $? == 0 ]; then
     chmod +x Main*
     echo "Executing .." >> $slog;
-    echo $EXECUTION >> $slog;
+    echo "Command: $EXECUTION" >> $slog;
     $EXECUTION
     echo $? > run.retcode
 ##    cat <<EOF > $PRUNNING/run.sh
@@ -182,33 +181,23 @@ if [ "$TYPE" == "1" ]; then
 #No compilation
 elif [ "$TYPE" == "2" ]; then
   echo "Copying and rename 'source.ext' to 'main.ext' in $PRUNNING" >> $slog;
-  cp $SOURCE $PRUNNING/Main.$ext
+  cp $SOURCE $frun/Main.$ext
 
-  echo "Copying $INFILE and rename in $PRUNNING" >> $slog;
-  cp $INFILE $PRUNNING/Main.IN
+  echo "Copying $INFILE and rename in $frun" >> $slog;
+  cp $INFILE $frun/Main.in
 
-  echo "Copying correct outputfile in $PRUNNING" >> $slog;
-  cp $OUTFILE $PRUNNING/correct.OUT
+  echo "Copying correct outputfile in $frun" >> $slog;
+  cp $OUTFILE $frun/correct.OUT
 
-  echo "Change directory to $PRUNNING" >> $slog;
-  cd $PRUNNING
+  echo "Change directory to $frun" >> $slog;
+  cd $frun
   chmod +x Main*
 
   echo "Executing .." >> $slog;
-  cat <<EOF > $PRUNNING/run.sh
-#!/bin/bash
-[ -f /proc/cpuinfo ] || sudo /bin/mount -t proc proc /proc
-[ -d /sys/kernel ] || sudo /bin/mount -t sysfs sysfs /sys
-cd $PRUN
-eval $EXECUTION
-echo \$? > run.retcode
-sudo /bin/umount /proc 
-sudo /bin/umount /sys 
-EOF
-
-  chmod 755 $PRUNNING/run.sh
-  #chroot /$basename $PRUN/run.sh
-  schroot -c $basename -p $PRUN/run.sh
+  echo "Command: $EXECUTION" >> $slog;
+  cd $frun
+  eval $EXECUTION
+  echo \$? > run.retcode  
 fi;
 
 ret=`cat run.retcode`
@@ -252,4 +241,3 @@ else
   else echo "NO - NO-OUTPUT";
   fi
 fi;
-

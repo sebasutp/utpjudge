@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users.json
   
   def index
-    @users = User.paginate(:page => params[:page], :per_page => 10)
+    @users = User.paginate(:page => params[:page], :per_page => 10).order('created_at DESC')
 
     respond_to do |format|
       format.html # index.html.erb
