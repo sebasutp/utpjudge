@@ -1,5 +1,5 @@
 class ProblemsController < ApplicationController
-  before_filter :req_psetter, :except=>[:index,:show]
+  before_filter :req_psetter
   before_filter :init_vars
   
   def init_vars
