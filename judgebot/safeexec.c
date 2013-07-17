@@ -465,7 +465,9 @@ Use -U and -G for that, but you might need to have root privilegies.\n");
     if(currun < nruns) goto doagain;
 
     // otherwise just report the exit code:
-    if (st) fprintf (stderr, "safeexec: TOTAL TIME RUNNING %s: %u sec (%lf sec)\n", argv[optind], (unsigned int) (time(NULL)-ini), dt);
+		// modify to output only time running
+//    if (st) fprintf (stderr, "safeexec: TOTAL TIME RUNNING %s: %u sec (%lf sec)\n", argv[optind], (unsigned int) (time(NULL)-ini), dt);
+		if (st) fprintf (stderr, "%s: %u sec (%lf sec)\n", argv[optind], (unsigned int) (time(NULL)-ini), dt);
     exitandkill(ret);
   } else {
     /* ------------------- child process ------------------------------ */

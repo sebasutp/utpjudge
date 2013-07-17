@@ -1,9 +1,14 @@
 require 'socket'
 
-s = TCPSocket.new 'localhost', 3010
+cont = 118
+n = 1
+n.times do |x|
+	s = TCPSocket.new 'localhost', 3010
+	r = Random.new
+#	t = r.rand(0...104)
+	t = cont
+	puts "Write a submission id: " + t.to_s
+	s.puts t
+	cont += 1
+end
 
-puts "Write a submission id: "
-subm = gets
-s.puts subm
-
-s.close

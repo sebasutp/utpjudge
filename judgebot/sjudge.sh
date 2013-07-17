@@ -20,15 +20,17 @@
 # 8 security threat
 # 9 runtime error
 
-folder=files
-slog=slog.log
 
+#Directory to running submissions
+frun=runs${10}
+folder=files/$frun
+slog=slog.log
 echo "" >> $folder/$slog
 
 # This script makes use of $COMMNAME to execute the code with less privilegies
 commname=`which safeexec`
 # User to judging
-basename=utpjudgejail
+basename=utp
 #SRUN=/usr/bin/$COMMNAME
 
 if [ ! -x $commname ]; then
@@ -47,23 +49,23 @@ ML=$8
 PL=$9
 RTL=30
 
-if [ ! -f $folder/$SOURCE ]; then
-  echo "$SOURCE does not exist" >> $folder/$slog;
-  exit;
-fi;
-
-if [ ! -f $folder/$INFILE ]; then
-  echo "$INFILE does not exist" >> $folder/$slog;
-  exit;
-fi;
-
-if [ ! -f $folder/$OUTFILE ]; then
-  echo "$OUTFILE does not exist" >> $folder/$slog;
-  exit;
-fi;
-
 cd $folder
+#chmod 777 -R $frun
 
+if [ ! -f $SOURCE ]; then
+  echo "$SOURCE does not exist" >> $slog;
+  exit;
+fi;
+
+if [ ! -f $INFILE ]; then
+  echo "$INFILE does not exist" >> $slog;
+  exit;
+fi;
+
+if [ ! -f $OUTFILE ]; then
+  echo "$OUTFILE does not exist" >> $slog;
+  exit;
+fi;
 
 # Set values by default
 if [ "$TL" == "" ]; then
@@ -75,7 +77,7 @@ if [ "$ML" == "" ]; then
   ML=131072;
 fi
 
-# To know user id
+# To know user iddoes not exist
 id -u $basename >/dev/null 2>/dev/null
 if [ $? == 0 ]; then
   jailu=`id -u $basename`
@@ -114,31 +116,29 @@ else
   exit;
 fi
 
-#Directory to running submissions
-frun=runs
 
 # Extension
 tmp=(${SOURCE//./ })
 ext=${tmp[1]}
 
-if [ ! -d "$frun" ]; then
-  echo "mkdir $frun" >> $slog
-  mkdir $frun
-else
-  echo "rm -rf $frun/*" >> $slog
-  rm -rf $frun/*
-fi
+##if [ ! -d "$frun" ]; then
+#  echo "mkdir $frun" >> $slog
+#  mkdir $frun
+##else
+##  echo "rm -rf $frun/*" >> $slog
+##  rm -rf $frun/*
+##fi
 
 #To compilation
 if [ "$TYPE" == "1" ]; then
   echo "Copying and rename 'source.ext' to 'main.ext' in /$basename/RUNS" >> $slog;
-  cp $SOURCE $frun/Main.$ext 2>> $slog;
+  cp $SOURCE Main.$ext 2>> $slog;
 
   echo "Copying $INFILE in $frun" >> $slog;
-  cp $INFILE $frun/Main.in 2>> $slog;
+  cp $INFILE Main.in 2>> $slog;
 
   echo "Copying correct outputfile in $frun" >> $slog;
-  cp $OUTFILE $frun/correct.OUT 2>> $slog;
+  cp $OUTFILE correct.OUT 2>> $slog;
 
   echo "Change directory to $frun" >> $slog;
   cd $frun 2>> $slog;
