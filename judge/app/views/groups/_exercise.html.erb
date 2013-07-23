@@ -16,7 +16,7 @@
   <tbody>
     <% @group.exercises.each do |exercise| %>
       <tr>
-        <td><%= link_to exercise.id, user_path(exercise) %></td>
+        <td><%= link_to exercise.id, exercise_path(exercise) %></td>
         <td><%= exercise.name %></td>
         <td>
         <%= link_to "delete",:controller => "groups", :action => "rem_exer" , :exercise => exercise.id%>
