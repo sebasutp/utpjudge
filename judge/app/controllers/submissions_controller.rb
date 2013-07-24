@@ -1,7 +1,7 @@
 class SubmissionsController < ApplicationController
   before_filter :req_psetter, :only=>[:destroy,:update,:edit]
-  before_filter :req_gen_user, :except=>[:destroy,:update,:edit,:judgebot,:bot_testcase]
-  http_basic_authenticate_with :name => "user", :password => "password", :only => [:judgebot,:bot_testcase]
+  before_filter :req_gen_user, :except=>[:destroy,:update,:edit,:judgebot,:bot_testcase,:update_veredict]
+  http_basic_authenticate_with :name => "user", :password => "password", :only => [:judgebot,:bot_testcase,:update_veredict]
 
   # GET /submissions
   # GET /submissions.json
@@ -62,6 +62,25 @@ class SubmissionsController < ApplicationController
           format.json { render json: @submission.get_test_cases }
       end
   end
+
+	#POST receive the veredict from judbot
+	def update_veredict
+		@submission = Submission.find(params[:id])
+		time = params[:time]
+		sub_id    = params[:id]
+		veredict  = params[:veredict]
+
+		@submission.veredict = veredict
+		@submission.time = time
+
+		respond_to do |format|
+    	format.json { render json: [veredict] }
+    end
+
+		#update on DB
+		@submission.update_attributes(params[:submission])
+
+	end
 
   # GET /submissions/new
   def new
