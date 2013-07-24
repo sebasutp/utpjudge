@@ -14,7 +14,7 @@
   <dd><%= @user.encrypted_password %></dd> -->
 </dl>
 
-<% if @user.has_roles([:root]) %>
+<% if @current_user.has_roles([1]) %>
  <hr class="bs-docs-separator">
  <h3>Groups of this user</h3>
  <%= render "group" %>
