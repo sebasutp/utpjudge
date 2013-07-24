@@ -33,8 +33,7 @@ class UsersController < ApplicationController
       format.html # new.html.erb
       format.json { render :json => @user }
     end
-    
-    
+    #redirect_to :root 
   end
 
   # GET /users/1/edit
