@@ -186,4 +186,3 @@ echo "done!";
 hostn=`hostname`
 echo "$basename $hostn = (root) NOPASSWD: /bin/mount"  >> /home/$basename/etc/sudoers;
 echo "$basename $hostn = (root) NOPASSWD: /bin/umount" >> /home/$basename/etc/sudoers;
-
