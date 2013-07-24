@@ -12,6 +12,7 @@ fi
 COMMNAME=safeexec
 basename=utpjudgejail
 homejail=/home/$basename
+PATH_BOT=../judgebot
 DISTRIB_CODENAME=testing
 PRUN=RUNS
 
@@ -23,17 +24,6 @@ rm -rf /etc/schroot/chroot.d/$basename.conf
 deluser $basename
 delgroup g$basename
 
-# To install all packages needed
-LIST_DEBS_JAIL="g++ gcc libstdc++6 sharutils openjdk-6-jdk openjdk-6-jre openjdk-7-jdk openjdk-7-jre \
-                python sudo"
-LIST_DEBS="quota debootstrap schroot sysstat g++ gcc libstdc++6 makepasswd mii-diag \
-					 sharutils openjdk-7-dbg openjdk-7-jdk openjdk-7-jre openjdk-7-doc sysvinit-utils"
-echo "Executing: apt-get update ...";
-apt-get update > /dev/null 2>/dev/null;
-echo "done!";
-echo "Executing: apt-get install $LIST_DEBS ...";
-apt-get -y install $LIST_DEBS > /dev/null 2>/dev/null;
-echo "done!";
 echo "Creating commmand: '$COMMNAME' ...";
 # To compile and create command $COMMNAME if does not exists
 if [ ! -x /usr/bin/$COMMNAME ]; then
@@ -51,6 +41,33 @@ if [ ! -x /usr/bin/$COMMNAME ]; then
 		exit;
 	fi
 fi
+
+# To create dir 'files' with writting permissions and pipe.
+
+echo "Creating dir: $PATH_BOT/files";
+mkdir $PATH_BOT/files
+chmod 777 $PATH_BOT/files
+echo "Creating fifo: $PATH_BOT/test_fifo";
+mkfifo $PATH_BOT/test_fifo
+chmod 700 $PATH_BOT/test_fifo
+
+# If jail is not necessary.
+if [ $# == 0 ]; then
+    exit;
+fi
+
+# To install all packages needed
+LIST_DEBS_JAIL="g++ gcc libstdc++6 sharutils openjdk-6-jdk openjdk-6-jre openjdk-7-jdk openjdk-7-jre \
+                python sudo"
+LIST_DEBS="quota debootstrap schroot sysstat g++ gcc libstdc++6 makepasswd mii-diag \
+					 sharutils openjdk-7-dbg openjdk-7-jdk openjdk-7-jre openjdk-7-doc sysvinit-utils"
+echo "Executing: apt-get update ...";
+apt-get update > /dev/null 2>/dev/null;
+echo "done!";
+echo "Executing: apt-get install $LIST_DEBS ...";
+apt-get -y install $LIST_DEBS > /dev/null 2>/dev/null;
+echo "done!";
+
 
 # Checks if all commands are found
 commands="setquota ln id chown chmod dirname useradd mkdir cp rm mv apt-get dpkg uname debootstrap schroot"
