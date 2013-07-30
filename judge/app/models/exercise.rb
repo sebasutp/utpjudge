@@ -27,11 +27,11 @@ class Exercise < ActiveRecord::Base
   end
   
   def time_to_end
-    elapsed = ((Time.parse(to_date.to_s(:db)) - Time.now)/60.0).to_i
-    if elapsed < 0
+    missing = ((Time.parse(to_date.to_s(:db)) - Time.now)/60.0).to_i
+    if missing < 0
       return 0
     end
-    return elapsed
+    return missing
   end
   
   def add_user(some_user)
@@ -68,7 +68,7 @@ class Exercise < ActiveRecord::Base
   
   def time_of_first_solution(user, ex_problem)
     submission = first_accepted_submission(user, ex_problem)
-    submission.blank? ? nil : ((submission.end_date - from_date) / 60).round
+    submission.blank? ? nil : ((Time.parse(submission.end_date.to_s(:db)) - Time.parse(from_date.to_s(:db))) / 60).to_i - 300
   end
   
   def problem_solved?(user, ex_problem)

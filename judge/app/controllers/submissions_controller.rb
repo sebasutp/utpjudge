@@ -96,8 +96,8 @@ class SubmissionsController < ApplicationController
 			else
 				@language = Language.all
 				@submission = Submission.newJudgeSource(@exercise_problem)
-        @submission.user = current_user
-        @submission.save
+#        @submission.user = current_user
+#        @submission.save
         render "jupload"
       end
 
@@ -106,6 +106,7 @@ class SubmissionsController < ApplicationController
   def jdownload
      @submission = Submission.find(params[:id])
      @submission.end_date = DateTime.now
+     
      if @submission.user.valid_exercise? @submission.exercise_problem.exercise
         respond_to do |format|
           if @submission.update_attributes(params[:submission]) && @submission.judge
@@ -124,10 +125,14 @@ class SubmissionsController < ApplicationController
   end
 
 	def jupload
-	  @submission = Submission.find(params[:id])
-	  @submission.language = Language.find(params[:language_id])
+	  #@submission = Submission.find(params[:id])
+    @exercise_problem = ExerciseProblem.find(params[:exercise_problem_id])
+    @submission = Submission.newJudgeSource(@exercise_problem)
+    @submission.language = Language.find(params[:language_id])
     @submission.end_date = DateTime.now
-    #@submission.language_id = params[:language_id]
+    @submission.user = current_user
+    @submission.save
+
     respond_to do |format|      
       if @submission.update_attributes(params[:submission]) && @submission.judge
         #if success redirect to show action

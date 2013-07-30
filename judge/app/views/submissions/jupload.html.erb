@@ -1,5 +1,5 @@
 <h2>Submit solution</h2>
-<%= form_for(@submission, :url=> {:action => "jupload", :id=>@submission.id}, :html => {:method=>"put", :onsubmit => "return validate_form()"}) do |f| %>
+<%= form_for(@submission, :url=> {:action => "jupload", :exercise_problem_id => @exercise_problem.id}, :html => {:method=>"put", :onsubmit => "return validate_form()"}) do |f| %>
   <% if @submission.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@submission.errors.count, "error") %> prohibited this submission from being saved:</h2>

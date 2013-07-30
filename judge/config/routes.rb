@@ -8,13 +8,14 @@ Judge::Application.routes.draw do
   resources :submissions do
       collection do
           get :downloadInput
+          put :jupload
       end
       member do
         get :judgebot
         get :bot_testcase
-				get :update_veredict # to update veredict
+        get :update_veredict # to update veredict
         put :jdownload
-		    put :jupload
+#       put :jupload
       end
   end
   

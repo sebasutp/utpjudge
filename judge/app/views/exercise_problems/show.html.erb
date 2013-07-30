@@ -3,7 +3,7 @@
   <dd><h2><%= @problem.name %></h2></dd>
   <dd>Time limit: <%= "#{@exercise_problem.time_limit} s" %></dd>
   <dd>Memory limit: <%= "#{@exercise_problem.mem_lim} MBytes" %></dd>
-  <dd><%= @problem.pdescription.url %></dd>
+  <dd><a  href = <%= @problem.pdescription.url %> > PDF description </a> </dd>
   <br />
   <dd><%= raw(@problem.notes) %></dd>
 </dl>
