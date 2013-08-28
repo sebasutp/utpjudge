@@ -49,8 +49,11 @@ ML=$8
 PL=$9
 RTL=30
 
+# Max compilation time (in seconds) (1 minute by default)
+CT=60
+
+
 cd $folder
-#chmod 777 -R $frun
 
 if [ ! -f $SOURCE ]; then
   echo "$SOURCE does not exist" >> $slog;
@@ -95,6 +98,7 @@ fi
 #To replace string '$VAR' by the value of each variable
 EXECUTION="${EXECUTION//'jailu'/$jailu}"
 EXECUTION="${EXECUTION//'jailg'/$jailg}"
+EXECUTION="${EXECUTION//'-TRTL'/-T$RTL}"
 
 if [ "$TYPE" == "" ]; then
   echo "The value for TYPE is required" >> $slog;
@@ -136,22 +140,28 @@ if [ "$TYPE" == "1" ]; then
 
   echo "Copying $INFILE in $frun" >> $slog;
   cp $INFILE Main.in 2>> $slog;
+  chmod 744 Main.in
 
   echo "Copying correct outputfile in $frun" >> $slog;
   cp $OUTFILE correct.OUT 2>> $slog;
+  chmod 700 correct.OUT
 
   echo "Change directory to $frun" >> $slog;
   cd $frun 2>> $slog;
+
+  # Applying limits
+  ulimit -t $CT
 
   echo "Compiling .. $COMPILATION" >> $slog;
   eval $COMPILATION 2>> $slog;	#Compilation
 
   if [ $? == 0 ]; then
-    chmod +x Main*
     echo "Executing .." >> $slog;
     echo "Command: $EXECUTION" >> $slog;
-    $EXECUTION
+    
+    $EXECUTION 2>> $slog
     echo $? > run.retcode
+
 ##    cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
 #[ -f /proc/cpuinfo ] || sudo /bin/mount -t proc proc /proc
