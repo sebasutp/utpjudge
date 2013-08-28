@@ -135,7 +135,7 @@ ext=${tmp[1]}
 
 #To compilation
 if [ "$TYPE" == "1" ]; then
-  echo "Copying and rename 'source.ext' to 'main.ext' in /$basename/RUNS" >> $slog;
+  echo "Copying and rename '$SOURCE' to 'Main.$ext' in $frun" >> $slog;
   cp $SOURCE Main.$ext 2>> $slog;
 
   echo "Copying $INFILE in $frun" >> $slog;
@@ -161,6 +161,7 @@ if [ "$TYPE" == "1" ]; then
     
     $EXECUTION 2>> $slog
     echo $? > run.retcode
+    chmod 700 run.retcode
 
 ##    cat <<EOF > $PRUNNING/run.sh
 #!/bin/bash
@@ -190,24 +191,25 @@ if [ "$TYPE" == "1" ]; then
 
 #No compilation
 elif [ "$TYPE" == "2" ]; then
-  echo "Copying and rename 'source.ext' to 'main.ext' in $PRUNNING" >> $slog;
-  cp $SOURCE $frun/Main.$ext
-
+  echo "Copying and rename '$SOURCE' to 'Main.$ext' in $frun" >> $slog;
+  cp $SOURCE Main.$ext 2>> $slog
+  
   echo "Copying $INFILE and rename in $frun" >> $slog;
-  cp $INFILE $frun/Main.in
+  cp $INFILE Main.in 2>>$slog
+  chmod 744 Main.in
 
   echo "Copying correct outputfile in $frun" >> $slog;
-  cp $OUTFILE $frun/correct.OUT
+  cp $OUTFILE correct.OUT 2>> $slog
+  chmod 700 correct.OUT
 
   echo "Change directory to $frun" >> $slog;
   cd $frun
-  chmod +x Main*
 
   echo "Executing .." >> $slog;
   echo "Command: $EXECUTION" >> $slog;
-  cd $frun
   eval $EXECUTION
-  echo \$? > run.retcode  
+  echo $? > run.retcode 
+  chmod 700 run.retcode
 fi;
 
 ret=`cat run.retcode`
@@ -234,6 +236,7 @@ elif [ "$ret" == "3" ]; then
   echo "NO - Timelimit exceeded";
 elif [ "$ret" == "7" ]; then
   echo "NO - Memory limit exceeded";
+elif [ "$TYPE" == "2" -a -s Main.ERR ]; then echo "NO - Runtime Error";
 else
   [ -s Main.OUT ]
   if [ $? == 0 ]; then
@@ -248,6 +251,7 @@ else
     else
       echo "NO - Wrong answer";
     fi
-  else echo "NO - NO-OUTPUT";
+  
+  else echo "NO - NO OUTPUT";
   fi
 fi;
