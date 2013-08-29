@@ -29,12 +29,13 @@ echo "" >> $folder/$slog
 
 # This script makes use of $COMMNAME to execute the code with less privilegies
 commname=`which safeexec`
+
 # User to judging
 basename=utp
 #SRUN=/usr/bin/$COMMNAME
 
 if [ ! -x $commname ]; then
-  echo "$SRUN not found or it's not executable" >> $folder/$slog;
+  echo "$SRUN not found or it's not executable" >> $slog;
   exit;
 fi
 
@@ -48,7 +49,8 @@ TL=$7
 ML=$8
 PL=$9
 RTL=30
-
+# Max number of child process
+CP=0
 # Max compilation time (in seconds) (1 minute by default)
 CT=60
 
@@ -99,6 +101,7 @@ fi
 EXECUTION="${EXECUTION//'jailu'/$jailu}"
 EXECUTION="${EXECUTION//'jailg'/$jailg}"
 EXECUTION="${EXECUTION//'-TRTL'/-T$RTL}"
+EXECUTION="${EXECUTION//'-uCP'/-u$CP}"
 
 if [ "$TYPE" == "" ]; then
   echo "The value for TYPE is required" >> $slog;
