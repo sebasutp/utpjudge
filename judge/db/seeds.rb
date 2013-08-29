@@ -17,14 +17,14 @@ lang = Language.new
 lang.name="C++"
 lang.ltype="1"
 lang.compilation="/usr/bin/g++ -Wall -O2 -static -pipe -o SOURCE SOURCE.cpp"
-lang.execution="SRUN -F10 -tTL -Ujailu -Gjailg -iINFILE -oSOURCE.OUT -eSOURCE.ERR -n0 -C. -f20000 -d512000 -mML ./SOURCE"
+lang.execution="SRUN -uCP -F10 -tTL -Ujailu -Gjailg -iINFILE -oSOURCE.OUT -eSOURCE.ERR -n0 -C. -f20000 -d512000 -mML ./SOURCE"
 lang.save
 
 lang = Language.new
 lang.name="ANSI C"
 lang.ltype="1"
 lang.compilation="/usr/bin/gcc -Wall -O2 -static -pipe -o SOURCE SOURCE.c"
-lang.execution="SRUN -F10 -tTL -Ujailu -Gjailg -iINFILE -oSOURCE.OUT -eSOURCE.ERR -n0 -C. -f20000 -d512000 -mML ./SOURCE"
+lang.execution="SRUN -uCP -F10 -tTL -Ujailu -Gjailg -iINFILE -oSOURCE.OUT -eSOURCE.ERR -n0 -C. -f20000 -d512000 -mML ./SOURCE"
 lang.save
 
 lang = Language.new
@@ -38,5 +38,5 @@ lang = Language.new
 lang.name="Python"
 lang.ltype="2"
 lang.compilation=""
-lang.execution="SRUN -F10 -tTL -Ujailu -Gjailg -iINFILE -oSOURCE.OUT -eSOURCE.ERR -n0 -C. -f20000 -d512000 -mML -- /usr/bin/python SOURCE.py"
+lang.execution="SRUN -uCP -F10 -tTL -Ujailu -Gjailg -iINFILE -oSOURCE.OUT -eSOURCE.ERR -n0 -C. -f20000 -d512000 -mML -- /usr/bin/python SOURCE.py"
 lang.save
