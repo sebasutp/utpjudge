@@ -1,6 +1,6 @@
 class SubmissionsController < ApplicationController
   before_filter :req_psetter, :only=>[:destroy,:update,:edit]
-  before_filter :req_gen_user, :except=>[:destroy,:update,:edit,:judgebot,:bot_testcase,:update_veredict]
+  before_filter :req_gen_user, :except=>[:destroy,:update,:edit,:judgebot,:bot_testcase,:update_veredict,:testerbot]
   http_basic_authenticate_with :name => "user", :password => "password", :only => [:judgebot,:bot_testcase,:update_veredict]
 
   # GET /submissions
@@ -53,7 +53,23 @@ class SubmissionsController < ApplicationController
           format.json { render json: [@submission,@srccode,@lang,@submission.exercise_problem] }
       end
   end
-  
+
+  #POST /submission/testerbot.json
+  def testerbot
+    @exercise_problem = ExerciseProblem.find(params[:exercise_problem_id])
+    @submission = Submission.newJudgeSource(@exercise_problem)
+    @submission.language = Language.find(params[:language_id])
+    @submission.end_date = DateTime.now
+    @submission.user_id = User.all(:conditions => {:email => 'testerbot@utp.edu.co'})[0].id
+    @submission.save
+
+    respond_to do |format|
+      if @submission.update_attributes(params[:submission]) && @submission.judge
+        format.json { render json: [@submission] }
+      end
+    end
+  end
+
   #GET /submissions/1/bot_testcase.json (Called by judge)
   def bot_testcase
       @submission = Submission.find(params[:id])
@@ -63,39 +79,39 @@ class SubmissionsController < ApplicationController
       end
   end
 
-	#POST receive the veredict from judbot
-	def update_veredict
-		@submission = Submission.find(params[:id])
-		time = params[:time]
-		sub_id    = params[:id]
-		veredict  = params[:veredict]
+  #POST receive the veredict from judbot
+  def update_veredict
+    @submission = Submission.find(params[:id])
+    time = params[:time]
+    sub_id    = params[:id]
+    veredict  = params[:veredict]
 
-		@submission.veredict = veredict
-		@submission.time = time
+    @submission.veredict = veredict
+    @submission.time = time
 
-		respond_to do |format|
-    	format.json { render json: [veredict] }
+    respond_to do |format|
+      format.json { render json: [veredict] }
     end
 
-		#update on DB
-		@submission.update_attributes(params[:submission])
+    #update on DB
+    @submission.update_attributes(params[:submission])
 
-	end
+  end
 
   # GET /submissions/new
   def new
       @exercise_problem = ExerciseProblem.find(params[:exercise_problem])
       @jtype = Testcase.judgeTypeHash[@exercise_problem.stype]
-#			flash.now[:notice] = @jtype
+#     flash.now[:notice] = @jtype
 
       if @jtype==:downloadInput
         @submission = Submission.newJudgeDownload(@exercise_problem)
         @submission.user = current_user
         @submission.save
         render "jdownload"
-			else
-				@language = Language.all
-				@submission = Submission.newJudgeSource(@exercise_problem)
+      else
+        @language = Language.all
+        @submission = Submission.newJudgeSource(@exercise_problem)
 #        @submission.user = current_user
 #        @submission.save
         render "jupload"
@@ -124,8 +140,8 @@ class SubmissionsController < ApplicationController
       end
   end
 
-	def jupload
-	  #@submission = Submission.find(params[:id])
+  def jupload
+    #@submission = Submission.find(params[:id])
     @exercise_problem = ExerciseProblem.find(params[:exercise_problem_id])
     @submission = Submission.newJudgeSource(@exercise_problem)
     @submission.language = Language.find(params[:language_id])
@@ -144,7 +160,7 @@ class SubmissionsController < ApplicationController
         format.json { render json: @submission.errors, status: :unprocessable_entity }
       end
     end
-	end
+  end
 
   #GET /submissions/downloadInput?exercise_problem=id
   def downloadInput

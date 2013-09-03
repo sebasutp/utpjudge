@@ -161,7 +161,8 @@ if [ "$TYPE" == "1" ]; then
   if [ $? == 0 ]; then
     echo "Executing .." >> $slog;
     echo "Command: $EXECUTION" >> $slog;
-    
+
+    #/usr/bin/time -f "%E %M" -a -o $slog $EXECUTION 2>> $slog
     $EXECUTION 2>> $slog
     echo $? > run.retcode
     chmod 700 run.retcode
@@ -188,7 +189,7 @@ if [ "$TYPE" == "1" ]; then
     ##  exit;
     ##fi;
   else
-    echo "Compilation error";
+    echo -n "Compilation error";
     exit;
   fi;
 
@@ -216,7 +217,7 @@ elif [ "$TYPE" == "2" ]; then
 fi;
 
 ret=`cat run.retcode`
-echo "** $ret" >> $slog
+#echo "** $ret" >> $slog
 
 if [ "$ret" == "0" ]; then
   # This presentation error only checks white spaces and newlines
@@ -224,22 +225,22 @@ if [ "$ret" == "0" ]; then
   if [ $? == 0 ]; then
     DIFF2=`diff correct.OUT Main.OUT`
     if [ $? == 0 ]; then
-      echo "YES";
+      echo -n "YES";
     else
-      echo "NO - Presentation error";
+      echo -n "NO - Presentation error";
     fi
   else
-    echo "NO - Wrong answer";
+    echo -n "NO - Wrong answer";
   fi
 elif [ "$ret" == "1" ]; then
-  echo "NO - Compile error";
-elif [ "$ret" == "2" -o "$ret" == "9" ]; then
-  echo "NO - Runtime error";
+  echo -n "NO - Compile error";
+elif [ "$ret" == "2" -o "$ret" == "9" -o "$ret" == "11" ]; then
+  echo -n "NO - Runtime error";
 elif [ "$ret" == "3" ]; then
-  echo "NO - Timelimit exceeded";
+  echo -n "NO - Timelimit exceeded";
 elif [ "$ret" == "7" ]; then
-  echo "NO - Memory limit exceeded";
-elif [ "$TYPE" == "2" -a -s Main.ERR ]; then echo "NO - Runtime Error";
+  echo -n "NO - Memory limit exceeded";
+elif [ "$TYPE" == "2" -a -s Main.ERR ]; then echo -n "NO - Runtime Error";
 else
   [ -s Main.OUT ]
   if [ $? == 0 ]; then
@@ -247,14 +248,18 @@ else
     if [ $? == 0 ]; then
       DIFF2=`diff correct.OUT Main.OUT`
       if [ $? == 0 ]; then
-        echo "YES";
+        echo -n "YES";
       else
-        echo "NO - Presentation error";
+        echo -n "NO - Presentation error";
       fi
     else
-      echo "NO - Wrong answer";
+      echo -n "NO - Wrong answer";
     fi
   
-  else echo "NO - NO OUTPUT";
+  else echo -n "NO - Wrong answer";
   fi
 fi;
+
+# Running time
+echo -n ","
+awk '$1 == "*" {print $2}' $slog

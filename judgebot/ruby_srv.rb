@@ -19,31 +19,31 @@ class SJudge
   end
   
   def write_to_file(fname,str)
-		file = File.open("#{fname}","w")
+    file = File.open("#{fname}","w")
     file.write(str)
     file.close
   end
   
   def judge
-		base_name = "runs" + @submission["id"].to_s
-		base_path = @folder + "/" + base_name
+    base_name = "runs" + @submission["id"].to_s
+    base_path = @folder + "/" + base_name
     srcname = @submission["srcfile_file_name"]
 
-		%x{#{"mkdir #{base_path}"}}
-		%x{#{"chmod 777 -R #{base_path}"}}
+    %x{#{"mkdir #{base_path}"}}
+    %x{#{"chmod 777 -R #{base_path}"}}
 
     write_to_file(base_path + "/" + srcname,@src_code)
 
     sub_id = @submission["id"]
     tc_id = @submission["testcase_id"]
-		
+    
 #    if !(@testcases.has_key? tc_id)
       @testcases[tc_id] = tc = SConsumer.get("#{@base_uri}/submissions/#{sub_id}/bot_testcase.json")
       write_to_file "#{base_path}/#{tc_id}.in",tc[0]
       write_to_file "#{base_path}/#{tc_id}.out",tc[1]
 #    else
 #      tc = @testcases[tc_id]
-#			puts tc
+#     puts tc
 #    end    
     
     type = @language["ltype"]
@@ -56,16 +56,12 @@ class SJudge
     exec = exec.gsub("SOURCE","Main").gsub("-tTL","-t"+timl.to_s).gsub("ML",meml.to_s).gsub("INFILE","Main.in").gsub("SRUN","safeexec")
     command = "./sjudge.sh '#{srcname}' '#{tc_id}.in' '#{tc_id}.out' #{type} '#{comp}' '#{exec}' #{timl} #{meml} #{progl} #{sub_id}"
 
-		itime = Time.now.utc
-    s = %x{#{command}}
-		etime  = Time.now.utc
-		time = etime.to_i - itime.to_i
-
-		ans = sub_id.to_s + "," + s.to_s #+ " " + time.to_s
-		return ans
-		
-#		ur = "#{@base_uri}/submissions/#{sub_id}/update_veredict.json"
-#		response = SConsumer.get(ur,:query => { :veredict => s, :time => time })
+    s = %x{#{command}}.split(',')
+    ans = sub_id.to_s + "," + s[0].to_s + "," + s[1].to_s
+    return ans
+    
+#   ur = "#{@base_uri}/submissions/#{sub_id}/update_veredict.json"
+#   response = SConsumer.get(ur,:query => { :veredict => s, :time => time })
   end
 
   def process_subm(subm_id)
@@ -83,18 +79,18 @@ class SJudge
       server = TCPServer.new port
       @testcases = {}
 
-			loop {
-					Thread.start(server.accept) do |client|
-#	          client = server.accept
-	          s = client.gets
-	          puts "Receiving submission id=#{s}"
-						v = process_subm(s.to_i)
-						fifo = open("test_fifo", "w+")
-						fifo.puts v
-						fifo.flush
-	          client.close
-      	end
-			}
+      loop {
+#         Thread.start(server.accept) do |client|
+            client = server.accept
+            s = client.gets
+            puts "Receiving submission id=#{s}"
+            v = process_subm(s.to_i)
+            fifo = open("test_fifo", "w+")
+            fifo.puts v
+            fifo.flush
+            client.close
+#       end
+      }
   end
 
 end

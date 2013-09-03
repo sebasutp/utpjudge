@@ -11,20 +11,19 @@ end
 
 class RVeredict
 
-	def initialize()
-		@base_uri = 'http://localhost:3000'
+  def initialize()
+    @base_uri = 'http://localhost:3000'
     @data = open("test_fifo", "r+")
   end
 
-	def run_rv()
+  def run_rv()
 
       loop do
           v = @data.gets
-					ver = v.split(",")
-#					sleep 1
+          ver = v.split(",")
           puts "Receiving veredict=#{v}"
-					ur = "#{@base_uri}/submissions/#{ver[0]}/update_veredict.json"
-					response = SConsumer.get(ur,:query => { :veredict => ver[1], :time => 0.0 })
+          ur = "#{@base_uri}/submissions/#{ver[0]}/update_veredict.json"
+          response = SConsumer.get(ur,:query => { :veredict => ver[1], :time => ver[2] })
 
       end
   end

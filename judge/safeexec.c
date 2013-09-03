@@ -434,7 +434,8 @@ Use -U and -G for that, but you might need to have root privilegies.\n");
     if (dt >= cpu_timeoutdouble) {
 //      printf ("utsec=%d utusec=%d stsec=%d stusec=%d\n", uso.ru_utime.tv_sec, uso.ru_utime.tv_usec, uso.ru_stime.tv_sec, uso.ru_stime.tv_usec);
 		if(!bequiet)
-			fprintf(stderr, "safeexec: timed-out (cputime) after %.2lf seconds\n", cpu_timeoutdouble);
+//			fprintf(stderr, "safeexec: timed-out (cputime) after %.2lf seconds\n", cpu_timeoutdouble);
+        fprintf(stderr, "* %.2lf\n", cpu_timeoutdouble);
 		fflush(stderr);
 //      fprintf(stdout, "timed-out (cputime) after %d seconds\n", cpu_timeoutint);
 //      fflush(stdout);
@@ -465,7 +466,9 @@ Use -U and -G for that, but you might need to have root privilegies.\n");
     if(currun < nruns) goto doagain;
 
     // otherwise just report the exit code:
-    if (st) fprintf (stderr, "safeexec: TOTAL TIME RUNNING %s: %u sec (%lf sec)\n", argv[optind], (unsigned int) (time(NULL)-ini), dt);
+		// modify to output only time running
+//    if (st) fprintf (stderr, "safeexec: TOTAL TIME RUNNING %s: %u sec (%lf sec)\n", argv[optind], (unsigned int) (time(NULL)-ini), dt);
+		if (st) fprintf (stderr, "* %lf\n", dt);
     exitandkill(ret);
   } else {
     /* ------------------- child process ------------------------------ */
