@@ -1,4 +1,7 @@
 class LanguagesController < ApplicationController
+  
+  before_filter :req_root
+
   # GET /languages
   # GET /languages.json
   def index
