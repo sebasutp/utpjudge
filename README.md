@@ -4,6 +4,8 @@ UTP Online Judge
 Is a free software project oriented to improve the programming skills 
 of the students through contest like acm-icpc, codeforces, and others. 
 
+##### *This repository _IS OUT OF DATE_, the main repository is* [https://github.com/in-silico/utpjudge](https://github.com/in-silico/utpjudge)
+
 - The current development is not in the master branch, is in "dev".
 
 ### To Clone.
